@@ -1,0 +1,18 @@
+[
+ {
+    "sentence": "am i talking to human",
+    "intent": "afirm"
+ },
+ {
+    "sentence": "bad",
+    "intent": "mood_unhappy"
+ },
+ {
+    "sentence": "good",
+    "intent": "mood_happy"
+ },
+ {
+    "sentence": "great",
+    "intent": "mood_happy"
+ }
+]

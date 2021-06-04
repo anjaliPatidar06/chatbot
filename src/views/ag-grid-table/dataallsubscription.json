@@ -1,0 +1,34 @@
+[
+ {
+    "duration": "1 Month",
+    "name": "monthly",
+    "email": "user1@gmail.com",
+    "doc": "15-06-2020",
+    "module":"5",
+    "status":"Active"
+ },
+ {
+    "duration": "3 Month",
+    "name": "quaterly",
+    "email": "user1@gmail.com",
+    "doc": "15-06-2020",
+    "module":"5",
+    "status":"Active"
+ },
+ {
+    "duration": "6 Months",
+    "name": "halfyearly",
+    "email": "user1@gmail.com",
+    "doc": "15-06-2020",
+    "module":"5",
+    "status":"Active"
+ },
+ {
+    "duration": "1 year",
+    "name": "yearly",
+    "email": "user1@gmail.com",
+    "doc": "15-06-2020",
+    "module":"5",
+    "status":"Active"
+ }
+]

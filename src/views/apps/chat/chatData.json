@@ -1,0 +1,15 @@
+{
+    "users":[
+        {
+            "user_name": "anjali",
+            "chat_id":1,
+            "messages":["Hello, how are you ?"]
+        },
+        {
+            "user_name": "akshhi",
+            "chat_id":2,
+            "messages":["Hey buddy?"]
+        }
+    ]
+}
+

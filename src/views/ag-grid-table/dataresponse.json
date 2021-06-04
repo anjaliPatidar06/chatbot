@@ -1,0 +1,18 @@
+[
+ {
+    "response": "am i talking to human",
+    "select": "afirm"
+ },
+ {
+    "response": "bad",
+    "select": "mood_unhappy"
+ },
+ {
+    "response": "good",
+    "select": "mood_happy"
+ },
+ {
+    "response": "great",
+    "select": "mood_happy"
+ }
+]

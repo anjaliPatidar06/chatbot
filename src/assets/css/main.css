@@ -1,0 +1,200 @@
+/**
+ * This injects Tailwind's base styles, which is a combination of
+ * Normalize.css and some additional base styles.
+ *
+ * You can see the styles here:
+ * https://github.com/tailwindcss/tailwindcss/blob/master/css/preflight.css
+ *
+ * If using `postcss-import`, you should import this line from it's own file:
+ *
+ * @import "./tailwind-preflight.css";
+ *
+ * See: https://github.com/tailwindcss/tailwindcss/issues/53#issuecomment-341413622
+ */
+/*NOTE: 'preflight' IS RENAMED TO 'base'*/
+/*@tailwind base;*/
+
+/**
+ * Here you would add any of your custom component classes; stuff that you'd
+ * want loaded *before* the utilities so that the utilities could still
+ * override them.
+ *
+ * Example:
+ *
+ * .btn { ... }
+ * .form-input { ... }
+ *
+ * Or if using a preprocessor or `postcss-import`:
+ *
+ * @import "components/buttons";
+ * @import "components/forms";
+ */
+ @tailwind components;
+
+/**
+ * This injects all of Tailwind's utility classes, generated based on your
+ * config file.
+ *
+ * If using `postcss-import`, you should import this line from it's own file:
+ *
+ * @import "./tailwind-utilities.css";
+ *
+ * See: https://github.com/tailwindcss/tailwindcss/issues/53#issuecomment-341413622
+ */
+@tailwind utilities;
+
+/**
+ * Here you would add any custom utilities you need that don't come out of the
+ * box with Tailwind.
+ *
+ * Example :
+ *
+ * .bg-pattern-graph-paper { ... }
+ * .skew-45 { ... }
+ *
+ * Or if using a preprocessor or `postcss-import`:
+ *
+ * @import "utilities/background-patterns";
+ * @import "utilities/skew-transforms";
+ */
+
+
+ .vs__search, .vs__search:focus {
+    line-height: 1.8 !important;
+  }
+  [dir=ltr] .vx-input-group .vx-input-group-append {
+    margin-top: 20px !important;
+}
+/* .vx-input-group .vx-input-group-prepend {
+  margin-top: 20px !important;
+} */
+.v-select {
+  font: 400 13.3333px Arial !important;
+  /* font-family: "Montserrat", Helvetica, Arial, sans-serif !important; */
+  color: #000;
+  /* letter-spacing:0px; */
+  font-stretch: normal !important;
+}
+/* .image-fit{
+  height: 100% !important;
+  width: 100% !important;;
+  object-fit: cover !important;
+} */
+.image-fit {
+    width: 200px;
+    height: 200px;
+    background-position: center;
+    background-size: cover;
+    object-fit: fill;
+}
+#chat-app .chat-content-area .chat-content-scroll-area {
+  height: calc(90% - 134px);
+}
+.usertimestamp {
+  /* float: right; */
+  /* margin-top: -1px;
+  margin-right: 3.5em; */
+  background: #5a2f2f00;
+  /* color: black; */
+  font-size: 11px;
+  font-family: -webkit-body;
+position: relative;
+padding: 16px 0px 0 20px;
+  /* margin-right: -4rem;
+    margin-top: 3.4rem; */
+}
+.clearfix {
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+.timestamp {
+  /* float: left;
+  margin-top: -12px;
+  margin-left: 3.5em; */
+  background: transparent;
+  /* color: black; */
+  font-size: 11px;
+  font-family: -webkit-body;
+  position: relative;
+padding: 16px 0px 0 20px;
+}
+:root {
+  --vs-primary: 33,56,108 !important
+}
+.ag-grid-table {
+  color: inherit !important;
+  height: calc(var(--vh, 1vh) * 100 - 30rem) !important;
+}
+.collapsed {
+  display: none;
+}
+.toasted-container {
+  z-index: 99999 !important;
+}
+.toasted-container .toasted {
+  max-width: 380px !important;
+}
+.toasted-container.top-right {
+  right: 3% !important;
+}
+::-webkit-scrollbar {
+  width: 6px !important;
+  position: absolute !important;
+    background-color: #aaa !important;
+    border-radius: 6px !important;
+    transition: background-color .2s linear,height .2s linear,width .2s ease-in-out,border-radius .2s ease-in-out !important;
+}
+/* Track */
+/* ::-webkit-scrollbar-track {
+  background: #f1f1f1 !important; 
+}
+ 
+::-webkit-scrollbar-thumb {
+  background: #888 !important; 
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555 !important; 
+} */
+.text-archieve {
+display: flex;
+-webkit-box-align: center;
+-ms-flex-align: center;
+align-items: center;
+-webkit-box-pack: center;
+-ms-flex-pack: center;
+justify-content: center;
+position: relative;
+text-align: center;
+padding: 5px;
+}
+div#editor1 {
+  letter-spacing: normal !important;
+    word-spacing: normal !important;
+    font-size: inherit !important;
+    border: 1px solid rgba(0, 0, 0, 0.2) !important;
+}
+@media screen and (max-width: 768px) {
+  /* div#EmojiPicker {
+    position: absolute;
+    z-index: 1;
+    margin-top: 40px;
+    width: 100%;
+    display: block;
+    flex-direction: column;
+    transform: translateZ(0px);
+    min-height: 0px;
+    flex-grow: 1;
+    flex-shrink: 1;
+    height: 200px;
+  } */
+  .custom-chatlog {
+    height: 70% !important;
+    min-height: 200px !important;
+  }
+}
+.cke_editable {
+  cursor: text;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
