@@ -458,7 +458,6 @@ export default {
       this.setSidebarWidth();
     },
     reqAccepted(newValue, oldValue) {
-      console.log(typeof newValue, newValue,"reqAccepted new value");
       if (newValue === true) {
         this.checkforMsgRequest();
       }
@@ -473,7 +472,6 @@ export default {
         const unseenMsg = this.$store.getters["chat/chatUnseenMessages"](
           userId
         );
-        console.log(unseenMsg, "unseenMsg++++++++++++++");
         if (unseenMsg) return unseenMsg;
       };
     },
@@ -519,7 +517,6 @@ export default {
     msgRequestAccepted() {
       this.popupActive2 = false;
       this.reqAccepted = true;
-      console.log("isnide accept msg");
     },
     chatContacts() {
       axios
@@ -633,9 +630,6 @@ export default {
     },
     queuePurchase() {
       if (!this.message) return;
-      console.log(this)
-      console.log("queue message enter",this.activeContact.room,'activeContact');
-      var responsemsg = JSON.parse(localStorage.getItem("message"));
       var responsemsg = JSON.parse(localStorage.getItem("message"));
       var body = {
         // chatbot_id: 1042,
@@ -649,7 +643,6 @@ export default {
         author: localStorage.logged_in_user_name,
         room: this.activeContact.room
       }
-      console.log(body,'emit')
       this.$socket.emit("my event", body);
 
       //   var isPresent = this.data.contacts.some(function (el) {
@@ -668,7 +661,6 @@ export default {
       this.message = "";
     },
     showProfileSidebar(userId, openOnLeft = false) {
-      console.log(userId, "userID///");
       this.userProfileId = userId;
       this.isLoggedInUserProfileView = openOnLeft;
       this.activeProfileSidebar = !this.activeProfileSidebar;
@@ -731,9 +723,7 @@ export default {
     // },
     fillData(data) {
       var body;
-      console.log(data, "data");
       if (!this.containsKey(data, "author")) {
-        console.log("hey if");
         body = {
           company_id: parseInt(localStorage.company_id),
           chatbot_id: localStorage.chatbot_id,
@@ -747,7 +737,6 @@ export default {
           room: data.room
         };
       } else {
-        console.log("hey else", this.activeContact);
         body = {
           company_id: parseInt(localStorage.company_id),
           chatbot_id: localStorage.chatbot_id,
@@ -761,28 +750,23 @@ export default {
           room: this.activeContact.room
         };
       }
-      console.log(body,'store body')
-      axios
-        .post(Base_URL.Actual_URL + "store_message", body)
-        .then((response) => {
-          console.log("store response");
-          this.newMsg = data.message;
-          localStorage.removeItem("message");
-          this.contacts();
-        });
+      // axios
+      //   .post(Base_URL.Actual_URL + "store_message", body)
+      //   .then((response) => {
+      //     this.newMsg = data.message;
+      //     localStorage.removeItem("message");
+      //     this.contacts();
+      //   });
     },
     async checkNewUser(data) {
-      console.log("insidenew user", data);
       var body =   {company_id: parseInt(localStorage.company_id),
           chatbot_id: localStorage.chatbot_id,
           username: data.username,
           room: data.room}
-          console.log(body,'bodyyyyyyyyyy')
       await axios
         .post(Base_URL.Actual_URL + "valid_contact", body)
         .then((response) => {
           if (response.data.result === "Message From New Contact") {
-            console.log("inside if");
             // this.sockets.emit("join_room", {
             //   username: data.user_name,
             //   room: channels,
@@ -813,26 +797,16 @@ export default {
                 },
               ],
             });
-            console.log(
-              this.popupActive2,
-              "popactivr",
-              this.reqAccepted,
-              "reqAccepted"
-            );
-          }
-          console.log('heyy response return')
-          
+          }     
         });
     },
     checkforMsgRequest() {
       if (this.reqAccepted) {
-        console.log(this.reqAccepted,'reqAccepted')
         this.fillData(JSON.parse(localStorage.getItem("message")));
       }
     },
 
     getRealtimeData(data) {
-      console.log("get realtime data",data);
       let v = this;
       // this.sockets.subscribe("my_response", (data) => {
       console.log(data, "data frm socket subscribe");

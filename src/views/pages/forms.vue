@@ -1,8 +1,8 @@
 <template>
   <div class="vx-row">
     <div class="vx-col w-full mb-base">
-      <vx-card title="Form Lead Table">
-        <div class="vx-row">
+      <vx-card title="Lead Data Table">
+        <!-- <div class="vx-row">
           <div class="vx-col w-full mb-base">
             <div class="vx-col sm:w-1/3 w-full mb-2">
               <h6>Select form Name</h6>
@@ -17,19 +17,22 @@
               </v-select>
             </div>
           </div>
-        </div>
+        </div> -->
         <div id="div-with-loading" class="vs-con-loading__container">
           <vs-table
             pagination
             v-model="selected"
             @selected="selectRow"
-            :data="leadsData"
+            :data="newData"
+            max-items="10"
           >
             <template slot="thead">
               <vs-th v-for="(tr, indextr) in columnDefs" :key="indextr">{{
                 columnDefs[indextr].headerName
               }}</vs-th>
-              <vs-th v-if="!dateExist && columnDefs.length > 0">Date_of_Creation</vs-th>
+              <vs-th v-if="!dateExist && columnDefs.length > 0"
+                >Date_of_Creation</vs-th
+              >
             </template>
 
             <template slot-scope="{ data }">
@@ -37,12 +40,12 @@
           <vs-td :data="data[indextr]" v-for="(tr1, indextr1) in tr[0]" :key="indextr1" :class="{collapsed: indextr1 > 5}">
           {{tr1}}
           </vs-td> -->
-              <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in newData">
+              <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data">
                 <vs-td
                   :data="data[indextr]"
                   v-for="(tr1, indextr1) in tr"
                   :key="indextr1"
-                  :class="{ collapsed: indextr1 > 5 }"
+                  :class="{ collapsed: indextr1 > 4 }"
                 >
                   {{ tr1.value }}
                 </vs-td>
@@ -118,16 +121,89 @@ export default {
   },
   methods: {
     getFormData() {
+      // axios
+      //   .post(Base_URL.Actual_URL + "get_formdata", {
+      //     chatbot_id: localStorage.chatbot_id,
+      //   })
+      //   .then((response) => {
+      //     // console.log(response.data);
+      //     setTimeout(() => {
+      //       this.$vs.loading.close("#div-with-loading > .con-vs-loading");
+      //     }, 1000);
+      //     this.formData = response.data.Form_list;
+      //   });
       axios
-        .post(Base_URL.Actual_URL + "get_formdata", {
+        .post(Base_URL.Actual_URL + "Lead_ip_wise", {
           chatbot_id: localStorage.chatbot_id,
+          company_id: localStorage.company_id,
         })
         .then((response) => {
-          // console.log(response.data);
+          var test = [];
+          test = response.data;
+          // console.log(test ,typeof response.data)
+          //  for(let i in response.data) {
+          //    console.log(i ,'iiiiiiiiii')
+          //  }
+          // response.data.forEach(element => {
+          //   console.log(element,'element')
+          // });
           setTimeout(() => {
             this.$vs.loading.close("#div-with-loading > .con-vs-loading");
           }, 1000);
-          this.formData = response.data.Form_list;
+          // this.formData = response.data.Data;
+          if (Array.isArray(response.data.Data)) {
+            var count = 0;
+            this.dateExist = false;
+            console.log(response.data.Data, "tyyuuii");
+            this.leadsData = response.data.Data;
+            console.log(this.leadsData, "leadsData");
+            this.leadsData.forEach((element) => {
+              var columnCount = 0;
+              // this.leadRowdata.push(
+              //       [element])
+
+              for (const property in element) {
+                if (property == "Date_of_Creation" && columnCount <= 4) {
+                  this.dateExist = true;
+                }
+                this.leadRowdata.push({
+                  key: property,
+                  value: element[property],
+                });
+                // if(columnCount > 4) {
+                //   console.log(element,property)
+                //   this.$delete(element, property);
+                // console.log(this.$delete(element));
+                // }
+                if (count < 1 && columnCount < 5) {
+                  this.columnDefs.push({
+                    headerName: property,
+                    // field: property,
+                    // filter: true,
+                    // width: 225,
+                  });
+                }
+                columnCount++;
+              }
+              // console.log(this.dateExist,columnCount,'columnCount')
+              if (this.dateExist == false && columnCount > 4) {
+                console.log(
+                  element.Date_of_Creation,
+                  "element.Date_of_Creation\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\+++"
+                );
+                this.leadRowdata.splice(5, 0, {
+                  key: "Date_of_Creation",
+                  value: element.Date_of_Creation,
+                });
+              }
+
+              this.newData.push(this.leadRowdata);
+              this.leadRowdata = [];
+              count++;
+            });
+            // console.log(this.newData,'newadta')
+          }
+          console.log("columndef" , this.columnDefs);
         });
     },
     handleSelected(val) {
@@ -159,7 +235,6 @@ export default {
                 if (property == "Date_of_Creation" && columnCount <= 4) {
                   this.dateExist = true;
                 }
-console.log(element[property])
                 this.leadRowdata.push({
                   key: property,
                   value: element[property],
@@ -181,7 +256,10 @@ console.log(element[property])
               }
               // console.log(this.dateExist,columnCount,'columnCount')
               if (this.dateExist == false && columnCount > 4) {
-                console.log(element.Date_of_Creation,'element.Date_of_Creation\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\+++')
+                console.log(
+                  element.Date_of_Creation,
+                  "element.Date_of_Creation\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\+++"
+                );
                 this.leadRowdata.splice(5, 0, {
                   key: "Date_of_Creation",
                   value: element.Date_of_Creation,

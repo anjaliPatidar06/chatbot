@@ -156,7 +156,6 @@ export default {
   methods: {
     getTableData() {
       var newemail = localStorage.getItem("email");
-      console.log(newemail);
       var chatbot_id = localStorage.getItem("chatbot_id");
       axios
         .post(Base_URL.Actual_URL + "entityintentcollapsible", {
@@ -164,7 +163,6 @@ export default {
           chatbot_id: chatbot_id,
         })
         .then((response) => {
-          console.log(response);
           this.rowdata = response.data.userlist;
           this.newsentence = response.data.sentence;
           this.responsedata = response.data.response1;
@@ -199,9 +197,7 @@ export default {
       this.$validator.validateAll().then((result) => {
         if (result) {
           var newemail = localStorage.getItem("email");
-          console.log(newemail);
           var chatbot_id = localStorage.getItem("chatbot_id");
-          console.log(chatbot_id);
           axios
             .post(Base_URL.Actual_URL + "collapsiblevalue", {
               chatbot_id: chatbot_id,
@@ -211,9 +207,7 @@ export default {
               addresponse: this.responsename.responsename,
             })
             .then((response) => {
-              console.log(response);
                 this.getTableData();
-
               if (response.data.code == 100) {
                 this.$emit('updateCollapseComponent')
                 this.$vs.notify({

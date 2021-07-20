@@ -26,7 +26,9 @@
 
                                 <vs-input type="email" label-placeholder="Email" v-model="email" class="w-full mb-8" />
                                 <vs-button type="border" to="/login" class="px-4 w-full md:w-auto">Back To Login</vs-button>
-                                <vs-button class="float-right px-4 w-full md:w-auto mt-3 mb-8 md:mt-0 md:mb-0">Recover Password</vs-button>
+                                <vs-button class="float-right px-4 w-full md:w-auto mt-3 mb-8 md:mt-0 md:mb-0"
+                                @click="submit"
+                                >Recover Password</vs-button>
                             </div>
                         </div>
                     </div>
@@ -37,11 +39,39 @@
 </template>
 
 <script>
+import axios from "axios";
+import { Base_URL } from "../../../api.config";
+
 export default {
   data () {
     return {
       email: ''
     }
+  },
+  methods:{
+   submit() {
+      this.$validator.validateAll().then((result) => {
+        if (result) {
+          var newemail = localStorage.email;
+          axios
+            .post(Base_URL.Actual_URL + "forget_password", {
+               email_id: this.email
+            })
+            .then((response) => {
+              console.log(response,'nfjd')
+              if(response.data.code == 200) {
+                    this.email = ''
+                    this.$vs.notify({
+                    color: "success",
+                    // title: "Mail sent.",
+                    text: response.data.result,
+                    position: "top-center",
+                });
+              }
+            });
+        }
+      });
+    },
   }
 }
 </script>

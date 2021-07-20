@@ -7,6 +7,7 @@
   Author URL: http://www.themeforest.net/user/pixinvent
 ==========================================================================================*/
 
+import createMultiTabState from 'vuex-multi-tab-state';
 
 export default {
 
@@ -20,5 +21,5 @@ export default {
   chatContacts: [],
 
   // Stores Chat data(log)
-  chats: {}
+  chats: {},
 }

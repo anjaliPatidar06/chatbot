@@ -10,7 +10,7 @@ Vue.component("v-select", vSelect);
       <vx-card title="ChatBot UI Design">
         <!-- <span style="color: red">{{ entitycard }}</span> -->
         <div class="vx-row">
-            <div class="vx-col sm:w-1/3 w-full mb-2">
+          <div class="vx-col sm:w-1/3 w-full mb-2">
             <h6>Chatbot Name</h6>
 
             <vs-input
@@ -48,8 +48,13 @@ Vue.component("v-select", vSelect);
               :options="durations"
               v-model="selectedDuration"
               :dir="$vs.rtl ? 'rtl' : 'ltr'"
+              v-validate="'required'"
+              name="select_font"
             >
             </v-select>
+            <span class="text-danger text-sm">{{
+              errors.first("select_font")
+            }}</span>
 
             <p
               :style="{
@@ -70,7 +75,7 @@ Vue.component("v-select", vSelect);
               type="color"
               name="ui_Color"
               value=""
-            />  
+            />
             <!-- <span class="text-danger text-sm">{{
               errors.first("ui_Color")
             }}</span> -->
@@ -87,7 +92,8 @@ Vue.component("v-select", vSelect);
 
         <div class="vx-row">
           <div class="vx-col sm:w-1/3 w-full mb-2">
-            <vs-button class="mr-3 mt-4" @click="chatbotui">Submit</vs-button>
+            <vs-button class="mr-3 mt-4" @click="chatbotui" v-if="rowdata.length > 0">Update</vs-button>
+            <vs-button class="mr-3 mt-4" @click="chatbotui" v-else>Submit</vs-button>
           </div>
         </div>
       </vx-card>
@@ -96,7 +102,14 @@ Vue.component("v-select", vSelect);
           <template v-if="dataImg">
             <!-- Image Container -->
             <div
-              class="img-container w-64 mx-auto flex items-center justify-center"
+              class="
+                img-container
+                w-64
+                mx-auto
+                flex
+                items-center
+                justify-center
+              "
             >
               <img :src="dataImg" alt="img" class="image-fit" />
             </div>
@@ -121,7 +134,7 @@ Vue.component("v-select", vSelect);
               <vs-button
                 color="primary"
                 class="mb-base mr-3"
-                @click="dataImg = null"
+                @click="removeBotIcon"
                 size="large"
                 >Remove Image</vs-button
               >
@@ -154,7 +167,14 @@ Vue.component("v-select", vSelect);
           <template v-if="dataImgnew">
             <!-- Image Container -->
             <div
-              class="img-container w-64 mx-auto flex items-center justify-center"
+              class="
+                img-container
+                w-64
+                mx-auto
+                flex
+                items-center
+                justify-center
+              "
             >
               <img :src="dataImgnew" alt="img" class="image-fit" />
             </div>
@@ -179,7 +199,7 @@ Vue.component("v-select", vSelect);
               <vs-button
                 color="primary"
                 class="mb-base mr-3"
-                @click="dataImgnew = null"
+                @click="removeChatIcon"
                 size="large"
                 >Remove Image</vs-button
               >
@@ -209,7 +229,14 @@ Vue.component("v-select", vSelect);
           <template v-if="dataImgavatar">
             <!-- Image Container -->
             <div
-              class="img-container w-64 mx-auto flex items-center justify-center"
+              class="
+                img-container
+                w-64
+                mx-auto
+                flex
+                items-center
+                justify-center
+              "
             >
               <img :src="dataImgavatar" alt="img" class="image-fit" />
             </div>
@@ -230,10 +257,7 @@ Vue.component("v-select", vSelect);
                 size="large"
                 >Update Image</vs-button
               >
-              <vs-button
-                color="primary"
-                @click="dataImgavatar = null"
-                size="large"
+              <vs-button color="primary" @click="removeAvatarIcon" size="large"
                 >Remove Image</vs-button
               >
             </div>
@@ -262,7 +286,14 @@ Vue.component("v-select", vSelect);
           <template v-if="dataImgnewbackground">
             <!-- Image Container -->
             <div
-              class="img-container w-64 mx-auto flex items-center justify-center"
+              class="
+                img-container
+                w-64
+                mx-auto
+                flex
+                items-center
+                justify-center
+              "
             >
               <img :src="dataImgnewbackground" alt="img" class="image-fit" />
             </div>
@@ -287,7 +318,7 @@ Vue.component("v-select", vSelect);
               <vs-button
                 color="primary"
                 class="mb-base mr-3"
-                @click="dataImgnewbackground = null"
+                @click="removeBackImageIcon"
                 size="large"
                 >Remove Image</vs-button
               >
@@ -340,19 +371,22 @@ const dict = {
     chatbotheading: {
       required: "Please enter chatbot heading.",
     },
-    bot_name:{
+    bot_name: {
       required: "Please enter chatbot name.",
     },
-    ui_Color:{
-      required:"Please select chatbot UI color"
-    }
+    ui_Color: {
+      required: "Please select chatbot UI color",
+    },
+    select_font: {
+      required: "Please select font",
+    },
   },
 };
 Validator.localize("en", dict);
 export default {
   data() {
     return {
-      bot_name:'',
+      bot_name: "",
       uiColor: "#def1d1",
       chatbotheading: "",
       dataImgnewbackground: null,
@@ -482,12 +516,23 @@ export default {
       localStorage.chatbot_id !== null &&
       localStorage.chatbot_id !== undefined
     ) {
+      this.getReloadData();
+    }
+  },
+  methods: {
+    getReloadData() {
       axios
         .post(Base_URL.Actual_URL + "chatboticonreload", {
           chatbot_id: localStorage.chatbot_id,
         })
         .then((response) => {
           this.rowdata = response.data.userlist;
+          if (this.rowdata.length > 0) {
+            this.bot_name = this.rowdata[0].bot_name;
+            this.chatbotheading = this.rowdata[0].chatbotheading;
+            this.selectedDuration = this.rowdata[0].fontname;
+            this.uiColor = this.rowdata[0].chatbotuicolor;
+          }
           if (this.rowdata.length > 0) {
             var st = this.rowdata[0].botimagepath;
 
@@ -506,9 +551,116 @@ export default {
             this.dataImgnewbackground = `${se}`;
           }
         });
-    }
-  },
-  methods: {
+    },
+    removeBotIcon() {
+      var filename = this.dataImg.substring(this.dataImg.lastIndexOf("/") + 1);
+
+      if (filename == "sara_avatar.png") {
+        this.$vs.notify({
+          color: "warning",
+          // title: "Delete Record",
+          title: "Default images can not be deleted.",
+          position: "top-center",
+        });
+      } else {
+        axios
+          .post(Base_URL.Actual_URL + "deleteboticon", {
+            idx: this.rowdata[0].id,
+          })
+          .then((response) => {
+            this.dataImg = null;
+            this.$vs.notify({
+              color: "danger",
+              title: "Delete Record",
+              text: "The selected Record was successfully deleted",
+              position: "top-center",
+            });
+          });
+      }
+    },
+    removeChatIcon() {
+      var filename = this.dataImgnew.substring(
+        this.dataImgnew.lastIndexOf("/") + 1
+      );
+
+      if (filename == "logoimag.png") {
+        this.$vs.notify({
+          color: "warning",
+          // title: "Delete Record",
+          title: "Default images can not be deleted.",
+          position: "top-center",
+        });
+      } else {
+        axios
+          .post(Base_URL.Actual_URL + "deletelogo", {
+            idx: this.rowdata[0].id,
+          })
+          .then((response) => {
+            this.dataImgnew = null;
+            this.$vs.notify({
+              color: "danger",
+              title: "Delete Record",
+              text: "The selected Record was successfully deleted",
+              position: "top-center",
+            });
+          });
+      }
+    },
+    removeAvatarIcon() {
+      var filename = this.dataImgavatar.substring(
+        this.dataImgavatar.lastIndexOf("/") + 1
+      );
+      if (filename == "userAvatar.jpg") {
+        this.$vs.notify({
+          color: "warning",
+          // title: "Delete Record",
+          title: "Default images can not be deleted.",
+          position: "top-center",
+        });
+      } else {
+        axios
+          .post(Base_URL.Actual_URL + "deleteusericon", {
+            idx: this.rowdata[0].id,
+          })
+          .then((response) => {
+            this.dataImgavatar = null;
+            this.$vs.notify({
+              color: "danger",
+              title: "Delete Record",
+              text: "The selected Record was successfully deleted",
+              position: "top-center",
+            });
+          });
+      }
+    },
+    removeBackImageIcon() {
+      var filename = this.dataImgnewbackground.substring(
+        this.dataImgnewbackground.lastIndexOf("/") + 1
+      );
+
+      if (filename == "bg.png") {
+        this.$vs.notify({
+          color: "warning",
+          // title: "Delete Record",
+          title: "Default images can not be deleted.",
+          position: "top-center",
+        });
+      } else {
+        axios
+          .post(Base_URL.Actual_URL + "deletebckgrundimage", {
+            idx: this.rowdata[0].id,
+          })
+          .then((response) => {
+            this.dataImgnewbackground = null;
+            this.$vs.notify({
+              color: "danger",
+              // title: "Delete Record",
+              title: "The selected Record was successfully deleted",
+              position: "top-center",
+            });
+          });
+      }
+    },
     updateCurrImg(input) {
       if (input.target.files && input.target.files[0]) {
         const reader = new FileReader();
@@ -604,7 +756,7 @@ export default {
       });
     },
     chatbotui() {
-      var color = localStorage.getItem("color");
+      // var color = localStorage.getItem("color");
       this.$validator.validateAll().then((result) => {
         if (result) {
           axios
@@ -612,9 +764,10 @@ export default {
               color: localStorage.getItem("color") || this.uiColor,
               company_id: localStorage.company_id,
               chatbotheading: this.chatbotheading,
-              fontname: this.selectedDuration.durationCode,
+              fontname:
+                this.selectedDuration.durationCode || this.selectedDuration,
               chatbot_id: localStorage.chatbot_id,
-              bot_name: this.bot_name
+              bot_name: this.bot_name,
             })
             .then((response) => {
               if (response.status == 200) {
@@ -627,9 +780,10 @@ export default {
                 this.uiColor = "#def1d1";
                 this.chatbotheading = "";
                 this.selectedDuration = "";
-                this.bot_name = '';
+                this.bot_name = "";
                 this.entitycard = response.data.result;
               }
+              this.getReloadData();
 
               //     else {
               //  this.$vs.notify({

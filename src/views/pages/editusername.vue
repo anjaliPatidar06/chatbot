@@ -7,7 +7,7 @@
           <div class="vx-row">
             <div class="vx-col sm:w-1/2 w-full mb-2">
               <vs-input
-                v-validate="'required|alpha|min:3|max:25'"
+                v-validate="'required|min:3|max:25'"
                 data-vv-validate-on="blur"
                 class="w-full"
                 label="First Name"
@@ -21,7 +21,7 @@
             <div class="vx-col sm:w-1/2 w-full mb-2">
               <vs-input
                 class="w-full"
-                v-validate="'required|alpha|min:3|max:25'"
+                v-validate="'required|min:3|max:25'"
                 data-vv-validate-on="blur"
                 label="Last Name"
                 name="last_name"
@@ -183,18 +183,19 @@ import { Validator } from "vee-validate";
 const dict = {
   custom: {
     first_name: {
-      required: "Please enter your first name",
-      alpha: "Your first name may only contain alphabetic characters",
+      required: "Please enter first name",
+      // alpha: "Your first name may only contain alphabetic characters",
     },
     last_name: {
-      required: "Please enter your last name",
-      alpha: "Your last name may only contain alphabetic characters",
+      required: "Please enter last name",
+      // alpha: "Your last name may only contain alphabetic characters",
     },
     email: {
       required: "Please enter your email",
+      email: "Please enter a valid email"
     },
     chatbot_name: {
-      required: "Please select chatbot name ",
+      required: "Please select chatbot name",
     },
     role: {
       required: "Please select role",

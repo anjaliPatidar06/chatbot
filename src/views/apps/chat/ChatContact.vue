@@ -20,8 +20,8 @@
       class="contact__container w-full flex items-center justify-between overflow-hidden"
     >
       <div class="contact__info flex flex-col truncate w-5/6">
-        {{ contact.contact }}
-        <!-- <h5 class="font-semibold" :class="{'text-white': isActiveChatUser}">{{ contact.displayName }}</h5> -->
+         <!-- <p v-html="contact.display_name == null ? contact.contact : contact.display_name"></p> -->
+        <h5 class="font-semibold" :class="{'text-white': isActiveChatUser}"  v-html="contact.display_name == null ? contact.contact : contact.display_name">{{ contact.displayName }}</h5>
         <h5
           class="font-semibold"
           :class="{ 'text-white': isActiveChatUser }"
@@ -75,7 +75,6 @@
 
 <script>
 var moment = require("moment-timezone");
-
 export default {
   props: {
     contact: { type: Object, required: true },
@@ -104,14 +103,8 @@ export default {
   },
   methods: {
     remove_linebreaks(str) {
-      // var div = document.createElement("div");
-      // div.innerHTML = str;
-      // var text = div.textContent || div.innerText || "";
-      // // document.write(text)
-      // var str1 = text.replace(/[\r<br/>]+/gm, "");
-      // var str2 = str1.replace(/[\r<p>]+/gm, "");
-      // return str2.replace(/[\r<p/>]+/gm, "");
-      return str.replace('(/\r?<br/>|\r/g', " ");
+      str = str.replace(/<br\s*\/?>/gi, ' ')
+      return str
     },
   },
 };

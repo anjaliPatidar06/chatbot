@@ -11,7 +11,7 @@ Author URL: http://www.themeforest.net/user/pixinvent
 <template>
   <div class="clearfix">
     <vs-input
-      v-validate="'required|alpha|max:15'"
+      v-validate="'required|max:15'"
       data-vv-validate-on="blur"
       label-placeholder="Name"
       name="name"
@@ -180,7 +180,7 @@ const dict = {
   custom: {
     name: {
       required: "Please enter your name",
-      alpha: "Your name may only contain alphabetic characters",
+      // alpha: "Your name may only contain alphabetic characters",
     },
     email: {
       required: "Please enter email",

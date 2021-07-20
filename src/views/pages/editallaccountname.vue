@@ -10,7 +10,7 @@
             <vs-input
               class="w-full"
               label="Name"
-              v-validate="'required|alpha|max:15'"
+              v-validate="'required'"
               name="name"
               v-model="rowdata[0].name"
             />
@@ -34,7 +34,7 @@
           <div class="vx-col sm:w-1/2 w-full mb-2">
             <vs-input
               class="w-full"
-              v-validate="'required|alpha|max:15'"
+              v-validate="'required'"
               data-vv-validate-on="blur"
               label="Company"
               name="company"
@@ -196,11 +196,11 @@ const dict = {
   custom: {
     name: {
       required: "Please enter your name",
-      alpha: "Your name may only contain alphabetic characters",
+      // alpha: "Your name may only contain alphabetic characters",
     },
     company: {
       required: "Please enter your company",
-      alpha: "Your company name may only contain alphabetic characters",
+      // alpha: "Your company name may only contain alphabetic characters",
     },
     country: {
       required: "Please select your country name",

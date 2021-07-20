@@ -87,9 +87,9 @@
     background-size: cover;
     object-fit: fill;
 }
-#chat-app .chat-content-area .chat-content-scroll-area {
+/* #chat-app .chat-content-area .chat-content-scroll-area {
   height: calc(90% - 134px);
-}
+} */
 .usertimestamp {
   /* float: right; */
   /* margin-top: -1px;

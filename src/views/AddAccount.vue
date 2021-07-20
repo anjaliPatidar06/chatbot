@@ -11,7 +11,7 @@
             <vs-input
               class="w-full"
               label="Name"
-              v-validate="'required|max:15'"
+              v-validate="'required'"
               name="name"
               v-model="name"
             />
@@ -35,7 +35,7 @@
           <div class="vx-col sm:w-1/2 w-full mb-2">
             <vs-input
               class="w-full"
-              v-validate="'required|max:15'"
+              v-validate="'required'"
               data-vv-validate-on="blur"
               label="Company"
               name="company"
@@ -222,7 +222,7 @@ const dict = {
     },
     name: {
       required: "Please enter name",
-      alpha: "Your name may only contain alphabetic characters",
+      // alpha: "Your name may only contain alphabetic characters",
     },
     company: {
       required: "Please enter company name",
@@ -617,10 +617,8 @@ export default {
   mounted() {
     axios
       .get(Base_URL.Actual_URL + "subscriptiondata", {
-        // axios.get(Base_URL.Actual_URL+'subscriptiondata',{
       })
       .then((response) => {
-        console.log(response);
         this.rowdata = response.data.userlist;
       });
   },

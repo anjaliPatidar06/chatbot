@@ -205,7 +205,37 @@ export default {
       container: "#div-with-loading",
       scale: 0.6,
     });
-
+    // const body = {
+      // method: "create",
+      // store: 25923,
+      // authkey: "f7Gng@bTpxw-bbhq",
+      // framed: "xxx",
+      // cartid: 1,	
+      // test: 1,
+      // amount: 20,
+      // currency: "INR",
+      // description: "order transaction test",
+      // authorised: "http://188.227.58.42:83/allUser",
+      // declined: "http://188.227.58.42:83/login",
+      // cancelled: "http://188.227.58.42:83"
+//             ivp_method: "create",
+//       ivp_store: 25923,
+//       ivp_authkey: "f7Gng@bTpxw-bbhq",
+// ivp_trantype:sale
+// //ivp_tranclass:cont
+// ivp_cart:anj_2
+// ivp_currency:AED
+// ivp_amount:9.50,
+//       ivp_currency: "INR",
+//       ivp_desc: "order transaction test",
+//       return_auth: "http://188.227.58.42:83/allUser",
+//       return_decl: "http://188.227.58.42:83/login",
+//       return_can: "http://188.227.58.42:83"
+//     }
+//     axios.post('https://secure.telr.com/gateway/order.json',body).then((res) => {
+//       console.log(res,'res')
+      
+//     })
     this.allUser();
   },
 };

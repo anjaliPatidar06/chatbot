@@ -53,6 +53,7 @@ const dict = {
   custom: {
     email: {
       required: "Please enter your email",
+      email: "Please enter a valid email."
     },
     password: {
       required: "Please enter your password",

@@ -410,7 +410,6 @@ export default {
       this.showEmojis2 = false;
     },
     selectEmoji2(emoji) {
-      console.log(emoji);
       document.getElementById('editor2').focus();
       if (window.getSelection) {
         // IE9 and non-IE

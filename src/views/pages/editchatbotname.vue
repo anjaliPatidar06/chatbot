@@ -76,7 +76,6 @@ export default {
     },
   },
   created() {
-    console.log(Base_URL.Actual_URL, "Base_URL.Actual_URL");
   },
   mounted() {
     const url = Base_URL.Actual_URL + "editchatbotname/";
@@ -84,10 +83,6 @@ export default {
     const url1 = url + id;
     axios.get(url1, {}).then((response) => {
       this.rowdata = response.data.userlist;
-      //   console.log(this.rowdata[0].Email,this.rowdata[0].Password,this.rowdata[0].Firstname,this.rowdata[0].Lastname,this.rowdata[0].PhoneNumber)
-      // console.log(localStorage.getItem('email'))
-
-      // console.log(response)
     });
   },
   methods: {
@@ -120,7 +115,6 @@ export default {
         })
     },
     resetForm() {
-      console.log("Reseting the form");
       var self = this;
       //Iterate through each object field, key is name of the object field`
       Object.keys(this.data.form).forEach(function (key, index) {

@@ -238,7 +238,6 @@ export default {
         .then((response) => {
           this.email = response.data.userlist;
 
-          console.log(this.email[0].id);
           this.id = this.email[0].id;
 
           this.$router.push({ name: "editslotname", params: { id: this.id } });

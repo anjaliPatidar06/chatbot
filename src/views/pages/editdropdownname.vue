@@ -8,15 +8,15 @@
         <div class="vx-row">
           <div class="vx-col sm:w-1/2 w-full mb-2" :data="rowdata">
             <h6>Response Name</h6>
-              <v-select
-                class="w-full"
-                label="responsename"
-                name="response_name"
-                v-validate="'required'"
-                :options="responsedata"
-                v-model="rowdata[0].responsename"
-              >
-              </v-select>
+            <v-select
+              class="w-full"
+              label="responsename"
+              name="response_name"
+              v-validate="'required'"
+              :options="responsedata"
+              v-model="rowdata[0].responsename"
+            >
+            </v-select>
             <span class="text-danger text-sm">{{
               errors.first("response_name")
             }}</span>
@@ -24,30 +24,30 @@
           <div class="vx-col sm:w-1/2 w-full mb-2" :data="rowdata">
             <h6>Intent</h6>
 
-              <v-select
-                class="w-full"
-                label="intent"
-                :options="intentData"
-                v-model="rowdata[0].intent"
-                :dir="$vs.rtl ? 'rtl' : 'ltr'"
-                v-validate="'required'"
-                name="assignintentdropdown"
-              >
-              </v-select>
-              <span class="text-danger text-sm">
-                {{ errors.first("assignintentdropdown") }}</span
-              >
-           </div>
+            <v-select
+              class="w-full"
+              label="intent"
+              :options="intentData"
+              v-model="rowdata[0].intent"
+              :dir="$vs.rtl ? 'rtl' : 'ltr'"
+              v-validate="'required'"
+              name="assignintentdropdown"
+            >
+            </v-select>
+            <span class="text-danger text-sm">
+              {{ errors.first("assignintentdropdown") }}</span
+            >
+          </div>
         </div>
         <div class="vx-row">
           <div class="vx-col sm:w-1/2 w-full mb-2" :data="rowdata">
             <h6>Entity Key</h6>
-                    <v-select
-                class="w-full"
-                label="Entitykey"
-                :options="newsentence"
-                @input="dropdown"
-                v-validate="{ required: rowdata[0].entityvalue !== '' }"
+            <v-select
+              class="w-full"
+              label="Entitykey"
+              :options="newsentence"
+              @input="dropdown"
+              v-validate="{ required: rowdata[0].entityvalue !== '' }"
               name="entity_key"
               v-model="rowdata[0].entitykey"
             />
@@ -56,20 +56,19 @@
             }}</span>
           </div>
           <div class="vx-col sm:w-1/2 w-full mb-2" :data="rowdata">
-           
-              <h6>Entity Value</h6>
-              <v-select
-                class="w-full"
-                label="Entityvalue"
-                :options="entitycard"
-                v-model="rowdata[0].entityvalue"
-                v-validate="{ required: rowdata[0].entitykey !== '' }"
-                name="entity_value"
-                :dir="$vs.rtl ? 'rtl' : 'ltr'"
-              />
-              <span class="text-danger text-sm">{{
-                errors.first("entity_value")
-              }}</span>
+            <h6>Entity Value</h6>
+            <v-select
+              class="w-full"
+              label="Entityvalue"
+              :options="entitycard"
+              v-model="rowdata[0].entityvalue"
+              v-validate="{ required: rowdata[0].entitykey !== '' }"
+              name="entity_value"
+              :dir="$vs.rtl ? 'rtl' : 'ltr'"
+            />
+            <span class="text-danger text-sm">{{
+              errors.first("entity_value")
+            }}</span>
           </div>
         </div>
 
@@ -83,8 +82,8 @@
               v-model="rowdata[0].title"
             />
             <span class="text-danger text-sm">
-                {{ errors.first("title") }}</span
-              >
+              {{ errors.first("title") }}</span
+            >
           </div>
           <div class="vx-col w-full">
             <vs-button
@@ -104,7 +103,7 @@ import axios from "axios";
 import vSelect from "vue-select";
 import { Base_URL } from "../../../api.config";
 import { Validator } from "vee-validate";
-import { EventBus } from '../../event-bus';
+import { EventBus } from "../../event-bus";
 
 const dict = {
   custom: {
@@ -136,9 +135,9 @@ export default {
         responsename: "",
         title: "",
       },
-      entitycard:[],
-      intentData:[],
-      newsentence:[]
+      entitycard: [],
+      intentData: [],
+      newsentence: [],
     };
   },
 
@@ -148,19 +147,16 @@ export default {
   mounted() {
     const url = Base_URL.Actual_URL + "editdropdownname/";
     const id = this.$route.params.id;
-    console.log(url + id);
     const url1 = url + id;
     axios.get(url1, {}).then((response) => {
-      console.log(response);
       this.rowdata = response.data.userlist;
     });
-this.getTableData()
+    this.getTableData();
   },
   methods: {
-        getTableData() {
+    getTableData() {
       var newemail = localStorage.getItem("email");
       var chatbot_id = localStorage.getItem("chatbot_id");
-      console.log(chatbot_id, "chatbot_id");
       axios
         .post(Base_URL.Actual_URL + "entityintentdropdown", {
           company_id: localStorage.company_id,
@@ -168,15 +164,13 @@ this.getTableData()
         })
         .then((response) => {
           this.intentData = response.data.userlist;
-          console.log(this.intentData,'intentdata')
           this.newsentence = response.data.sentence;
           this.responsedata = response.data.response1;
           this.buttonnew = response.data.button;
-          console.log(this.buttonnew, "buttonnew");
         });
     },
-     dropdown: function (e) {
-       this.rowdata[0].entityvalue = ''
+    dropdown: function (e) {
+      this.rowdata[0].entityvalue = "";
       if (e !== null) {
         var newemail = localStorage.getItem("email");
         var chatbot_id = localStorage.getItem("chatbot_id");
@@ -190,41 +184,45 @@ this.getTableData()
             this.entitycard = response.data.entity;
           });
       } else {
-        this.rowdata[0].entitykey = ''
-        this.entitycard = ''
-        this.rowdata[0].entityvalue = ''
+        this.rowdata[0].entitykey = "";
+        this.entitycard = "";
+        this.rowdata[0].entityvalue = "";
       }
     },
     Update() {
-      console.log("in update");
-   this.$validator.validateAll().then((result) => {
+      this.$validator.validateAll().then((result) => {
         if (result) {
-      const url = Base_URL.Actual_URL + "editdropdownname/";
-      const id = this.$route.params.id;
-      console.log(url + id);
-      const url1 = url + id;
-      axios
-        .post(url1, {
-          intent: this.rowdata[0].intent.intent || this.rowdata[0].intent,
-          title: this.rowdata[0].title,
-          responsename: this.rowdata[0].responsename.responsename ||this.rowdata[0].responsename,
-          entityvalue: this.rowdata[0].entityvalue.Entityvalue || this.rowdata[0].entityvalue ,
-          entitykey: this.rowdata[0].entitykey.Entitykey || this.rowdata[0].entitykey ,
-        })
-        .then((response) => {
-          if (response.data.code == 200) {
-            EventBus.$emit('selectedComponent','dropdownEvent')
-             this.$vs.notify({
-                title: "Edit Dropdown ",
-                 text: "Your Dropdown data is updated",
-                 color: 'success',
-                 position: "top-center",
-              });
-            this.$router.go(-1)
-          }
-        });
+          const url = Base_URL.Actual_URL + "editdropdownname/";
+          const id = this.$route.params.id;
+          const url1 = url + id;
+          axios
+            .post(url1, {
+              intent: this.rowdata[0].intent.intent || this.rowdata[0].intent,
+              title: this.rowdata[0].title,
+              responsename:
+                this.rowdata[0].responsename.responsename ||
+                this.rowdata[0].responsename,
+              entityvalue:
+                this.rowdata[0].entityvalue.Entityvalue ||
+                this.rowdata[0].entityvalue,
+              entitykey:
+                this.rowdata[0].entitykey.Entitykey ||
+                this.rowdata[0].entitykey,
+            })
+            .then((response) => {
+              if (response.data.code == 200) {
+                EventBus.$emit("selectedComponent", "dropdownEvent");
+                this.$vs.notify({
+                  title: "Edit Dropdown ",
+                  text: "Your Dropdown data is updated",
+                  color: "success",
+                  position: "top-center",
+                });
+                this.$router.go(-1);
+              }
+            });
         }
-      })
+      });
     },
   },
 };

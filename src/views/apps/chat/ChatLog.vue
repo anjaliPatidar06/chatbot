@@ -46,12 +46,28 @@
             <vs-avatar
               v-if="msg.msg_from == agentId"
               size="40px"
-              class="border-2 shadow border-solid border-white m-0 flex-shrink-0"
+              class="
+                border-2
+                shadow
+                border-solid border-white
+                m-0
+                flex-shrink-0
+              "
               :class="msg.msg_from == agentId ? 'sm:ml-5 ml-3' : 'sm:mr-5 mr-3'"
             ></vs-avatar>
             <div
               v-if="msg.msg_from !== agentId"
-              class="con-vs-avatar border-2 shadow border-solid border-white m-0 flex-shrink-0 40px sm:mr-5 mr-3"
+              class="
+                con-vs-avatar
+                border-2
+                shadow
+                border-solid border-white
+                m-0
+                flex-shrink-0
+                40px
+                sm:mr-5
+                mr-3
+              "
               style="width: 40px; height: 40px; background: rgb(195, 195, 195)"
             >
               <i
@@ -78,7 +94,17 @@
           ></vs-avatar>
           <div
             v-if="msg.msg_from !== agentId"
-            class="con-vs-avatar border-2 shadow border-solid border-white m-0 flex-shrink-0 40px sm:mr-5 mr-3"
+            class="
+              con-vs-avatar
+              border-2
+              shadow
+              border-solid border-white
+              m-0
+              flex-shrink-0
+              40px
+              sm:mr-5
+              mr-3
+            "
             style="width: 40px; height: 40px; background: rgb(195, 195, 195)"
           >
             <i
@@ -110,7 +136,18 @@
         </template>
 
         <div
-          class="msg break-words relative shadow-md rounded py-3 px-4 mb-2 rounded-lg max-w-sm"
+          class="
+            msg
+            break-words
+            relative
+            shadow-md
+            rounded
+            py-3
+            px-4
+            mb-2
+            rounded-lg
+            max-w-sm
+          "
           :class="{
             'bg-primary-gradient text-white': msg.msg_from == agentId,
             'border border-solid border-transparent bg-white': !(
@@ -148,7 +185,7 @@
                 style="color: white"
                 v-if="msg.msg_type == 'application/pdf'"
               >
-                <a :href="msg.textContent" :download="msg.file_name">
+                <a :href="msg.textContent" :download="msg.file_name" target="_blank">
                   <i
                     class="fa fa-download"
                     aria-hidden="true"
@@ -160,6 +197,27 @@
                   class="fa fa-file-pdf-o ml-2 fa-lg"
                   aria-hidden="true"
                   style="color: white"
+                >
+                </i>
+              </span>
+            </div>
+          </span>
+            <span v-if="msg.msg_type == 'pdf'">
+            <div class="img-upload">
+              <span
+                class="text-archive"
+                v-if="msg.msg_type == 'pdf'"
+              >
+                <a :href="msg.textContent" :download="msg.file_name" target="_blank">
+                  <i
+                    class="fa fa-download"
+                    aria-hidden="true"
+                  ></i
+                ></a>
+                <span class="ml-2">{{ msg.file_name }}</span>
+                <i
+                  class="fa fa-file-pdf-o ml-2 fa-lg"
+                  aria-hidden="true"
                 >
                 </i>
               </span>
@@ -211,14 +269,6 @@ export default {
     remove_linebreaks(str) {
       return str.replace(/[\r\n]+/gm, "");
     },
-    //  hashItalic: function(value) {
-    //   if (!value) return "";
-    //   value = value.toString();
-    //   let hashReg = /_\w+/gm;
-    //   value = value.replace(hashReg, "<i>$&</i>");
-    //   value = value.replace('_', '')
-    //   return value;
-    // }
   },
   computed: {
     chatData() {
@@ -239,12 +289,8 @@ export default {
   },
   methods: {
     renderDoc(e) {
-      console.log(e, "e");
       let file;
       file = e.name;
-      // var res = e.split("base64,");
-      // console.log(res,'res')
-      // console.log(atob(res[1]),'decoded')
       return file;
     },
     isSameDay(time_to, time_from) {
@@ -266,6 +312,10 @@ export default {
     },
     scrollToBottom() {
       this.$nextTick(() => {
+        console.log(
+          this.$parent.$el.scrollHeight,
+          "this.$parent.$el.scrollHeight"
+        );
         this.$parent.$el.scrollTop = this.$parent.$el.scrollHeight;
       });
     },

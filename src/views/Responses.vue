@@ -330,7 +330,6 @@ export default {
     };
   },
   mounted() {
-    console.log("hey mount");
     this.getEntityIntent();
   },
 
@@ -437,7 +436,6 @@ export default {
       if(document.getElementById('editor1').innerHTML == '' || document.getElementById('editor1').innerHTML == null) {
         this.response_error = true
       } else {
-        console.log('hey else')
         this.response_error = false
       }
     },
@@ -498,7 +496,7 @@ export default {
       }
     },
     makeItalic2(Id) {
-        if (Id == "editor2") {
+      if (Id == "editor2") {
         var state = document.queryCommandState("italic");
         switch (state) {
           case true:
@@ -515,19 +513,31 @@ export default {
       this.showEmojis = false;
     },
     selectEmoji(emoji) {
+      // alert('hey')
+      //   var elInput = document.getElementById('editor1')
+      //   console.log(elInput,'elInput');
+      //   var start = elInput // Record the position of the cursor
+      //   var end = elInput // Record the location of the last character of the selected character
+      //   if (start === undefined || end === undefined) return
+      //   var txt = elInput.value
+      //   console.log(txt, 'txt')
+      //   var result =
+      //     txt.substring(0, start) + emoji.data + txt.substring(end)
+      //   elInput.value = result // Assignment to the value of INPUT
+      //   elInput.focus()
+      //   elInput.selectionStart = start + emoji.data.length
+      //   elInput.selectionEnd = start + emoji.data.length
+      //   document.getElementById('editor1').innerHTML = result
+      //   console.log(document.getElementById('editor1').innerHTML,'console.log')
       var sel, range;
       document.getElementById('editor1').focus();
       if (window.getSelection) {
-        // IE9 and non-IE
-         console.log('if ++++++')
-      console.log(document.selection)
+        // alert('if 1')
         sel = window.getSelection();
         if (sel.getRangeAt && sel.rangeCount) {
+          // alert('if 2')
           range = sel.getRangeAt(0);
           range.deleteContents();
-
-          // Range.createContextualFragment() would be useful here but is
-          // non-standard and not supported in all browsers (IE9, for one)
           var el = document.createElement("div");
           el.innerHTML = emoji.data;
           var frag = document.createDocumentFragment(),
@@ -537,30 +547,26 @@ export default {
             lastNode = frag.appendChild(node);
           }
           range.insertNode(frag);
-
-          // Preserve the selection
           if (lastNode) {
+            // alert('last node',lastNode)
             range = range.cloneRange();
             range.setStartAfter(lastNode);
             range.collapse(true);
             sel.removeAllRanges();
+            console.log(sel, 'range')
             sel.addRange(range);
           }
         }
       } else if (document.selection && document.selection.type != "Control") {
-        // IE < 9
-      alert('else if')
-      console.log(document.selection.type)
+        // alert('else if')
         document.selection.createRange().pasteHTML(emoji.data);
       }
     },
-        selectEmoji2(emoji) {
-                var sel, range;
+    selectEmoji2(emoji) {
+      var sel, range;
       document.getElementById('editor2').focus();
       if (window.getSelection) {
         // IE9 and non-IE
-         console.log('if ++++++')
-      console.log(document.selection)
         sel = window.getSelection();
         if (sel.getRangeAt && sel.rangeCount) {
           range = sel.getRangeAt(0);
@@ -588,11 +594,10 @@ export default {
           }
         }
       } else if (document.selection && document.selection.type != "Control") {
-        // IE < 9
-      console.log(document.selection.type)
-        document.selection.createRange().pasteHTML(emoji.data);
-      }
-        },
+          // IE < 9
+            document.selection.createRange().pasteHTML(emoji.data);
+          }
+    },
 
     showEmojiContainer() {
       this.showEmojis = true;
@@ -600,7 +605,7 @@ export default {
      showEmojiContainer2() {
       this.showEmojis2 = true;
     },
-       closeEmojiContainer2() {
+    closeEmojiContainer2() {
       this.showEmojis2 = false;
     },
     // selectEmoji2(emoji) {
@@ -658,9 +663,7 @@ export default {
         });
     },
     SubmitResponse() {
-      console.log(document.getElementById('editor1').innerHTML,document.getElementById('editor1').innerHTML)
       this.addresponse = document.getElementById('editor1').innerHTML
-      console.log(this.addresponse,'respodnejfdnje')
       if(this.addresponse == '' || this.addresponse == null) {
         this.response_error = true
       } else {
@@ -674,9 +677,9 @@ export default {
             .post(Base_URL.Actual_URL + "addresponse", {
               chatbot_id: chatbot_id,
               company_id: localStorage.company_id,
-              addresponse: this.addresponse,
+              addresponse: document.getElementById('editor1').innerHTML,
               createresponse: this.createresponse,
-              addresponse1: this.addresponse1,
+              addresponse1: document.getElementById('editor2').innerHTML,
             })
             .then((response) => {
               if (response.data.code == 100) {
@@ -932,8 +935,6 @@ export default {
 
     addEvent5() {
       var newemail = localStorage.getItem("email");
-      console.log(newemail);
-
       axios
         .post(Base_URL.Actual_URL + "cardvalue", {
           company_id: localStorage.company_id,

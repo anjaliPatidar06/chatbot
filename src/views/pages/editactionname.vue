@@ -124,7 +124,6 @@ export default {
           const url = Base_URL.Actual_URL + "editactionname/";
           const id = this.$route.params.id;
           const url1 = url + id;
-          console.log(typeof this.rowdata,'this.rowdata[0].actionname')
           if (this.rowdata[0].responsename !== null && this.rowdata[0].responsename !== undefined) {
             if (this.rowdata[0].responsename.responsename !== null && this.rowdata[0].responsename.responsename !== undefined) {
                 response = this.rowdata[0].responsename.responsename

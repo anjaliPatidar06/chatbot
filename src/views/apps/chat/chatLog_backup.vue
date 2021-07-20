@@ -56,7 +56,6 @@ export default{
   },
   computed: {
     chatData () {
-      //console.log("sakshi here 123455 ")
       return this.$store.getters['chat/chatDataOfUser'](this.userId)
     },
     activeUserImg () {
@@ -73,7 +72,6 @@ export default{
     }
   },
   created() {
-    console.log('hey chat data')
     this.getChatMessages(this.userId)
   },
   methods: {
@@ -84,7 +82,6 @@ export default{
         })
         .then((response) => {
           this.newmessages = response.data.msg_list;
-          console.log(response, "new messa+++++++++++++");
         });
     },
     isSameDay (time_to, time_from) {

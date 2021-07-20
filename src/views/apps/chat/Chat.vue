@@ -1,7 +1,13 @@
 <template>
   <div
     id="chat-app"
-    class="border border-solid d-theme-border-grey-light rounded relative overflow-hidden"
+    class="
+      border border-solid
+      d-theme-border-grey-light
+      rounded
+      relative
+      overflow-hidden
+    "
   >
     <vs-sidebar
       class="items-no-padding"
@@ -82,7 +88,14 @@
     <!-- CONTACTS LIST -->
 
     <div
-      class="chat__bg no-scroll-content chat-content-area border border-solid d-theme-border-grey-light border-t-0 border-r-0 border-b-0"
+      class="
+        chat__bg
+        no-scroll-content
+        chat-content-area
+        border border-solid
+        d-theme-border-grey-light
+        border-t-0 border-r-0 border-b-0
+      "
       :class="{
         'sidebar-spacer--wide': clickNotClose,
         'flex items-center justify-center': activeChatUser === null,
@@ -115,7 +128,11 @@
         > -->
         <component
           :is="scrollbarTag"
-          class="chat-content-scroll-area border border-solid d-theme-border-grey-light"
+          class="
+            chat-content-scroll-area
+            border border-solid
+            d-theme-border-grey-light
+          "
           :class="[showEmojis ? 'custom-chatlog' : 'inherit-chatlog']"
           :settings="settings"
           ref="chatLogPS"
@@ -147,20 +164,17 @@
             </div> -->
             <div class="vx-row w-full">
               <div class="vx-col w-1/2 pr-0">
-            <VEmojiPicker
-              @select="selectEmoji"
-              v-if="showEmojis"
-              @emoji-click="emojiClick"
-              emojisByRow="10"
-              emojiSize="34"
-              :showSearch="true"
-              :dark="false"
-            />
+                <VEmojiPicker
+                  @select="selectEmoji"
+                  v-if="showEmojis"
+                  emojisByRow="10"
+                  emojiSize="34"
+                  :showSearch="true"
+                  :dark="false"
+                />
 
-
-
-            <!-- </div> -->
-            <!-- <vs-input
+                <!-- </div> -->
+                <!-- <vs-input
               id="editor1"
               class="flex-1"
               placeholder="Type Your Message"
@@ -169,65 +183,72 @@
               @select="testFunction"
               ref="boldText"
             ></vs-input> -->
-            <div
-              id="editor1"
-              contenteditable
-              placeholder="Type Your Message"
-              @enter="queuePurchase"
-            >
-            </div></div>
-            <!-- <div id="editor1"
+                <div
+                  id="editor1"
+                  contenteditable
+                  placeholder="Type Your Message"
+                  @keyup.enter.exact="inputHandler"
+                  @keydown.enter.exact.prevent
+                  @input="CheckMessage"
+                ></div>
+              </div>
+              <!-- <div id="editor1"
               class="flex-1"
               placeholder="Type Your Message"
               @keyup.enter="queuePurchase"
               @select="testFunction"
               ref="boldText"><p>Test...</p></div> -->
-            <!-- </vx-input-group> -->
+              <!-- </vx-input-group> -->
 
-            <input
-              type="file"
-              class="hidden"
-              @change="sendChatImage"
-              data-vv-as="file"
-              ref="chatImage"
-              accept="*"
-              name="chatImage"
-              :dir="$vs.rtl ? 'rtl' : 'ltr'"
-            />
-          <div class="vx-col w-1/2 pl-0 pr-0">
-            <vs-button @click="makeBold('editor1')" style="border-radius:0"
-            ><i class="fa fa-bold" aria-hidden="true"></i
-          ></vs-button>
-          <vs-button @click="makeItalic('editor1')" style="border-radius:0"
-            ><i class="fa fa-italic" aria-hidden="true"></i
-          ></vs-button>
+              <input
+                type="file"
+                class="hidden"
+                @change="sendChatImage"
+                data-vv-as="file"
+                ref="chatImage"
+                accept="*"
+                name="chatImage"
+                :dir="$vs.rtl ? 'rtl' : 'ltr'"
+              />
+              <div class="vx-col w-1/2 pl-0 pr-0">
+                <vs-button @click="makeBold('editor1')" style="border-radius: 0"
+                  ><i class="fa fa-bold" aria-hidden="true"></i
+                ></vs-button>
+                <vs-button
+                  @click="makeItalic('editor1')"
+                  style="border-radius: 0"
+                  ><i class="fa fa-italic" aria-hidden="true"></i
+                ></vs-button>
 
-            <!-- <button id="jBold" @click="makeBold"><b>B</b></button> -->
-            
-            <vs-button
-              v-if="!showEmojis"
-              @click="showEmojiContainer"
-              style="border-radius: 0"
-              ><i class="fa fa-smile-o fa-lg" aria-hidden="true"></i
-            ></vs-button>
-            <vs-button
-              v-else
-              @click="closeEmojiContainer"
-              style="border-radius: 0"
-              ><i class="fa fa-chevron-down" aria-hidden="true"></i
-            ></vs-button>
-            <vs-button @click="$refs.chatImage.click()" style="border-radius: 0"
-              ><i class="fa fa-paperclip fa-lg" aria-hidden="true"></i
-            ></vs-button>
+                <!-- <button id="jBold" @click="makeBold"><b>B</b></button> -->
 
-            <vs-button
-              class="bg-primary-gradient ml-4"
-              type="filled"
-              @click="queuePurchase"
-              id="que">Send 
-              <!-- <i class="fa fa-paper-plane fa-lg pl-1" aria-hidden="true"></i> -->
-              </vs-button>
-            </div>
+                <vs-button
+                  v-if="!showEmojis"
+                  @click="showEmojiContainer"
+                  style="border-radius: 0"
+                  ><i class="fa fa-smile-o fa-lg" aria-hidden="true"></i
+                ></vs-button>
+                <vs-button
+                  v-else
+                  @click="closeEmojiContainer"
+                  style="border-radius: 0"
+                  ><i class="fa fa-chevron-down" aria-hidden="true"></i
+                ></vs-button>
+                <vs-button
+                  @click="$refs.chatImage.click()"
+                  style="border-radius: 0"
+                  ><i class="fa fa-paperclip fa-lg" aria-hidden="true"></i
+                ></vs-button>
+                <vs-button
+                  class="bg-primary-gradient ml-4"
+                  type="filled"
+                  @click="queuePurchase"
+                  id="que"
+                  :disabled="!ShowSendButton"
+                  >Send
+                  <!-- <i class="fa fa-paper-plane fa-lg pl-1" aria-hidden="true"></i> -->
+                </vs-button>
+              </div>
             </div>
 
             <!-- <span class="text-danger text-sm mb-2">
@@ -260,7 +281,7 @@
 <script src="/socket.io/socket.io.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdn.syncfusion.com/ej2/ej2-vue-es5/dist/ej2-vue.min.js" type="text/javascript"></script>
-
+<script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/toasty.js"></script>
 <script>
 import ChatContact from "./ChatContact.vue";
 import ChatLog from "./ChatLog.vue";
@@ -275,14 +296,17 @@ import chatUsersData from "./chatData.json";
 // import { VueChatEmoji, emojis } from 'vue-chat-emoji'
 import { VEmojiPicker } from "v-emoji-picker";
 // import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-
+import { EventBus } from "../../../event-bus";
+import visibility from 'vue-visibility-change';
+ 
+// registry directive
 export default {
   name: "chat",
   data() {
     return {
       // editor: ClassicEditor,
       // message: "<p>Type a message</p>",
-
+ShowSendButton: false,
       editorConfig: {
         placeholder: "type a message",
         toolbar: [["Bold", "Italic"]],
@@ -310,7 +334,6 @@ export default {
         body: this.message,
         author: null,
       },
-
       message: "<p>Type your message</p>",
       username: "",
       mes: "",
@@ -351,9 +374,8 @@ export default {
     },
     chatUnseenMessages() {
       return (userId) => {
-        const unseenMsg = this.$store.getters["chat/chatUnseenMessages"](
-          userId
-        );
+        const unseenMsg =
+          this.$store.getters["chat/chatUnseenMessages"](userId);
         if (unseenMsg) return unseenMsg;
       };
     },
@@ -399,12 +421,6 @@ export default {
   },
 
   methods: {
-    handleInput(e) {
-      console.log(
-        "heyyyyyyyyyyyyyyyyyyyyyyyyyyyy",
-        document.getElementById("editor1").outerHTML
-      );
-    },
     clickInput() {
       var span = "<p></p>";
       document.getElementById("editor1").innerHTML += span;
@@ -435,32 +451,8 @@ export default {
       document.getElementById("editor1").innerHTML =
         document.getElementById("editor1").innerHTML +
         '<span style="font-weight:initial;">Heyy</span>';
-      // document.getElementById('editor1').innerHTML = (window.getSelection().toString())
-      // console.log(document.getElementById('textBoldDiv').innerHTML,'+++++++++++++')
-      // return (window.getSelection().toString()).bold()
-
-      //  var highlight = window.getSelection().toString();
-      // var span = '<span class="bold">' + window.getSelection().toString() + '</span>';
-      // var text = document.getElementById(editor1).innerHTML;
-      // console.log(highlight.bold(),'bold')
-      // console.log(this.message.match('/'+window.getSelection().toString()+'/'));
-      // this.message = highlight.bold();
-      // document.getElementById('editor1').innerHTML = highlight.bold();
-      // console.log(document.getElementById('editor1'),'document.getElementById.innerhtml()')
-      // document.getElementById('editor1').html(text.replace(highlight, span));
-      // console.log("<b>$&"+window.getSelection().toString()+"</b>",'"<b>$&"+window.getSelection().toString()+"</b>"')
-      // return "<b>  $&"+window.getSelection().toString()+"</b>";
     },
-    // makeBold() {
-    //   var highlight = window.getSelection().toString();
-    //   var span = '<span style="font-weight:bold;">' + highlight + "</span>";
-
-    //   document.getElementById("editor1").innerHTML = document
-    //     .getElementById("editor1")
-    //     .innerHTML.replace(highlight, span);
-    //   console.log("heyy", window.getSelection().toString());
-    // },
-        makeBold(Id) {
+    makeBold(Id) {
       if (Id == "editor1") {
         var state = document.queryCommandState("bold");
         switch (state) {
@@ -471,11 +463,11 @@ export default {
           case null:
             break;
         }
-        document.execCommand('bold');
+        document.execCommand("bold");
       }
     },
     makeItalic(Id) {
-        if (Id == "editor1") {
+      if (Id == "editor1") {
         var state = document.queryCommandState("italic");
         switch (state) {
           case true:
@@ -485,24 +477,17 @@ export default {
           case null:
             break;
         }
-        document.execCommand('italic');
+        document.execCommand("italic");
       }
-    },
-    emojiClick(e) {
-      console.log(e, "emoji");
     },
     checkToggle() {
       // alert("hey toggle");
     },
     selectEmoji(emoji) {
-      // console.log(emoji);
-      // this.message = this.message + emoji.data;
-          var sel, range;
-      document.getElementById('editor1').focus();
+      var sel, range;
+      document.getElementById("editor1").focus();
       if (window.getSelection) {
         // IE9 and non-IE
-         console.log('if ++++++')
-      console.log(document.selection)
         sel = window.getSelection();
         if (sel.getRangeAt && sel.rangeCount) {
           range = sel.getRangeAt(0);
@@ -512,6 +497,9 @@ export default {
           // non-standard and not supported in all browsers (IE9, for one)
           var el = document.createElement("div");
           el.innerHTML = emoji.data;
+          if(el.innerHTML !== '' || el.innerHTML !== null) {
+             this.ShowSendButton = true
+          }
           var frag = document.createDocumentFragment(),
             node,
             lastNode;
@@ -531,8 +519,6 @@ export default {
         }
       } else if (document.selection && document.selection.type != "Control") {
         // IE < 9
-      alert('else if')
-      console.log(document.selection.type)
         document.selection.createRange().pasteHTML(emoji.data);
       }
     },
@@ -543,14 +529,11 @@ export default {
       this.showEmojis = false;
     },
     sendChatImage() {
-      // console.log(this.$refs.chatImage.files[0],'this.$refs.chatImage.files[0]')
       if (
         this.$refs.chatImage.files[0].type == "image/jpeg" ||
         this.$refs.chatImage.files[0].type == "image/png"
       ) {
         this.file1 = this.$refs.chatImage.files[0];
-        // this.selectedfile = this.$refs.chatImage.files[0].name;
-        // console.log(this.$refs.chatImage.files[0]);
         this.createBase64Image(this.file1);
       } else {
         this.file1 = this.$refs.chatImage.files[0];
@@ -558,7 +541,6 @@ export default {
         reader.readAsDataURL(this.file1);
         reader.onload = (e) => {
           this.file1 = e.target.result;
-          console.log("elsee image", this.file1);
           const payload = {
             isPinned: this.isChatPinned,
             msg: {
@@ -587,8 +569,6 @@ export default {
             msg_type: this.$refs.chatImage.files[0].type,
             file_name: this.$refs.chatImage.files[0].name,
           };
-          console.log(body, "emit");
-
           this.$socket.emit("join_room", {
             username: localStorage.logged_in_user_name,
             room: this.activeContact.room,
@@ -650,6 +630,7 @@ export default {
         })
         .then((response) => {
           this.newContacts = response.data.user_list;
+          // this.chatContacts = response.data.user_list
           if (this.newContacts.length > 0) {
             this.newContacts.forEach((element) => {
               this.$socket.emit("join_room", {
@@ -704,21 +685,45 @@ export default {
       value = value.replaceAll(/_/gi, "");
       return value;
     },
+    inputHandler() {
+      // if (e.keyCode === 13 && !e.shiftKey) {
+      //   e.preventDefault();
+      // this.queuePurchase();
+      // }
+      this.queuePurchase();
+    },
+    CheckMessage() {
+      if(document.getElementById("editor1").innerText !== '') {
+        this.ShowSendButton = true
+      } else {
+        this.ShowSendButton = false
+      }
+    },
     queuePurchase() {
-      this.message = document.getElementById('editor1').innerHTML
-      if (!this.message) return;
-      const payload = {
-        isPinned: this.isChatPinned,
-        msg: {
-          textContent: this.message,
-          msg_time: String(new Date()),
-          is_sent: true,
-          is_seen: true,
-          msg_from: localStorage.id,
-          msg_type: "text",
-        },
-        id: this.activeChatUser,
-      };
+      // var aSound = document.createElement("audio");
+      // aSound.setAttribute("src", "beep.wav");
+      // aSound.play();
+      // var aSound = document.createElement("audio");
+      // aSound.setAttribute("src", "beep.wav");
+      // aSound.play();
+      this.message = document.getElementById("editor1").innerHTML;
+      if (
+        document.getElementById("editor1").innerText == '' ||
+        document.getElementById("editor1").innerText == null) {
+        return;
+      } else {
+        const payload = {
+          isPinned: this.isChatPinned,
+          msg: {
+            textContent: this.message,
+            msg_time: String(new Date()),
+            is_sent: true,
+            is_seen: true,
+            msg_from: localStorage.id,
+            msg_type: "text",
+          },
+          id: this.activeChatUser,
+        };
 
       this.$store.dispatch("chat/sendChatMessage", payload);
       var body = {
@@ -727,7 +732,7 @@ export default {
         username: localStorage.id,
         chatbot_user_name: this.activeContact.contact,
         agent_id: localStorage.id,
-        message: this.fontBoldAndItalic(this.message),
+        message: this.message,
         isSent: true,
         isSeen: true,
         author: localStorage.logged_in_user_name,
@@ -735,7 +740,7 @@ export default {
         msg_type: "text",
         file_name: null,
       };
-      console.log(body, "emit");
+      console.log(this.fontBoldAndItalic(this.message), this.message, "emit");
 
       this.$socket.emit("join_room", {
         username: localStorage.logged_in_user_name,
@@ -743,7 +748,8 @@ export default {
       });
       this.$socket.emit("my event", body);
       this.message = "";
-      document.getElementById('editor1').innerHTML = ''
+      document.getElementById("editor1").innerHTML = "";
+      }
     },
     showProfileSidebar(userId, openOnLeft = false) {
       this.userProfileId = userId;
@@ -784,30 +790,6 @@ export default {
       if (!value && this.clickNotClose) return;
       this.isChatSidebarActive = value;
     },
-    // checkNewContact(username) {
-    //     this.contacts()
-    //     var matchedConatct , matchedIndex
-    //     var isPresent = this.newContacts.some(function (el ,index) {
-    //       console.log(el.username , username)
-    //       if(el.username === username){
-    //         console.log('matchedddd s')
-    //         matchedIndex =index
-    //         return matchedConatct = el
-    //       };
-
-    //     });
-    //     if (isPresent) {
-    //       console.log('inside if')
-    //         this.activeChatUser = matchedConatct.user_id
-    //         this.newContacts.splice(matchedIndex, 1);
-    //        this.newContacts.splice(0, 0, matchedConatct);
-    //        return this.newContacts
-    //       //  this.newContacts =
-    //     //             this.chatContacts()
-    //     }
-    //     //  else {
-    //     // }
-    // },
     matchedRoomUserId(room) {
       this.newContacts.forEach((ele) => {
         if (room == ele.room) {
@@ -816,6 +798,7 @@ export default {
       });
     },
     fillData(data) {
+      console.log(data,'data')
       var body;
       if (!this.containsKey(data, "author")) {
         console.log("hey if", data);
@@ -827,13 +810,12 @@ export default {
           messge: data.message,
           msg_from: data.username,
           msg_to: "" + localStorage.id,
-          // msg_to: this.matchedRoomUserId(data.room),
           is_seen: 0,
           receiver: localStorage.id,
           room: data.room,
           agent_id: localStorage.id,
           msg_type: data.msg_type,
-          file_name: null,
+          file_name: data.file_name ? data.file_name : null,
         };
       } else {
         console.log("hey else", data);
@@ -855,13 +837,15 @@ export default {
         };
       }
       if (this.activeContact.contact == data.username) {
-        console.log(this.activeContact.contact, data.username);
         body.is_seen = 1;
       }
       console.log(body, "store body++++++++++++++++++++++++++++");
+      var count = 0;
       axios
         .post(Base_URL.Actual_URL + "store_message", body)
         .then((response) => {
+          count = count+1
+          console.log(count,'count')
           console.log("store response", response);
           this.newMsg = data.message;
           localStorage.removeItem("message");
@@ -875,38 +859,44 @@ export default {
         username: data.username,
         room: data.room,
       };
-      console.log(body, " valid       bodyyyyyyyyyy");
+      console.log(data, body, " valid bodyyyyyyyyyy");
       await axios
         .post(Base_URL.Actual_URL + "valid_contact", body)
         .then((response) => {
           this.count = false;
           if (response.data.result === "Message From New Contact") {
-            this.newChatBotUserName = data.username;
-            this.$toasted.info("You have new message request. &#013;", {
-              icon: "message",
-              action: [
-                {
-                  text: "Accept",
+            if (localStorage.user_role !== "Admin") {
+              this.newChatBotUserName = data.username;
+              var sound = require("../../../assets/audio/just-saying-593.mp3");
+              var audio = new Audio(sound);
+              audio.play();
+              this.$toasted.info("You have new message request. &#013;", {
+                icon: "message",
+                action: [
+                  {
+                    text: "Accept",
 
-                  onClick: (e, toast) => {
-                    toast.goAway(0);
-                    this.saveContact(data);
-                    this.$store.dispatch("chat/fetchChatContacts");
-                    this.chatContacts = this.$store.getters[
-                      "chat/chatContacts"
-                    ];
+                    onClick: (e, toast) => {
+                      toast.goAway(0);
+                      this.saveContact(data);
+                      this.$store.dispatch("chat/fetchChatContacts");
+                      this.chatContacts =
+                        this.$store.getters["chat/chatContacts"];
+                    },
                   },
-                },
-                {
-                  text: "Reject",
-                  onClick: (e, toast) => {
-                    toast.goAway(0);
+                  {
+                    text: "Reject",
+                    onClick: (e, toast) => {
+                      toast.goAway(0);
+                    },
                   },
-                },
-              ],
-            });
+                ],
+              });
+            }
           } else {
-            this.fillData(data);
+            if (data.message !== undefined) {
+              this.fillData(data);
+            }
           }
         });
     },
@@ -919,7 +909,6 @@ export default {
         room: data.room,
         agent_id: localStorage.id,
       };
-      console.log(body, "save contactttt b ody");
       axios
         .post(Base_URL.Actual_URL + "save_contact", body)
         .then((response) => {
@@ -967,6 +956,9 @@ export default {
         position: "top-center",
       });
     },
+    user_detail_updated() {
+      this.$store.dispatch("chat/fetchChatContacts");
+    },
   },
   components: {
     VuePerfectScrollbar,
@@ -997,10 +989,15 @@ export default {
   mounted() {
     console.log("chat mount");
     this.$store.dispatch("chat/setChatSearchQuery", "");
+    EventBus.$on(
+      "user_detail_updated",
+      this.user_detail_updated
+    );
   },
   beforeDestroy() {
     this.$store.unregisterModule("chat");
-    // this.sockets.unsubscribe("my_response");
+  //  this.$socket.removeAllListeners("my_response");
+    this.sockets.unsubscribe("my_response");
   },
   sockets: {
     connect() {
@@ -1053,10 +1050,13 @@ export default {
       }
       this.getRealtimeData(data);
     },
+   
     // Fired when the server sends something on the "messageChannel" channel.
     my_response: function (data) {
       console.log(data, "my_response ");
-      if (data.username !== localStorage.id) {
+    //  if(!visibility.hidden()) {
+         if (data.username !== localStorage.id) {
+        console.log(this.newContacts[0], "nwew contacts");
         const payload = {
           isPinned: this.isChatPinned,
           msg: {
@@ -1074,10 +1074,11 @@ export default {
         }
         this.$store.dispatch("chat/sendChatMessage", payload);
       }
-
-      this.getRealtimeData(data);
+             this.getRealtimeData(data);
+      // }
     },
     custom_connection: function (data) {
+      console.log(data, "custom_connection data");
       if (
         data.chatbot_id == localStorage.chatbot_id &&
         data.company_id == localStorage.company_id
@@ -1119,6 +1120,7 @@ div#EmojiPicker {
 div#EmojiPicker {
   height: calc(100% - 10px);
   width: 100%;
+  padding-right: 1rem !important;
 }
 @media only screen and (max-width: 400px) {
   div#EmojiPicker {
@@ -1141,7 +1143,27 @@ div#EmojiPicker {
   }
   div#EmojiPicker {
     height: auto !important;
+    padding-right: 1rem !important;
   }
+}
+[contenteditable="true"]:empty:before {
+  content: attr(placeholder);
+  pointer-events: none;
+  display: block; /* For Firefox */
+}
+
+/* */
+
+div[contenteditable="true"] {
+  border: 1px dashed #aaa;
+  width: 290px;
+  padding: 5px;
+}
+
+pre {
+  background: #eee;
+  padding: 5px;
+  width: 290px;
 }
 </style>
 
@@ -1223,8 +1245,8 @@ div#editor1 {
   border-width: thin !important;
   border-radius: 6px;
   border: solid black;
-      max-height: 38px;
-    overflow: hidden;
+  max-height: 38px;
+  overflow: hidden;
 }
 // div#cke_1_contents {
 //     width: 34rem !important;
@@ -1257,5 +1279,10 @@ div#editor1 {
 iframe.cke_wysiwyg_frame.cke_reset {
   width: 402px;
   max-width: 100%;
+}
+</style>
+<style lang="stylus" scoped>
+.vs-button:not(.vs-radius):not(.includeIconOnly):not(.small):not(.large) {
+    padding: .75rem 2rem !important;
 }
 </style>

@@ -10,7 +10,6 @@
 
 <template>
   <div class="layout--main" :class="[layoutTypeClass, navbarClasses, footerClasses, {'no-scroll': isAppPage}]">
-
     <v-nav-menu
       :navMenuItems = "navMenuItems"
       title         = "Vuexy"
@@ -18,7 +17,6 @@
 
     <div id="content-area" :class="[contentAreaClass, {'show-overlay': bodyOverlay}]">
       <div id="content-overlay" />
-
     <!-- Navbar -->
     <template v-if="mainLayoutType === 'horizontal' && windowWidth >= 1200">
       <the-navbar-horizontal
@@ -156,13 +154,12 @@ export default {
 
   watch: {
     "$route"(to,from) {
-      console.log(to.name,'namee frm watch')
+      // console.log(to.name,'namee frm watch')
       if(to.name == 'chat') {
          this.showChatComponent = false
       } else {
         this.showChatComponent = true
       }
-      // console.log(this.showChatComponent,'showChatComponent')
       this.routeTitle = this.$route.meta.pageTitle
     },
     isThemeDark(val) {
@@ -230,7 +227,7 @@ export default {
     },
     selectedChatbotName(e) {
       this.chatbotname = e
-      console.log('chat bot name',e)
+      // console.log('chat bot name',e)
       },
     changeRouteTitle(title) {
       this.routeTitle = title

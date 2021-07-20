@@ -13,10 +13,10 @@
               label="responsename"
               :options="responsedata"
               v-model="rowdata[0].responsename"
-               name="response_name"
+              name="response_name"
               v-validate="'required'"
               :dir="$vs.rtl ? 'rtl' : 'ltr'"
-             >
+            >
             </v-select>
             <span class="text-danger text-sm">
               {{ errors.first("response_name") }}</span
@@ -30,7 +30,7 @@
               :options="rowdatanew"
               v-model="rowdata[0].intent"
               :dir="$vs.rtl ? 'rtl' : 'ltr'"
-               v-validate="'required'"
+              v-validate="'required'"
               name="intent"
             >
             </v-select>
@@ -49,9 +49,8 @@
               v-model="rowdata[0].entitykey"
               @input="button"
               :dir="$vs.rtl ? 'rtl' : 'ltr'"
-                name="entity_key"
+              name="entity_key"
               v-validate="{ required: rowdata[0].entityvalue !== '' }"
-
             />
             <span class="text-danger text-sm">
               {{ errors.first("entity_key") }}</span
@@ -60,14 +59,13 @@
           <div class="vx-col sm:w-1/2 w-full mb-2">
             <h6>Entity Value</h6>
             <v-select
-            
               class="w-full"
               label="Entityvalue"
               :options="entitycard"
               v-model="rowdata[0].entityvalue"
               :dir="$vs.rtl ? 'rtl' : 'ltr'"
-               name="entity_value"
-              v-validate="{ required:rowdata[0].entitykey !== ''}"
+              name="entity_value"
+              v-validate="{ required: rowdata[0].entitykey !== '' }"
             />
             <span class="text-danger text-sm">{{
               errors.first("entity_value")
@@ -105,7 +103,7 @@ import axios from "axios";
 import vSelect from "vue-select";
 import { Base_URL } from "../../../api.config";
 import { Validator } from "vee-validate";
-import { EventBus } from '../../event-bus';
+import { EventBus } from "../../event-bus";
 
 const dict = {
   custom: {
@@ -128,7 +126,7 @@ const dict = {
 };
 Validator.localize("en", dict);
 var responsedata;
-var newsentence
+var newsentence;
 export default {
   data() {
     return {
@@ -139,13 +137,12 @@ export default {
         responsename: "",
         title: "",
         rowdatanew: [],
-       
+
         buttonnew: [],
-        
       },
       entitycard: [],
-       responsedata:[],
-        newsentence: [],
+      responsedata: [],
+      newsentence: [],
     };
   },
 
@@ -165,9 +162,9 @@ export default {
     },
   },
   mounted() {
-    this.rowdatanew = []
-    this.responsedata = []
-    this.newsentence =[]
+    this.rowdatanew = [];
+    this.responsedata = [];
+    this.newsentence = [];
     var newemail = localStorage.getItem("email");
     axios
       .post(Base_URL.Actual_URL + "entityintentnew", {
@@ -175,18 +172,13 @@ export default {
         chatbot_id: localStorage.chatbot_id,
       })
       .then((response) => {
-        console.log()
         this.rowdatanew = response.data.userlist;
         this.newsentence = response.data.sentence;
-        console.log(this.responsedata,'responsedata')
         this.responsedata = response.data.response1;
         this.buttonnew = response.data.button;
-        console.log(this.newsentence,'newsentence data')
-        console.log(this.responsedata ,'responsedata')
       });
     const url = Base_URL.Actual_URL + "editbuttonname/";
     const id = this.$route.params.id;
-    console.log(url + id);
     const url1 = url + id;
     axios.get(url1).then((response) => {
       this.rowdata = response.data.userlist;
@@ -194,60 +186,61 @@ export default {
   },
   methods: {
     button: function (e) {
-       if(e !== null) {
-      var newemail = localStorage.getItem("email");
-      console.log(e);
-      console.log(this.rowdata[0].entitykey);
-      axios
-        .post(Base_URL.Actual_URL + "entityvalue", {
-          company_id: localStorage.company_id,
-          entity_key: e.Entitykey,
-          chatbot_id: localStorage.chatbot_id,
-        })
-        .then((response) => {
-          console.log(response);
-          this.entitycard = response.data.entity;
-        });
-       } else {
-           this.entitycard = []
-           this.rowdata[0].entityvalue =''
-           this.rowdata[0].entitykey =''
-       }
+      if (e !== null) {
+        var newemail = localStorage.getItem("email");
+        axios
+          .post(Base_URL.Actual_URL + "entityvalue", {
+            company_id: localStorage.company_id,
+            entity_key: e.Entitykey,
+            chatbot_id: localStorage.chatbot_id,
+          })
+          .then((response) => {
+            this.entitycard = response.data.entity;
+          });
+      } else {
+        this.entitycard = [];
+        this.rowdata[0].entityvalue = "";
+        this.rowdata[0].entitykey = "";
+      }
     },
     Update() {
-      console.log("in update");
-    
-    this.$validator.validateAll().then((result) => {
+      this.$validator.validateAll().then((result) => {
         if (result) {
-      const url = Base_URL.Actual_URL + "editbuttonname/";
-      const id = this.$route.params.id;
-      const url1 = url + id;
-      axios
-        .post(url1, {
-          intent: this.rowdata[0].intent.intent || this.rowdata[0].intent,
-          title: this.rowdata[0].title,
-          responsename:  this.rowdata[0].responsename.responsename || this.rowdata[0].responsename,
-          entityvalue: this.rowdata[0].entityvalue.Entityvalue || this.rowdata[0].entityvalue,
-          entitykey: this.rowdata[0].entitykey.Entitykey || this.rowdata[0].entitykey,
-        })
-        .then((response) => {
-          if (response.data.code == 200) {
-            EventBus.$emit('selectedComponent','buttonEvent')
-            this.msg = response.data.msg;
-              this.$vs.notify({
-                title: "Edit button ",
-                text: "Your button data is updated",
-                color:"success",
-                position: "top-center",
-             });
-              this.$router.push({
-              name:'botTemplate',
-                  params:{ name:'button'}
+          const url = Base_URL.Actual_URL + "editbuttonname/";
+          const id = this.$route.params.id;
+          const url1 = url + id;
+          axios
+            .post(url1, {
+              intent: this.rowdata[0].intent.intent || this.rowdata[0].intent,
+              title: this.rowdata[0].title,
+              responsename:
+                this.rowdata[0].responsename.responsename ||
+                this.rowdata[0].responsename,
+              entityvalue:
+                this.rowdata[0].entityvalue.Entityvalue ||
+                this.rowdata[0].entityvalue,
+              entitykey:
+                this.rowdata[0].entitykey.Entitykey ||
+                this.rowdata[0].entitykey,
             })
-          }
-        });
+            .then((response) => {
+              if (response.data.code == 200) {
+                EventBus.$emit("selectedComponent", "buttonEvent");
+                this.msg = response.data.msg;
+                this.$vs.notify({
+                  title: "Edit button ",
+                  text: "Your button data is updated",
+                  color: "success",
+                  position: "top-center",
+                });
+                this.$router.push({
+                  name: "botTemplate",
+                  params: { name: "button" },
+                });
+              }
+            });
         }
-      })
+      });
     },
   },
 };

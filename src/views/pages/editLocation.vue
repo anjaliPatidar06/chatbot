@@ -181,7 +181,6 @@ export default {
       reader.readAsDataURL(fileObject);
       reader.onload = (e) => {
         this.file1 = "";
-        //   console.log(e.target.result)
         this.file1 = e.target.result;
         this.locationData[0].image_path = e.target.result;
       };
@@ -224,7 +223,6 @@ export default {
         })
         .then((response) => {
           this.responsedata = response.data.response1;
-          console.log(this.responsedata[0],'this.responsedata[0].image_path')
         });
     },
     updateLocation() {

@@ -68,6 +68,13 @@
         @click="selectButton('locationEvent')"
         >Location</vs-button
       >
+      <vs-button
+        type="filled"
+        :color="pdfEvent ? 'warning' : 'primary'"
+        class="ml-12 mt-2 mb-2"
+        @click="selectButton('pdfEvent')"
+        >Pdf</vs-button
+      >
       <div class="mt-2">
         <responses v-if="responseEvent == true"></responses>
         <dropdown
@@ -110,6 +117,11 @@
           :key="locationComponentKey"
           @updateLocationComponent="updateLocationComponent"
         ></location>
+        <pdf
+          v-if="pdfEvent == true"
+          :key="pdfComponentKey"
+          @updatePdfComponent="updatePdfComponent"
+        ></pdf>
       </div>
     </div>
   </div>
@@ -139,6 +151,7 @@ import pictureComponent from "./picture.vue";
 import Calender from "./calender.vue";
 import location from "./location.vue";
 import { EventBus } from "../../event-bus";
+import pdf from "./pdf.vue";
 export default {
   data() {
     return {
@@ -150,6 +163,8 @@ export default {
       calendarComponentKey: 0,
       pictureComponentKey: 0,
       locationComponentKey: 0,
+      pdfComponentKey: 0,
+      pdfEvent: false,
       responseEvent: false,
       dropdownEvent: false,
       buttonEvent: false,
@@ -188,6 +203,7 @@ export default {
         (this.collapsibleEvent = false),
         (this.cardEvent = false),
         (this.locationEvent = false);
+      this.pdfEvent = false;
     }
     if (this.$route.params.name == "dropdown") {
       this.dropdownEvent = true;
@@ -199,6 +215,7 @@ export default {
       this.collapsibleEvent = false;
       this.cardEvent = false;
       this.locationEvent = false;
+      this.pdfEvent = false;
     }
     if (this.$route.params.name == "button") {
       this.dropdownEvent = false;
@@ -210,6 +227,7 @@ export default {
       this.collapsibleEvent = false;
       this.cardEvent = false;
       this.locationEvent = false;
+      this.pdfEvent = false;
     }
     if (this.$route.params.name == "quickReply") {
       this.dropdownEvent = false;
@@ -221,6 +239,7 @@ export default {
       this.collapsibleEvent = false;
       this.cardEvent = false;
       this.locationEvent = false;
+      this.pdfEvent = false;
     }
     if (this.$route.params.name == "collapsible") {
       this.dropdownEvent = false;
@@ -232,6 +251,7 @@ export default {
       this.collapsibleEvent = true;
       this.cardEvent = false;
       this.locationEvent = false;
+      this.pdfEvent = false;
     }
     if (this.$route.params.name == "card") {
       this.dropdownEvent = false;
@@ -243,6 +263,7 @@ export default {
       this.collapsibleEvent = false;
       this.cardEvent = true;
       this.locationEvent = false;
+      this.pdfEvent = false;
     }
     if (this.$route.params.name == "calendar") {
       this.dropdownEvent = false;
@@ -254,6 +275,7 @@ export default {
       this.collapsibleEvent = false;
       this.cardEvent = false;
       this.locationEvent = false;
+      this.pdfEvent = false;
     }
     if (this.$route.params.name == "picture") {
       this.dropdownEvent = false;
@@ -265,6 +287,7 @@ export default {
       this.collapsibleEvent = false;
       this.cardEvent = false;
       this.locationEvent = false;
+      this.pdfEvent = false;
     }
     if (this.$route.params.name == "location") {
       this.dropdownEvent = false;
@@ -276,6 +299,31 @@ export default {
       this.collapsibleEvent = false;
       this.cardEvent = false;
       this.locationEvent = true;
+      this.pdfEvent = false;
+    }
+    if (this.$route.params.name == "location") {
+      this.dropdownEvent = false;
+      this.responseEvent = false;
+      this.buttonEvent = false;
+      this.calendarEvent = false;
+      this.pictureEvent = false;
+      this.quickReplyEvent = false;
+      this.collapsibleEvent = false;
+      this.cardEvent = false;
+      this.locationEvent = true;
+      this.pdfEvent = false;
+    }
+    if (this.$route.params.name == "pdf") {
+      this.dropdownEvent = false;
+      this.responseEvent = false;
+      this.buttonEvent = false;
+      this.calendarEvent = false;
+      this.pictureEvent = false;
+      this.quickReplyEvent = false;
+      this.collapsibleEvent = false;
+      this.cardEvent = false;
+      this.locationEvent = false;
+      this.pdfEvent = true;
     }
   },
 
@@ -308,11 +356,11 @@ export default {
     Calender,
     pictureComponent,
     location,
+    pdf,
   },
   methods: {
     async reload(e) {
       this.$forceUpdate();
-
       this.render = false;
       await this.$nextTick();
       this.render = true;
@@ -325,73 +373,9 @@ export default {
         (this.quickReplyEvent = false),
         (this.collapsibleEvent = false),
         (this.cardEvent = false);
-      // if(selectedVal == 'responseEvent') {
-      //   console.log('hey not calendarEvent')
-      //    this.responseEvent = true
-      //      this.$router.push({
-      //         // name: "botTemplate",
-      //         params:{ name:'response'}
-      //       });
-      // }
-      //  if(selectedVal == 'dropdownEvent') {
-      //    this.dropdownEvent = true
-      //      this.$router.push({
-      //         params:{ name:'dropdown'}
-      //       });
-      // }
-      // if(selectedVal == 'calendarEvent') {
-      //   console.log('heyy calendarEvent')
-      //    this.calendarEvent = true
-      //      this.$router.push({
-      //         // name: "botTemplate",
-      //         params:{ name:'calendar'}
-      //       });
-      // }
-      //  if(selectedVal == 'buttonEvent') {
-      //    console.log(this.buttonEvent,'buttonEvent')
-      //      this.$router.push({
-      //         // name: "botTemplate",
-      //         params:{ name:'button'}
-      //       });
-      //    this.buttonEvent = true
-      // }
-      //  if(selectedVal == 'pictureEvent') {
-      //      this.$router.push({
-      //         // name: "botTemplate",
-      //         params:{ name:'picture'}
-      //       });
-      //    this.pictureEvent = true
-      //    console.log(this.pictureEvent,'pictureEvent')
-      // }
-      //  if(selectedVal == 'quickReplyEvent') {
-      //      this.$router.push({
-      //         // name: "botTemplate",
-      //         params:{ name:'quickReply'}
-      //       });
-      //    this.quickReplyEvent = true
-      // }
-      //  if(selectedVal == 'collapsibleEvent') {
-      //      this.$router.push({
-      //         // name: "botTemplate",
-      //         params:{ name:'collapsible'}
-      //       });
-      //    this.collapsibleEvent = true
-      // }
-      //   if(selectedVal == 'cardEvent') {
-      //       this.$router.push({
-      //         // name: "botTemplate",
-      //         params:{ name:'card'}
-      //       });
-      //    this.cardEvent = true
-      // }
-      // if(selectedVal == 'locationEvent') {
-      //   console.log('matched')
-      //     this.$router.push({
-      //         // name: "botTemplate",
-      //         params:{ name:'location'}
-      //       });
-      //   this.locationEvent = true
-      // }
+    },
+    updatePdfComponent() {
+      this.pdfComponentKey = this.pdfComponentKey + 1;
     },
     updateLocationComponent() {
       this.locationComponentKey = this.locationComponentKey + 1;
@@ -428,10 +412,10 @@ export default {
         (this.collapsibleEvent = false),
         (this.cardEvent = false),
         (this.locationEvent = false);
+      this.pdfEvent = false;
       if (selectedVal == "responseEvent") {
         this.responseEvent = true;
         this.$router.push({
-          // name: "botTemplate",
           params: { name: "response" },
         });
       }
@@ -444,51 +428,50 @@ export default {
       if (selectedVal == "calendarEvent") {
         this.calendarEvent = true;
         this.$router.push({
-          // name: "botTemplate",
           params: { name: "calendar" },
         });
       }
       if (selectedVal == "buttonEvent") {
         this.$router.push({
-          // name: "botTemplate",
           params: { name: "button" },
         });
         this.buttonEvent = true;
       }
       if (selectedVal == "pictureEvent") {
         this.$router.push({
-          // name: "botTemplate",
           params: { name: "picture" },
         });
         this.pictureEvent = true;
       }
       if (selectedVal == "quickReplyEvent") {
         this.$router.push({
-          // name: "botTemplate",
           params: { name: "quickReply" },
         });
         this.quickReplyEvent = true;
       }
       if (selectedVal == "collapsibleEvent") {
         this.$router.push({
-          // name: "botTemplate",
           params: { name: "collapsible" },
         });
         this.collapsibleEvent = true;
       }
       if (selectedVal == "cardEvent") {
         this.$router.push({
-          // name: "botTemplate",
           params: { name: "card" },
         });
         this.cardEvent = true;
       }
       if (selectedVal == "locationEvent") {
         this.$router.push({
-          // name: "botTemplate",
           params: { name: "location" },
         });
         this.locationEvent = true;
+      }
+      if (selectedVal == "pdfEvent") {
+        this.$router.push({
+          params: { name: "pdf" },
+        });
+        this.pdfEvent = true;
       }
     },
   },

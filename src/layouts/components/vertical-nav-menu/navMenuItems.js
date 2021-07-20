@@ -161,9 +161,6 @@ export default [
     slug: "Query",
     icon: "LayoutIcon",
 
-
-
-
     submenu: [
       {
         url: "/Chat",
@@ -172,18 +169,31 @@ export default [
         icon: "FileIcon",
       },
       {
-        url: "/Collectedemail",
+        url: "/collected-leads",
         name: "Collected Leads",
         slug: "Collected Leads",
         icon: "FileIcon",
       },
 
+      // {
+      //   url: "/form_leads",
+      //   name: "Form Leads",
+      //   slug: "form_leads",
+      //   icon: "FileIcon",
+      // },
       {
-        url: "/form_leads",
-        name: "Form Leads",
-        slug: "form_leads",
+        url: "/unansweredQuestions",
+        name: "Unanswered Questions",
+        slug: "unansweredQuestions",
         icon: "FileIcon",
       },
+      {
+        url: "/chatbotFile",
+        name: "Chatbot File",
+        slug: "chatbotFile",
+        icon: "FileIcon",
+      }
+      
       // {
       //   url: "/nlunew",
       //   name: "chat module",

@@ -167,7 +167,7 @@ export default {
 <script>
 import axios from "axios";
 import vSelect from "vue-select";
-import {Base_URL, API_List} from '../../../api.config'
+import { Base_URL, API_List } from "../../../api.config";
 
 export default {
   data() {
@@ -541,52 +541,16 @@ export default {
   },
   mounted() {
     const url = Base_URL.Actual_URL + "editallaccountname/";
-    // const url='http://127.0.0.1:5000/editallaccountname/'
-
     const id = this.$route.params.id;
-    console.log(url + id);
     const url1 = url + id;
     axios.get(url1, {}).then((response) => {
-      console.log(response);
       this.rowdata = response.data.userlist;
-      console.log(this.rowdata);
-      //   console.log(this.rowdata[0].Email,this.rowdata[0].Password,this.rowdata[0].Firstname,this.rowdata[0].Lastname,this.rowdata[0].PhoneNumber)
-      // console.log(localStorage.getItem('email'))
-
-      // console.log(response)
     });
   },
   methods: {
     Update() {
-      console.log("in update");
-      console.log(this.rowdata[0].name);
-      console.log(this.rowdata[0].email);
-      console.log(this.rowdata[0].phone);
-      console.log(this.rowdata[0].password);
-      console.log(this.rowdata[0].categorynew.categoryname);
-
-      console.log(this.rowdata[0].companyname);
-      console.log(this.rowdata[0].country);
-
-      function getRandomInt(min, max) {
-        return Math.floor(Math.random() * (max - min)) + min;
-      }
-      const color = `rgb(${getRandomInt(0, 255)},${getRandomInt(
-        0,
-        255
-      )},${getRandomInt(0, 255)})`;
-      this.$vs.notify({
-        title: "Edit Allaccount ",
-        text: "Your Allaccount data is updated",
-        color,
-        position: "top-center",
-      });
-
-      // const url='http://127.0.0.1:5000/editallaccountname/'
-
       const url = Base_URL.Actual_URL + "editallaccountname/";
       const id = this.$route.params.id;
-      console.log(url + id);
       const url1 = url + id;
       axios
         .post(url1, {
@@ -604,9 +568,14 @@ export default {
           if (response.data.code == 200) {
             this.msg = response.data.msg;
             this.$router.push({
-              name:"allaccount"
-            })
-        
+              name: "allaccount",
+            });
+            this.$vs.notify({
+              title: "Edit Allaccount ",
+              text: "Your Allaccount data is updated",
+              color: "success",
+              position: "top-center",
+            });
           }
         });
     },

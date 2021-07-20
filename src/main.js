@@ -110,7 +110,11 @@ import CKEditor from 'ckeditor4-vue';
 
 Vue.use(VueToastr);
 Vue.use(CKEditor);
+// import createMultiTabState from 'vuex-multi-tab-state';
+import visibility from 'vue-visibility-change';
+Vue.use(visibility);
 
+// Vue.use(Vuex);
 // import { VueChatEmoji } from 'vue-chat-emoji';
 // Vue.component("Emoji", VueChatEmoji);
 // require("vue-chat-emoji/dist/vue-chat-emoji.min.css");
@@ -132,6 +136,7 @@ Vue.use(new VueSocketIO({
 // import 'sweetalert2/dist/sweetalert2.min.css';
 
 // Vue.use(VueSweetalert2);
+
 Vue.filter('formatDate', function(value) {
   if (value) {
     return moment(String(value)).format('MM/DD/YYYY HH:mm')
@@ -151,7 +156,6 @@ Vue.config.productionTip = false
 import Toasted from 'vue-toasted';
 
 Vue.use(Toasted);
-
 
 new Vue({
     sockets: {
@@ -177,3 +181,6 @@ new Vue({
     render: h => h(App)
 }).$mount('#app')
 
+// document.addEventListener("visibilitychange", function() {
+//       document.title = document.hidden ? "I'm away" : "I'm here";
+// });

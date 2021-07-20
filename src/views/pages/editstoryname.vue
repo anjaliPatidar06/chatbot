@@ -70,17 +70,9 @@ export default {
   mounted() {
     const url = Base_URL.Actual_URL + "editstoryname/";
     const id = this.$route.params.id;
-    console.log(url + id);
     const url1 = url + id;
     axios.get(url1, {}).then((response) => {
-      console.log(response);
       this.rowdata = response.data.userlist;
-      console.log(this.rowdata);
-
-      //   console.log(this.rowdata[0].Email,this.rowdata[0].Password,this.rowdata[0].Firstname,this.rowdata[0].Lastname,this.rowdata[0].PhoneNumber)
-      // console.log(localStorage.getItem('email'))
-
-      // console.log(response)
     });
   },
   methods: {

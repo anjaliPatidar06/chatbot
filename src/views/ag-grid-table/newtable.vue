@@ -241,12 +241,9 @@ export default {
    
       })
       .then((response) => {
-        console.log(this.response)
       this.rowdata=response.data.userlist
-      console.log(this.rowdata)
-      console.log(localStorage.getItem('email'))
       if(localStorage.getItem('email')!='superadmin@gmail.com'){
-     window.location.href = 'http://188.227.58.42:83/AddSubscription'
+        window.location.href = 'http://188.227.58.42:83/AddSubscription'
       }
      
       // console.log(response)

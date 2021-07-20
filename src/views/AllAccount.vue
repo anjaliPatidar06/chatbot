@@ -1,7 +1,7 @@
 <template>
   <vx-card title="All Account" search>
     <!-- <p>You can add the functionality of expanding a <strong>tr</strong> to visualize more data to make a structure of data or more complex functionalities</p><br> -->
-  <!-- <div class="centerx example-loading">
+    <!-- <div class="centerx example-loading">
     <div
       class="fill-row-loading">
       <div
@@ -13,61 +13,60 @@
         </div>
     </div>
   </div> -->
-                <div id="div-with-loading" class="vs-con-loading__container">
+    <div id="div-with-loading" class="vs-con-loading__container">
+      <vs-table search max-items="10" pagination :data="rowdata">
+        <template slot="thead">
+          <vs-th>Name</vs-th>
+          <vs-th>Email</vs-th>
+          <!-- <vs-th>Company Name</vs-th> -->
+          <vs-th>Phone Number</vs-th>
+          <vs-th>Country</vs-th>
+          <vs-th>Category</vs-th>
 
-    <vs-table search max-items="10" pagination :data="rowdata">
-      <template slot="thead">
-        <vs-th>Name</vs-th>
-        <vs-th>Email</vs-th>
-        <!-- <vs-th>Company Name</vs-th> -->
-        <vs-th>Phone Number</vs-th>
-        <vs-th>Country</vs-th>
-        <vs-th>Category</vs-th>
+          <vs-th>Action</vs-th>
+        </template>
+        <template slot-scope="{ data }">
+          <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data">
+            <vs-td :data="tr.name">
+              {{ tr.name }}
+            </vs-td>
+            <vs-td :data="tr.email">
+              {{ tr.email }}
+            </vs-td>
+            <vs-td :data="tr.phone">
+              {{ tr.phone }}
+            </vs-td>
 
-        <vs-th>Action</vs-th>
-      </template>
-      <template slot-scope="{ data }">
-        <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data">
-          <vs-td :data="tr.name">
-            {{ tr.name }}
-          </vs-td>
-          <vs-td :data="tr.email">
-            {{ tr.email }}
-          </vs-td>
-          <vs-td :data="tr.phone">
-            {{ tr.phone }}
-          </vs-td>
+            <vs-td :data="tr.country">
+              {{ tr.country }}
+            </vs-td>
+            <vs-td :data="tr.category">
+              {{ tr.category }}
+            </vs-td>
 
-          <vs-td :data="tr.country">
-            {{ tr.country }}
-          </vs-td>
-          <vs-td :data="tr.category">
-            {{ tr.category }}
-          </vs-td>
-
-          <vs-td>
-            <div class="flex">
-              <vs-button
-                @click="updateRecord(tr.id)"
-                type="filled"
-                color="success"
-                class="mr-2"
-                >Edit</vs-button
-              >
-              <vs-button
-                @click="deleteTableRow(tr.id)"
-                type="filled"
-                color="danger"
-                >Delete</vs-button
-              >
-              <!-- <vs-button type="border" size="medium" icon-pack="feather" icon="icon-edit-2 null" color="success" class="mr-2" value='Update' @click='updateRecord(index,tr.Email);'></vs-button>
+            <vs-td>
+              <div class="flex">
+                <vs-button
+                  @click="updateRecord(tr.id)"
+                  type="filled"
+                  color="success"
+                  class="mr-2"
+                  >Edit</vs-button
+                >
+                <vs-button
+                  @click="deleteTableRow(tr.id)"
+                  type="filled"
+                  color="danger"
+                  >Delete</vs-button
+                >
+                <!-- <vs-button type="border" size="medium" icon-pack="feather" icon="icon-edit-2 null" color="success" class="mr-2" value='Update' @click='updateRecord(index,tr.Email);'></vs-button>
                                     <vs-button type="border" size="medium" icon-pack="feather" icon="icon-trash" color="danger"  @click='deleteTableRow(tr.id)'  ></vs-button> -->
-            </div>
-          </vs-td>
-        </vs-tr>
-      </template>
-    </vs-table>
-                </div>
+              </div>
+            </vs-td>
+          </vs-tr>
+        </template>
+      </vs-table>
+    </div>
     <br />
 
     <template slot="codeContainer">
@@ -130,18 +129,18 @@ export default {
   },
   methods: {
     allAccountList() {
-       this.$vs.loading({
-      container: "#div-with-loading",
-      scale: 0.6,
-    });
+      this.$vs.loading({
+        container: "#div-with-loading",
+        scale: 0.6,
+      });
       axios
         .get(Base_URL.Actual_URL + "allaccount", {
           //axios.get(Base_URL.Actual_URL+'allaccount',{
         })
         .then((response) => {
-             setTimeout(() => {
-              this.$vs.loading.close("#div-with-loading > .con-vs-loading");
-            }, 1000);
+          setTimeout(() => {
+            this.$vs.loading.close("#div-with-loading > .con-vs-loading");
+          }, 1000);
           this.rowdata = response.data.userlist;
         });
     },
@@ -166,15 +165,12 @@ export default {
     },
 
     updateRecord: function (index) {
-      console.log(index);
       axios
         .post(Base_URL.Actual_URL + "editallaccountnew", {
           Edit: 2,
           id: index,
         })
         .then((response) => {
-          console.log(response);
-          console.log("rahul");
           this.email = response.data.userlist;
           this.id = this.email[0].id;
           this.$router.push({

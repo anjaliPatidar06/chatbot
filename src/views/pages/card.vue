@@ -111,6 +111,34 @@
               errors.first("entity_value")
             }}</span>
           </div>
+             <div class="vx-col sm:w-1/3 w-full mb-2">
+            <h6>Button 2 Title</h6>
+            <vs-input
+              class="w-full"
+              v-model="title2"
+              name="title2"
+              v-validate="'required'"
+              data-vv-validate-on="blur"
+              :dir="$vs.rtl ? 'rtl' : 'ltr'"
+            ></vs-input>
+            <span class="text-danger text-sm">
+              {{ errors.first("title2") }}</span
+            >
+          </div>
+           <div class="vx-col sm:w-1/3 w-full mb-2">
+            <h6>Button 2 Payload</h6>
+            <vs-input
+              class="w-full"
+              v-model="Payload"
+              name="Payload"
+              v-validate="'required'"
+              data-vv-validate-on="blur"
+              :dir="$vs.rtl ? 'rtl' : 'ltr'"
+            ></vs-input>
+            <span class="text-danger text-sm">
+              {{ errors.first("Payload") }}</span
+            >
+          </div>
           <div class="vx-col sm:w-1/3 w-full mb-2">
             <div class="vx-row">
               <!-- <template v-if="dataImgnewbackground">
@@ -191,6 +219,8 @@
             <vs-th>Intent </vs-th>
             <vs-th>Entity Key</vs-th>
             <vs-th>Entity Value</vs-th>
+            <vs-th>Button 2 Title</vs-th>
+            <vs-th>Button 2 Payload</vs-th>
             <vs-th>Actions</vs-th>
           </template>
           <template slot-scope="{ data }">
@@ -215,6 +245,12 @@
               </vs-td>
               <vs-td :data="tr.entityvalue">
                 {{ tr.entityvalue }}
+              </vs-td>
+              <vs-td :data="tr.title_2">
+                {{tr.title_2}}
+              </vs-td>
+              <vs-td :data="tr.payload_2">
+                {{tr.payload_2}}
               </vs-td>
               <vs-td>
                 <div class="flex">
@@ -282,6 +318,12 @@ const dict = {
   btn_title: {
     required: "Please enter button title",
   },
+  title2: {
+    required: "Please enter button 2 title",
+  },
+  Payload: {
+    required: "Please enter button 2 payload",
+  },
     }
 };
 Validator.localize("en", dict);
@@ -290,6 +332,8 @@ export default {
   name: "card-component",
   data() {
     return {
+      Payload:'',
+      title:"",
       rowdata: [],
       name: "",
       responsename:"",
@@ -349,16 +393,13 @@ export default {
           chatbot_id: chatbot_id,
         })
         .then((response) => {
-          console.log(response);
           this.rowdata = response.data.userlist;
           this.newsentence = response.data.sentence;
           this.responsedata = response.data.response1;
-          console.log(this.responsedata);
           this.buttonnew = response.data.button;
         });
     },
     updateRecord: function (index) {
-      console.log(index);
       this.$router.push({
         name: "editcardname",
         params: { id: index },
@@ -394,7 +435,6 @@ export default {
           entity_key: e.Entitykey,
         })
         .then((response) => {
-          console.log(response);
           this.entitycard = response.data.entity;
         });
       } else {
@@ -407,7 +447,6 @@ export default {
       this.file1 = this.$refs.updateImgInputnewbackground.files[0];
       this.selectedfile = this.$refs.updateImgInputnewbackground.files[0].name;
 
-      console.log(this.$refs.updateImgInputnewbackground.files[0]);
       this.createBase64Image(this.file1);
     },
     createBase64Image(fileObject) {
@@ -420,7 +459,6 @@ export default {
     addEvent5() {
       this.$validator.validateAll().then((result) => {
         if (result) {
-          console.log(result);
           const reader = new FileReader();
           var newemail = localStorage.getItem("email");
           var chatbot_id = localStorage.getItem("chatbot_id");
@@ -442,12 +480,12 @@ export default {
               this.assignentityvaluecard.Entityvalue ||
               this.assignentityvaluecard,
             addresponse: this.responsename.responsename,
+            title_2: this.title2,
+            payload_2 : this.Payload
           };
-          console.log(body, "body");
           axios
             .post(Base_URL.Actual_URL + "cardvalue", body)
             .then((response) => {
-              console.log(response, "response");
               if (response.data.code == 100) {
                 this.message = response.data.message;
                 this.getCardList();

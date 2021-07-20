@@ -186,6 +186,9 @@ const dict = {
     latitude: {
       required: "Please enter latitude",
     },
+    locationImage:{
+      required: "Please enter location image",
+    }
   },
 };
 Validator.localize("en", dict);

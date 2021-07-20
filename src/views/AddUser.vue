@@ -188,6 +188,7 @@ import axios from "axios";
 import vSelect from "vue-select";
 import { Base_URL} from "./../../api.config";
 import { Validator } from "vee-validate";
+
 const dict = {
   custom: {
     first_name: {
@@ -290,7 +291,6 @@ export default {
   components: {
     "v-select": vSelect,
   },
-
   mounted() {
     var newemail = localStorage.getItem("email");
 
@@ -301,9 +301,8 @@ export default {
         company_id: localStorage.company_id,
       })
       .then((response) => {
-        console.log(response, "response");
         this.newsentence = response.data.sentence;
-        console.log(this.newsentence);
+        console.log(this.newsentence,'newvbdbs')
       });
   },
 
@@ -312,8 +311,6 @@ export default {
       this.$validator.validateAll().then((result) => {
         if (result) {
           var newemail = localStorage.getItem("email");
-          console.log(this.chatbotnamenew.chatbotname);
-          console.log(this.chatbotnamenew || this.chatbotnamenew, "value");
           axios
             .post(Base_URL.Actual_URL + "adduser", {
               firstname: this.firstname,
@@ -329,7 +326,6 @@ export default {
               // chatbotname: this.chatbotnamenew.id
             })
             .then((response) => {
-              console.log(response);
               this.result = response.data.result;
               if (response.data.code == 200) {
                  this.$vs.notify({

@@ -110,7 +110,37 @@
               errors.first("entity_value")
             }}</span>
           </div>
-          <div class="vx-col sm:w-1/3 w-full">
+                 <div class="vx-col sm:w-1/3 w-full mb-2">
+            <h6>Button 2 Title</h6>
+            <vs-input
+              class="w-full"
+              v-model="rowdata[0].title_2"
+              name="title2"
+              v-validate="'required'"
+              data-vv-validate-on="blur"
+              :dir="$vs.rtl ? 'rtl' : 'ltr'"
+            ></vs-input>
+            <span class="text-danger text-sm">
+              {{ errors.first("title2") }}</span
+            >
+          </div>
+           <div class="vx-col sm:w-1/3 w-full mb-2">
+            <h6>Button 2 Payload</h6>
+            <vs-input
+              class="w-full"
+              v-model="rowdata[0].payload_2"
+              name="Payload"
+              v-validate="'required'"
+              data-vv-validate-on="blur"
+              :dir="$vs.rtl ? 'rtl' : 'ltr'"
+            ></vs-input>
+            <span class="text-danger text-sm">
+              {{ errors.first("Payload") }}</span
+            >
+          </div>
+          
+          <div class="vx-row">
+            <div class="vx-col sm:w-1/3 w-full">
             <div
               class="img-container w-64 flex items-center justify-center"
             >
@@ -120,6 +150,7 @@
                 class="responsive mt-3"
               />
             </div>
+              <div class="vx-col sm:w-1/3 w-full"></div>
             <!-- <template v-if="dataImgnewbackground">
                 <div
                   class="img-container w-64 mx-auto flex items-center justify-center"
@@ -155,7 +186,10 @@
                   >
                 </div>
               </template> -->
-            <div class="vx-col w-full mb-2">
+              
+            
+          </div>
+              <div class="vx-col w-full mb-2">
               <div class="upload-img mt-5">
                 <input
                   type="file"
@@ -178,7 +212,7 @@
                 >
               </div>
             </div>
-          </div>
+              </div>
         </div>
 
         <div class="vx-col sm:w-1/3 w-full">
@@ -226,6 +260,12 @@ const dict = {
     btn_title: {
       required: "Please enter button title",
     },
+     title2: {
+    required: "Please enter button 2 title",
+  },
+  Payload: {
+    required: "Please enter button 2 payload",
+  },
   },
 };
 Validator.localize("en", dict);
@@ -234,6 +274,8 @@ export default {
   name: "card-component",
   data() {
     return {
+        Payload:'',
+      title:"",
       rowdata: [],
       name: "",
       responsename:"",
@@ -354,7 +396,6 @@ export default {
       reader.readAsDataURL(fileObject);
       reader.onload = (e) => {
         this.file1 = "";
-        //   console.log(e.target.result)
         this.file1 = e.target.result;
         this.rowdata[0].image_path = e.target.result;
       };
@@ -381,6 +422,8 @@ export default {
             entityvalue:
              this.rowdata[0].entityvalue.Entityvalue || this.rowdata[0].entityvalue,
             responsename: this.rowdata[0].responsename.responsename || this.rowdata[0].responsename,
+             title_2: this.rowdata[0].title_2,
+            payload_2 : this.rowdata[0].payload_2
           };
           axios
             .post(

@@ -109,7 +109,6 @@ export default {
         if (result) {
           const url = Base_URL.Actual_URL + "editsentencename/";
           const id = this.$route.params.id;
-          console.log(url + id);
           const url1 = url + id;
           axios
             .post(url1, {

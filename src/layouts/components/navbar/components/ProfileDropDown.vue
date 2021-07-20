@@ -18,7 +18,7 @@
 
       <vs-dropdown-menu class="vx-navbar-dropdown">
         <ul style="min-width: 9rem">
-          <li
+          <!-- <li
             class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
           >
             <feather-icon icon="UserIcon" svgClasses="w-4 h-4" />
@@ -53,7 +53,7 @@
             <span class="ml-2">Wish List</span>
           </li>
 
-          <vs-divider class="m-1" />
+          <vs-divider class="m-1" /> -->
 
           <li
             class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"

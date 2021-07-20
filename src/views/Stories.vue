@@ -334,13 +334,11 @@ export default {
     },
     newfunction() {},
     buildstory() {
-      console.log('isndie build')
       this.$validator.validateAll().then((result) => {
         if (result) {
           var chatbot_id = localStorage.getItem("chatbot_id");
 
           var chatbotname = localStorage.getItem("chatbotname");
-          console.log(this.selectvalue.durationCode);
           axios
             .post(Base_URL.Actual_URL + "storiesdata", {
               select_value: this.selectvalue.durationCode,
@@ -357,10 +355,8 @@ export default {
             })
 
             .then((response) => {
-              //console.log(response)
               this.textfile = response.data.userlistt;
               this.newmessage = response.data.message;
-              //console.log(this.textfile)
               this.responsename = "";
               //this.selectvalue="";
               this.assignintent = "";
@@ -401,15 +397,16 @@ export default {
     //       console.log(response,'testtttttttttttt')
     //     })
     // },
-    button: function () {
+    button: function (e) {
       this.assignentityvalue = "";
+      if (e !== null) {
       var chatbotname = localStorage.getItem("chatbotname");
       var newemail = localStorage.getItem("email");
 
       var chatbot_id = localStorage.getItem("chatbot_id");
 
-      console.log(this.assignintent);
-      console.log(this.assignentityvalue, "assign value");
+      // console.log(this.assignintent);
+      // console.log(this.assignentityvalue, "assign value");
       if (this.assignintent == "" && this.assignentityvalue == "") {
         var abc =
           "Please select Intent before selecting Entity Key and Entity value ";
@@ -429,6 +426,10 @@ export default {
         .then((response) => {
           this.entitycard = response.data.entity;
         });
+      } else {
+        this.assignentityvalue = ''
+        this.assignentity = "";
+      }
     },
     newbutton() {
       if (this.assignintent == "" && this.assignentity == "") {
@@ -442,10 +443,10 @@ export default {
       }
     },
     newstoryvalue() {
-      console.log(this.selectvalue, "selectvalue");
+      // console.log(this.selectvalue, "selectvalue");
       if (this.storyselect == "") {
         var abc = "Please select Story";
-        console.log(this.abc, "abc is printed");
+        // console.log(this.abc, "abc is printed");
         this.$vs.notify({
           title: ` ${abc}`,
           position: "top-center",
@@ -484,7 +485,7 @@ export default {
           chatbot_id: chatbot_id,
         })
         .then((response) => {
-          console.log(response);
+          // console.log(response);
 
           if (response.data.code == 100) {
                this.textfile = "";
@@ -518,7 +519,6 @@ export default {
       var newemail = localStorage.getItem("email");
 
       var chatbot_id = localStorage.getItem("chatbot_id");
-      console.log(this.storyselect);
       axios
         .post(Base_URL.Actual_URL + "storybuild", {
           company_id: localStorage.company_id,
@@ -527,7 +527,6 @@ export default {
           textarea: this.textfile,
         })
         .then((response) => {
-          console.log(response);
           if (response.data.code == 200) {
             this.textfile = "";
             this.storyselect = "";
@@ -567,7 +566,6 @@ export default {
           chatbot_id: chatbot_id,
         })
         .then((response) => {
-          console.log(response);
           if (response.data.code == 200) {
             this.storyname = "";
             this.message = response.data.message;

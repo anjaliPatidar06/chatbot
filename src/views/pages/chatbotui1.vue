@@ -339,16 +339,9 @@ export default {
     Prism,
   },
   mounted() {
-    var chatbotname = localStorage.getItem("chatbotname");
-    console.log(localStorage.getItem("chatbot_id"), "localStorage.chatbot_id");
-    console.log(
-      localStorage.getItem("chatbotname"),
-      "localStorage.chatbotname"
-    );
 
     axios
       .post(Base_URL.Actual_URL + "chatboticonreload", {
-        //axios.post('http://127.0.0.1:5000/chatboticonreload',{
         chatbot_id: localStorage.getItem("chatbot_id"),
         chatbotname: localStorage.getItem("chatbotname"),
       })
@@ -358,9 +351,6 @@ export default {
         var st = this.rowdata[0].botimagepath;
 
         this.dataImg = `${st}`;
-                // this.dataImg = `https://chatbot.engagechats.com/${st}`;
-
-
         var sy = this.rowdata[0].chatboticonpath;
 
         this.dataImgnew = `${sy}`;
@@ -373,28 +363,20 @@ export default {
 
         this.dataImgnewbackground = `https://chatbot.engagechats.com/${se}`;
 
-        //if(this.dataImg==)
-        // this.rowdata.
-
         if (response.data.code == 100) {
           setInterval(function () {
-            //window.location.href = 'http://188.227.58.42:83/NluData'
-            /// window.location.href = '/NluData'
+        
           }, 1200);
         }
       });
   },
   methods: {
     updateCurrImg(input) {
-      console.log(input);
-      //var chatbotuichatname=localStorage.getItem('chatbotname')
-      if (input.target.files && input.target.files[0]) {
+       if (input.target.files && input.target.files[0]) {
         const reader = new FileReader();
         reader.onload = (e) => {
           this.dataImg = e.target.result;
-          console.log(this.dataImg, "value");
-          console.log(input.target.files[0].name, "image value");
-          var chatbotname = localStorage.getItem("chatbotname");
+         var chatbotname = localStorage.getItem("chatbotname");
           axios.post(Base_URL.Actual_URL + "uploadboticon", {
             image: this.dataImg,
             chatbotname: chatbotname,
@@ -402,19 +384,14 @@ export default {
             bot: "botIcon",
           });
         };
-        console.log(input.target.files[0].name, "image value");
         reader.readAsDataURL(input.target.files[0]);
       }
     },
     updateCurrImge(input) {
-      console.log(input);
-      //var chatbotuichatname=localStorage.getItem('chatbotUIchatname')
       if (input.target.files && input.target.files[0]) {
         const reader = new FileReader();
         reader.onload = (e) => {
           this.dataImgnew = e.target.result;
-          console.log(this.dataImgnew, "value");
-          console.log(input.target.files[0].name, "image value");
           var chatbotname = localStorage.getItem("chatbotname");
           axios.post(Base_URL.Actual_URL + "chatbotIconimage", {
             image: this.dataImgnew,
@@ -448,8 +425,7 @@ export default {
       }
     },
     updateCurrImgebackground(input) {
-      console.log(input);
-      //var chatbotuichatname=localStorage.getItem('chatbotUIchatname')
+     
       if (input.target.files && input.target.files[0]) {
         const reader = new FileReader();
         reader.onload = (e) => {
@@ -463,7 +439,6 @@ export default {
             bot: "backgroundimage",
           });
         };
-        console.log(input.target.files[0].name, "image value");
         reader.readAsDataURL(input.target.files[0]);
       }
     },
@@ -489,9 +464,7 @@ export default {
           fontname: this.selectedDuration.durationCode,
         })
         .then((response) => {
-          //console.log(response)
           this.entitycard = response.data.result;
-          console.log(this.entitycard);
         });
     },
   },

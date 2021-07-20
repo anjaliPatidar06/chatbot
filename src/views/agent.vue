@@ -18,6 +18,12 @@
         <vs-button class="mr-2 mb-4" @click="popupActive = true"
           >Create New Chatbot
         </vs-button>
+        <vs-button
+          class="mr-2 mb-4"
+          @click="chatbotBackupActive = true"
+          color="warning"
+          >Chatbot Backup
+        </vs-button>
       </div>
       <span style="color: red">{{ msg }}</span>
       <vs-popup
@@ -41,6 +47,49 @@
           >Save</vs-button
         >
       </vs-popup>
+        <vs-prompt
+          class="calendar-event-dialog"
+        title="Chatbot Backup"
+          accept-text="Save"
+          @accept="chatbotBackup()"
+          :is-valid="validBackupForm"
+          :active.sync="chatbotBackupActive"
+          @cancel="chatbotBackupActive = false"
+        >
+        <div class="vx-row">
+          <div class="vx-col w-full mb-2">
+            <small class="date-label">Select Chatbot </small>
+            <v-select
+              class="w-full"
+              label="chatbotname"
+              v-validate="'required'"
+              name="chatbotSelected"
+              :options="rowdata"
+              v-model="chatbotSelected"
+              :dir="$vs.rtl ? 'rtl' : 'ltr'"
+            />
+            <span class="text-danger text-sm">{{
+              errors.first("chatbotSelected")
+            }}</span>
+          </div>
+       
+        <div class="vx-col w-full mb-2">
+          <small class="date-label">Chatbot Name</small>
+          <vs-input
+            name="chatbot_backup_name"
+            v-validate="'required'"
+            class="w-full"
+            v-model="chatbot_backup_name"
+            data-vv-validate-on="blur"
+          /><span class="text-danger text-sm">{{
+            errors.first("chatbot_backup_name")
+          }}</span>
+        </div>
+         </div>
+        <!-- <vs-button class="mt-3" color="primary" @click="chatbotBackup" type="filled"
+          >Save</vs-button
+        > -->
+        </vs-prompt>
       <vx-card title="Agent Table" search>
         <!-- <vs-table search max-items="10" pagination :data="users" > -->
         <vs-table
@@ -82,8 +131,8 @@
                     color="warning"
                     class="mr-2 buttontr"
                   >
-                    Train </vs-button
-                  >
+                    Train
+                  </vs-button>
                   <!-- <vs-button
                     v-else
                     :disabled="tr.chatbotname == 'Lead_Generation'"
@@ -149,11 +198,11 @@
                     >Edit</vs-button
                   >
                   <vs-button
-                    @click="deleteTableRow(tr.id)"
                     type="filled"
                     color="danger"
                     icon="delete"
                     aria-hidden="true"
+                    @click="openConfirm(tr.id)"
                     >Delete</vs-button
                   >
                 </div>
@@ -176,6 +225,12 @@ const dict = {
     chatbot_name: {
       required: "Please enter chatbot name",
     },
+    chatbotSelected:{
+      required: "Please select chatbot",
+    },
+    chatbot_backup_name:{
+      required: "Please enter chatbot name",
+    }
   },
 };
 Validator.localize("en", dict);
@@ -185,8 +240,8 @@ export default {
   props: ["agent"],
   data() {
     return {
-      trainingID:0,
-      trainingData:'',
+      trainingID: 0,
+      trainingData: "",
       chatbotname: "",
       activePromptAddEvent1: false,
       rowdata: [],
@@ -201,6 +256,10 @@ export default {
       popupActive: false,
       IsTraining: false,
       trainingchatbot: [],
+      chatbotBackupActive: false,
+      chatbotSelected: "",
+      chatbot_backup_name:'',
+      deleteID:0
     };
   },
   watch: {
@@ -218,6 +277,9 @@ export default {
     validateForm() {
       return !this.errors.any() && this.chatbotname !== "";
     },
+     validBackupForm() {
+      return this.chatbot_backup_name !== "" && this.chatbotSelected !== "";
+    },
   },
   mounted() {
     this.trainingID = localStorage.getItem("trainingID");
@@ -229,19 +291,58 @@ export default {
     } else {
       this.hidebutton();
       var chatbotidtrain = localStorage.getItem("chatbotidtrain");
-      if(chatbotidtrain !== null && chatbotidtrain !== undefined) {
+      if (chatbotidtrain !== null && chatbotidtrain !== undefined) {
         this.IsTraining = true;
         this.trainingData = setInterval(() => {
-            this.apicalling(chatbotidtrain);
-          }, 30000);
-        }
+          this.apicalling(chatbotidtrain);
+        }, 30000);
+      }
     }
   },
   methods: {
+       openConfirm(id) {
+         this.deleteID = id
+      this.$vs.dialog({
+        type: 'confirm',
+        color: 'danger',
+        title: `Confirm`,
+        text: 'Are you sure you want to delete this chatbot?',
+        accept: this.acceptAlert
+      })
+    },
+    acceptAlert() {
+      this.deleteTableRow(this.deleteID)
+    },
+    chatbotBackup() {
+      console.log('inside backup')
+        // this.$validator.validate().then((result) => {
+        // if (result) {
+      axios
+        .post(Base_URL.Actual_URL + "chatbot_backup", {
+          from_chatbot_id: this.chatbotSelected.id,
+          from_company_id: localStorage.company_id,
+          to_company_id: localStorage.company_id,
+          chatbotname: this.chatbot_backup_name,
+        })
+        .then((response) => {
+          console.log(response, "rsasdhs");
+          this.chatbotBackupActive = false
+          this.chatbotSelected = ''
+          this.chatbot_backup_name= ''
+          this.chatbotList()
+          this.$vs.notify({
+            color: "success",
+            title: response.data.result,
+            position: "top-center",
+          });
+        });
+        // }
+        // })
+    },
     chatbotList() {
       axios
         .post(Base_URL.Actual_URL + "chatbottable", {
-          company_id : localStorage.company_id ,
+          company_id: localStorage.company_id,
         })
         .then((response) => {
           this.rowdata = response.data.userlist;
@@ -260,7 +361,6 @@ export default {
             }
           });
           console.log("end for loop");
-          
         });
     },
     forceRerender() {
@@ -275,15 +375,15 @@ export default {
     hidebutton() {
       if (document.querySelectorAll(".mr-2.buttontr").length > 0) {
         var ID = localStorage.trainingID;
-        
+
         if (ID != null && ID != undefined) {
           document.querySelectorAll(".mr-2.buttontr").forEach((elem) => {
-          elem.disabled = true;
-        });
-            document.getElementById(ID).innerHTML =
-              '<i class="fa fa-refresh fa-spin"></i>&nbspTraining';
-            const button = document.getElementById(ID);
-            button.disabled = false;
+            elem.disabled = true;
+          });
+          document.getElementById(ID).innerHTML =
+            '<i class="fa fa-refresh fa-spin"></i>&nbspTraining';
+          const button = document.getElementById(ID);
+          button.disabled = false;
         }
       } else {
         console.log("in else ");
@@ -294,59 +394,58 @@ export default {
     },
     apicalling(trainingchatbot_id) {
       var chatbotidtrain = localStorage.getItem("chatbotidtrain");
-      if(trainingchatbot_id != null) {
-        axios.post(Base_URL.Actual_URL + "trainingchatbot_id", {
-          chatbot_id: trainingchatbot_id,
-        })
-        .then((response) => {
-          this.message = response.data.messages;
+      if (trainingchatbot_id != null) {
+        axios
+          .post(Base_URL.Actual_URL + "trainingchatbot_id", {
+            chatbot_id: trainingchatbot_id,
+          })
+          .then((response) => {
+            this.message = response.data.messages;
 
-          if (this.message == "Try again") {
-            var ID = localStorage.getItem("trainingID");
+            if (this.message == "Try again") {
+              var ID = localStorage.getItem("trainingID");
 
-            document.querySelectorAll(".mr-2.buttontr").forEach((elem) => {
-              elem.disabled = true;
-            });
-            this.IsTraining = true;
-            // document.getElementById("training" + ID).innerText = 'Training';
+              document.querySelectorAll(".mr-2.buttontr").forEach((elem) => {
+                elem.disabled = true;
+              });
+              this.IsTraining = true;
+              // document.getElementById("training" + ID).innerText = 'Training';
 
-            // document.getElementById(ID).innerText = 'Training'
-            document.getElementById(ID).innerHTML =
-              '<i  class="fa fa-refresh fa-spin"></i>&nbspTraining';
-            const button = document.getElementById(ID);
+              // document.getElementById(ID).innerText = 'Training'
+              document.getElementById(ID).innerHTML =
+                '<i  class="fa fa-refresh fa-spin"></i>&nbspTraining';
+              const button = document.getElementById(ID);
 
-            button.disabled = false;
-          } else {
-            clearInterval(this.trainingData);
-            console.log("success else");
-            this.IsTraining = false;
-            this.$vs.notify({
-              color: "success",
-              title: this.message,
-              position: "top-center",
-            });
-            var Id = localStorage.getItem("chatbotidtrain");
-             document.querySelectorAll(".mr-2.buttontr").forEach((elem) => {
-              elem.disabled = false;
-            });
-            document.getElementById("training" + Id).innerHTML =
-              '<i  class="fa fa-refresh fa-play"></i>&nbspTrain';
-            const button = document.getElementById("training" + Id);
-            button.disabled = false;
-            localStorage.setItem("trainingID", "");
-            localStorage.removeItem('trainingID')
-            localStorage.removeItem('chatbotidtrain')
-            this.chatbotList()
-          }
-        }, 10);
+              button.disabled = false;
+            } else {
+              clearInterval(this.trainingData);
+              this.IsTraining = false;
+              this.$vs.notify({
+                color: "success",
+                title: this.message,
+                position: "top-center",
+              });
+              var Id = localStorage.getItem("chatbotidtrain");
+              document.querySelectorAll(".mr-2.buttontr").forEach((elem) => {
+                elem.disabled = false;
+              });
+              document.getElementById("training" + Id).innerHTML =
+                '<i  class="fa fa-refresh fa-play"></i>&nbspTrain';
+              const button = document.getElementById("training" + Id);
+              button.disabled = false;
+              localStorage.setItem("trainingID", "");
+              localStorage.removeItem("trainingID");
+              localStorage.removeItem("chatbotidtrain");
+              this.chatbotList();
+            }
+          }, 10);
       }
-
-      },
+    },
 
     handleSelected(tr) {
-      localStorage.setItem('selected_chatbot', tr.chatbotname)
+      localStorage.setItem("selected_chatbot", tr.chatbotname);
       EventBus.$emit("selectedChatbotName", tr.chatbotname);
-  
+
       this.$vs.notify({
         text: `${tr.chatbotname} Chatbot Selected `,
         position: "top-center",
@@ -365,7 +464,7 @@ export default {
         });
     },
     deleteTableRow: function (idx) {
-
+      this.deleteID = 0
       axios
         .post(Base_URL.Actual_URL + "deletechatbot", {
           delete: 1,
@@ -373,20 +472,20 @@ export default {
         })
         .then((res) => {
           EventBus.$emit("chatbotDeleted", idx);
-          localStorage.setItem('selected_chatbot', 'No Chatbot Selected')
-          this.selectIntent = ''
-                this.$vs.notify({
-                color: "danger",
-                title: "Chatbot Deleted.",
-                text: "The selected chatbot is successfully deleted",
-                position: "top-center",
-              });
+          localStorage.setItem("selected_chatbot", "No Chatbot Selected");
+          this.selectIntent = "";
+          this.$vs.notify({
+            color: "danger",
+            title: "Chatbot Deleted.",
+            text: "The selected chatbot is successfully deleted",
+            position: "top-center",
+          });
           var Id = localStorage.getItem("chatbotidtrain");
-             document.querySelectorAll(".mr-2.buttontr").forEach((elem) => {
-              elem.disabled = false;
-            });
-            this.IsTraining = false;
-          localStorage.removeItem('chatbotidtrain');
+          document.querySelectorAll(".mr-2.buttontr").forEach((elem) => {
+            elem.disabled = false;
+          });
+          this.IsTraining = false;
+          localStorage.removeItem("chatbotidtrain");
           localStorage.removeItem("trainingID");
           this.chatbotList();
         });
@@ -432,33 +531,34 @@ export default {
           document.getElementById("training" + id).innerText = this.message;
           document.getElementById("training" + id).innerHTML =
             '<i class="fa fa-refresh fa-spin"></i>&nbsp' + this.message;
-            this.trainingData = setInterval(() => {
-              this.apicalling(id);
-            }, 30000);
+          this.trainingData = setInterval(() => {
+            this.apicalling(id);
+          }, 30000);
         });
     },
 
     deploy: function (index) {
       this.$vs.loading();
       setTimeout(() => {}, 6500);
-      axios.post(Base_URL.Actual_URL + "deploychatbotid", {
+      axios
+        .post(Base_URL.Actual_URL + "deploychatbotid", {
           chatbot_id: index,
         })
         .then((response) => {
           if (response.data.code == 200) {
-                this.$vs.notify({
-                  text: response.data.messages,
-                  color: "success",
-                  position: "top-center",
-                });
-                this.chatbotList();
-              } else {
-                this.$vs.notify({
-                  text: response.data.messages,
-                  color: "danger",
-                  position: "top-center",
-                });
-              }
+            this.$vs.notify({
+              text: response.data.messages,
+              color: "success",
+              position: "top-center",
+            });
+            this.chatbotList();
+          } else {
+            this.$vs.notify({
+              text: response.data.messages,
+              color: "danger",
+              position: "top-center",
+            });
+          }
           this.$vs.loading.close();
         });
       this.mes = "";

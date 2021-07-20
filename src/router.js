@@ -16,6 +16,7 @@ import Router from 'vue-router'
 Vue.use(Router)
 console.log('hey user type');
 function guardMyroute(to, from, next) {
+  
   console.log(router.apps, 'to from router')
   var isAuthenticated = false;
   if (localStorage.getItem('email'))
@@ -192,6 +193,11 @@ var router = new Router({
           component: () => import('./views/pages/card.vue')
         },
         {
+          path: '/payment-status',
+          name: 'payment-status',
+          component: () => import('./views/pages/paymentStatus.vue')
+        },
+        {
           path: '/collapsible',
           name: 'collapsible',
           component: () => import('./views/pages/collapsible.vue')
@@ -220,6 +226,16 @@ var router = new Router({
           path: '/picture',
           name: 'picture',
           component: () => import('./views/pages/picture.vue')
+        },
+        {
+          path: '/pdf',
+          name: 'pdf',
+          component: () => import('./views/pages/pdf.vue')
+        },
+        {
+          path: '/edit/pdf/:id',
+          name: 'edit-pdf',
+          component: () => import('./views/pages/editPdf.vue')
         },
         {
           path: '/editentity',
@@ -378,15 +394,11 @@ var router = new Router({
           path: '/buy',
           name: 'buy',
           component: () => import('./views/buy.vue'),
-
-
-
         },
         {
           path: '/agent',
           name: 'agent',
           component: () => import('./views/agent.vue'),
-
         },
 
         {
@@ -438,7 +450,6 @@ var router = new Router({
           beforeEnter: guardMyroutenew,
 
           component: () => import('./views/AllSubscription.vue'),
-
         },
         {
           path: '/addsubscription',
@@ -451,9 +462,6 @@ var router = new Router({
           path: '/nludata',
           name: 'nludata',
           component: () => import('@/views/NluData.vue'),
-
-
-
         },
         {
           path: '/responses',
@@ -511,17 +519,28 @@ var router = new Router({
           name: 'chatpage',
           component: () => import('./views/apps/chat/newpage.vue')
         },
+        // {
+        //   path: '/collected-leads',
+        //   name: 'collected-leads',
+        //   component: () => import('./views/Collectedemail.vue'),
+
+        // },
         {
-          path: '/collectedemail',
-          name: 'collectedemail',
-          component: () => import('./views/Collectedemail.vue'),
+          path: '/chatbotFile',
+          name: 'chatbotFile',
+          component: () => import('./views/pages/chatbotFile.vue'),
 
         },
         {
-          path: '/form_leads',
-          name: 'form_leads',
-          component: () => import('./views/pages/forms.vue'),
+          path: '/unansweredQuestions',
+          name: 'unansweredQuestions',
+          component: () => import('./views/unanswered_question.vue'),
 
+        },
+        {
+          path: '/collected-leads',
+          name: 'collected-leads',
+          component: () => import('./views/pages/forms.vue'),
         },
 
       ],
@@ -572,13 +591,16 @@ var router = new Router({
           path: '/forgot-password',
           name: 'page-forgot-password',
           component: () => import('@/views/pages/ForgotPassword.vue'),
-
         },
         {
-          path: '/reset-password',
+          path: '/reset-password/:reset_token?',
           name: 'page-reset-password',
           component: () => import('@/views/pages/ResetPassword.vue'),
-
+        },
+        {
+          path: '/email',
+          name: 'email',
+          component: () => import('@/views/pages/email.vue'),
         },
       ]
     },

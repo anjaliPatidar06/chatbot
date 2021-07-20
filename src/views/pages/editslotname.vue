@@ -153,7 +153,6 @@ export default {
   },
   methods: {
     Update() {
-      console.log("in update");
       this.$validator.validateAll().then((result) => {
         if (result) {
           const url = Base_URL.Actual_URL + "editslotname/";

@@ -159,17 +159,14 @@ export default {
   mounted() {
     const url = Base_URL.Actual_URL + "editquickname/";
     const id = this.$route.params.id;
-    console.log(url + id);
     const url1 = url + id;
     axios.get(url1, {}).then((response) => {
-      console.log(response);
       this.rowdata = response.data.userlist;
     });
     this.getTableData();
   },
   methods: {
     quick: function (e) {
-      console.log(e);
       this.rowdata[0].entityvalue = "";
       if (e !== null) {
         var newemail = localStorage.getItem("email");
@@ -182,9 +179,7 @@ export default {
             entity_key: e.Entitykey,
           })
           .then((response) => {
-            console.log(response);
             this.entitycard = response.data.entity;
-            console.log(entitycard);
           });
       } else {
         this.rowdata[0].entitykey = "";
@@ -209,12 +204,10 @@ export default {
         });
     },
     Update() {
-      console.log("in update");
       this.$validator.validateAll().then((result) => {
         if (result) {
           const url = Base_URL.Actual_URL + "editquickname/";
           const id = this.$route.params.id;
-          console.log(url + id);
           const url1 = url + id;
           axios
             .post(url1, {

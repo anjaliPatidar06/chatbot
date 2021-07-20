@@ -23,13 +23,13 @@
                                     <h4 class="mb-4">Reset Password</h4>
                                     <p>Please enter your new password.</p>
                                 </div>
-                                <vs-input type="email" label-placeholder="Email" v-model="email" class="w-full mb-6" />
+                                <!-- <vs-input type="email" label-placeholder="Email" v-model="email" class="w-full mb-6" /> -->
                                 <vs-input type="password" label-placeholder="Password" v-model="password" class="w-full mb-6" />
                                 <vs-input type="password" label-placeholder="Confirm Password" v-model="cpassword" class="w-full mb-8" />
 
                                 <div class="flex flex-wrap justify-between flex-col-reverse sm:flex-row">
                                     <vs-button type="border" to="/login" class="w-full sm:w-auto mb-8 sm:mb-auto mt-3 sm:mt-auto">Go Back To Login</vs-button>
-                                    <vs-button class="w-full sm:w-auto">Reset</vs-button>
+                                    <vs-button class="w-full sm:w-auto"@click="submit">Reset</vs-button>
                                 </div>
 
                             </div>
@@ -42,6 +42,9 @@
 </template>
 
 <script>
+import axios from "axios";
+import { Base_URL } from "../../../api.config";
+
 export default {
   data () {
     return {
@@ -49,6 +52,36 @@ export default {
       password: '',
       cpassword: ''
     }
+  },
+  created(){
+          console.log(this.$route.query.reset_token,'route')
+
+  },
+  methods:{
+      submit() {
+      this.$validator.validateAll().then((result) => {
+          console.log(this.$route,'route')
+        if (result) {
+          var newemail = localStorage.email;
+          axios
+            .post(Base_URL.Actual_URL + "reset_password", {
+               password: this.password,
+               token: this.$route.query.reset_token
+            })
+            .then((response) => {
+                if(response.data.code == 200) {
+                    this.$vs.notify({
+                    color: "success",
+                    title: "Reset Password.",
+                    text: "You have reset your password successfully.",
+                    position: "top-center",
+                });
+                  this.$router.push({name:'page-login'}) 
+                }             
+            });
+        }
+      });
+    },
   }
 }
 </script>

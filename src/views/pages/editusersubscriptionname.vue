@@ -15,7 +15,7 @@ Vue.component("v-select", vSelect);
           <div class="vx-col sm:w-1/3 w-full mb-2">
             <h6>Subscription Name</h6>
             <vs-input
-              v-validate="'required|min:3|max:25'"
+              v-validate="'required'"
               data-vv-validate-on="blur"
               name="subname"
               class="w-full"
@@ -33,14 +33,15 @@ Vue.component("v-select", vSelect);
               :options="durations"
               v-model="rowdata[0].duration"
               :dir="$vs.rtl ? 'rtl' : 'ltr'"
-              @input="promptAddNewEvent(selectedDuration, new Date())"
+              @input="promptAddNewEvent(rowdata[0].duration, new Date())"
             >
             </v-select>
           </div>
           <div class="vx-col sm:w-1/3 w-full mb-2">
             <h6>Number of Messages</h6>
             <vs-input
-              v-validate="'required|min:1|max:8|between:1,5000'"
+            type="number"
+              v-validate="'required'"
               data-vv-validate-on="blur"
               class="w-full"
               name="message"
@@ -93,9 +94,9 @@ Vue.component("v-select", vSelect);
           <div class="vx-col sm:w-1/3 w-full mb-2">
             <h6>Subscription Cost</h6>
             <vs-input
-              v-validate="'required|max:10|between:1,5000'"
+            type="number"
+              v-validate="'required'"
               data-vv-validate-on="blur"
-              type="digit"
               class="w-full"
               name="subcost"
               v-model="rowdata[0].subcost"
@@ -386,8 +387,8 @@ export default {
         },
 
         {
-          durationCode: "custom duration",
-          durationName: "custom duration",
+          durationCode: "Custom Duration",
+          durationName: "Custom Duration",
         },
       ],
       selected: null,
@@ -491,18 +492,18 @@ export default {
       this.labelLocal = "none";
     },
     promptAddNewEvent(type, date) {
+      console.log(this.rowdata,'ejhrfrhej')
       this.disabledFrom = false;
       this.addNewEventDialog(type, date);
     },
     addNewEventDialog(type, date) {
       this.clearFields();
-
-      if (type.durationCode == "custom duration") {
+      if (type.durationCode == "Custom Duration") {
         this.activePromptAddEvent = true;
         this.startDate = date;
         this.endDate = date;
       } else {
-        this.durations[4].durationName = "custom duration";
+        this.durations[4].durationName = "Custom Duration";
       }
     },
     openAddNewEvent(date) {

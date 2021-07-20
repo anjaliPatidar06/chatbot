@@ -37,9 +37,34 @@
           :class="'bg-success'"
         ></div> -->
       </div>
-      <h6>{{ test.contact }}</h6>
+      <!-- <h6>{{ test.contact }} </h6> -->
+      <h6 class="font-semibold"  v-html="test.display_name == null ? test.contact : test.display_name"></h6>
       <vs-spacer></vs-spacer>
-      <feather-icon
+      <i class="fa fa-edit fa-lg" @click="openModal()"></i>
+    <vs-popup
+        class="holamundo"
+        :active.sync="popupActive"
+        title="Contact Name"
+        @accept="addUserName"
+        @close="closeModal"
+      >
+        <span class="text-danger text-sm">{{
+          errors.first("contact_name")
+        }}</span>
+        <vs-input
+          name="contact_name"
+          v-validate="'required'"
+          class="w-full"
+          label-placeholder="Contact Name"
+          v-model="contact_name"
+          data-vv-validate-on="blur"
+        />
+        <vs-button class="mt-3" color="primary" @click="addUserName" type="filled"
+          >Save</vs-button
+        >
+      </vs-popup>
+
+      <!-- <feather-icon
         icon="StarIcon"
         class="cursor-pointer"
         :svgClasses="[
@@ -48,7 +73,7 @@
           'h-6',
         ]"
         @click.stop="isPinnedLocal = !isPinnedLocal"
-      ></feather-icon>
+      ></feather-icon> -->
     </vs-navbar>
   </div>
 </template>
@@ -57,12 +82,24 @@
 import axios from "axios";
 import { Base_URL } from "../../../../api.config";
 // import { watch } from 'fs';
+import { Validator } from "vee-validate";
+import { EventBus } from "../../../event-bus";
+const dict = {
+  custom: {
+    contact_name: {
+      required: "Please enter contact name",
+    },
+  },
+};
+Validator.localize("en", dict);
 var test
 export default {
   data() {
     return {
       userData:[],
       test:[],
+      popupActive: false,
+      contact_name:''
     };
   },
   props: {
@@ -140,20 +177,31 @@ export default {
     },
   },
   methods: {
-    
-      //  userDetails() {
-      //       const payload = {
-      //         company_id: localStorage.company_id,
-      //         chatbot_id: 1042,
-      //         user_id: this.userId
-      //       }
-      //       var test = this.$store.dispatch('chat/fetchContacts' ,payload)
-      //    test.then(function(result) {
-      //       console.log(typeof result,'result')
-      //       this.userData = result.username
-      //       console.log(this.userData,'userdata')
-      //     })
-      //   },
+    openModal() {
+      this.popupActive = true
+    },
+    closeModal() {
+      this.popupActive = false
+    },
+    addUserName() {
+       this.$validator.validateAll().then((result) => {
+        if (result) {
+         axios.post(Base_URL.Actual_URL + "update_ip_name", {
+          company_id: localStorage.company_id,
+          chatbot_id: localStorage.chatbot_id,
+          username: this.test.contact,
+          display_name: this.contact_name
+        })
+        .then((response) => {
+            console.log(response,'res')
+            this.popupActive = false
+            this.contact_name = ''
+            this.userDetails()
+            EventBus.$emit('user_detail_updated')
+          });
+        }
+        })
+    },
     userDetails() {
       axios.post(Base_URL.Actual_URL + "get_contact_list", {
           company_id: localStorage.company_id,
@@ -165,6 +213,7 @@ export default {
           this.newContacts.forEach((contact) => {
             if (contact.user_id == parseInt(this.userId)) {
               this.test = contact;
+              this.contact_name = this.test.display_name ? this.test.display_name : this.test.contact
                return this.test;
             }
           });
