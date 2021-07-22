@@ -143,6 +143,8 @@ export default {
                 this.rowdata[0].responsename.responsename ||
                 this.rowdata[0].responsename,
               description: this.rowdata[0].description,
+                company_id: localStorage.company_id,
+                chatbot_id: localStorage.chatbot_id,
             })
             .then((response) => {
               this.msg = response.data.msg;

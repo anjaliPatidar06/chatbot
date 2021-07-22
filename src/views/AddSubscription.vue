@@ -23,7 +23,6 @@
           </div>
           <div class="vx-col sm:w-1/3 w-full mb-2">
             <h6>Subscription Duration</h6>
-
             <v-select
               class="w-full"
               label="durationName"

@@ -222,6 +222,8 @@ export default {
               entitykey:
                 this.rowdata[0].entitykey.Entitykey ||
                 this.rowdata[0].entitykey,
+                company_id: localStorage.company_id,
+                chatbot_id: localStorage.chatbot_id,
             })
             .then((response) => {
               if (response.data.code == 200) {

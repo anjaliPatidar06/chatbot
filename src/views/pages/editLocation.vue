@@ -54,7 +54,7 @@
             </div>
             <div class="vx-col sm w-full mb-2">
               <h6>Description</h6>
-               <vs-textarea
+              <vs-textarea
                 class="w-full"
                 v-model="locationData[0].description"
                 v-validate="'max:100'"
@@ -69,17 +69,21 @@
                 >{{ errors.first("description") }}</span
               >
             </div>
-              <div class="vx-col w-1/3 mb-2">
-                  <div
-              class="img-container w-64 flex items-center justify-center" v-if="locationData[0].image_path"
-            >
-              <img
-                :src="locationData[0].image_path"
-                alt="img"
-                class="responsive mt-3"
-              />
-            </div>
-              <div class="upload-img" :class="locationData[0].image_path ? 'mt-5': 'mt-2'">
+            <div class="vx-col w-1/3 mb-2">
+              <div
+                class="img-container w-64 flex items-center justify-center"
+                v-if="locationData[0].image_path"
+              >
+                <img
+                  :src="locationData[0].image_path"
+                  alt="img"
+                  class="responsive mt-3"
+                />
+              </div>
+              <div
+                class="upload-img"
+                :class="locationData[0].image_path ? 'mt-5' : 'mt-2'"
+              >
                 <input
                   type="file"
                   class="hidden"
@@ -170,7 +174,7 @@ export default {
     this.getResponseData();
   },
   methods: {
-        handleFileUpload() {
+    handleFileUpload() {
       this.file1 = this.$refs.updateImgInputnewbackground.files[0];
       this.selectedfile = this.$refs.updateImgInputnewbackground.files[0].name;
       this.selectedfilePath = this.selectedfile;
@@ -187,15 +191,15 @@ export default {
     },
     number_latitude_test(n) {
       var result = n - Math.floor(n) !== 0;
- if (!parseInt(n)) {
+      if (!parseInt(n)) {
         return (this.testLatitude = false);
-      } 
+      }
       if (result) return (this.testLatitude = true);
       else return (this.testLatitude = false);
     },
     number_longitude_test(n) {
       var result = n - Math.floor(n) !== 0;
- if (!parseInt(n)) {
+      if (!parseInt(n)) {
         return (this.testLongitude = false);
       }
       if (result) return (this.testLongitude = true);
@@ -212,7 +216,7 @@ export default {
         .get(Base_URL.Actual_URL + "editlocation/" + this.$route.params.id)
         .then((response) => {
           this.locationData = response.data.location_list;
-          this.selectedfilePath = this.locationData[0].image_path
+          this.selectedfilePath = this.locationData[0].image_path;
         });
     },
     getResponseData() {
@@ -238,11 +242,14 @@ export default {
             var body = {
               latitude: this.locationData[0].latitude,
               longitude: this.locationData[0].longitude,
-              description: this.locationData[0].description || '',
+              description: this.locationData[0].description || "",
               image_path: this.selectedfilePath,
-            image_base: this.file1,
+              image_base: this.file1,
               responsename:
-                this.locationData[0].responsename.responsename || this.locationData[0].responsename,
+                this.locationData[0].responsename.responsename ||
+                this.locationData[0].responsename,
+              company_id: localStorage.company_id,
+              chatbot_id: localStorage.chatbot_id,
             };
             axios
               .post(
@@ -253,7 +260,7 @@ export default {
                 if (response.data.code == 200) {
                   this.$router.push({
                     name: "botTemplate",
-                    params:{ name:'location'}
+                    params: { name: "location" },
                   });
                   this.$emit("selectedComponent", "locationEvent");
                   this.$vs.notify({

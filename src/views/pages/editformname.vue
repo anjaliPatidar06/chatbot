@@ -93,7 +93,7 @@ const dict = {
       slot_validation: {
       required: "Please enter slot validation",
     },
-     slot_message: {
+     store_message: {
       required: "Please enter slot message",
     },
   },

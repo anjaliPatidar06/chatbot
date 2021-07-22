@@ -425,12 +425,7 @@ var router = new Router({
           component: () => import('./views/pages/chatbotui.vue'),
 
         },
-        {
-          path: '/lookup',
-          name: 'lookup',
-          component: () => import('./views/pages/lookup.vue'),
 
-        },
         {
           path: '/Intent',
           name: 'Intent',

@@ -236,7 +236,6 @@ export default {
         });
     },
     updateRecord: function (index) {
-      console.log(index);
       this.$router.push({
         name: "editquickname",
         params: { id: index },
@@ -275,9 +274,7 @@ export default {
             entity_key: e.Entitykey,
           })
           .then((response) => {
-            console.log(response);
             this.entitycard = response.data.entity;
-            console.log(entitycard);
           });
       } else {
         this.assignentityquickreplies = "";
@@ -287,7 +284,6 @@ export default {
     },
 
     updateRecord: function (index) {
-      console.log(index);
       axios
         .post(Base_URL.Actual_URL + "editquick", {
           Edit: 2,
@@ -296,7 +292,6 @@ export default {
         .then((response) => {
           this.email = response.data.userlist;
 
-          console.log(this.email[0].id);
           this.id = this.email[0].id;
           this.$router.push({
             name: "editquickname",
@@ -325,7 +320,6 @@ export default {
               addresponse: this.responsename.responsename,
             })
             .then((response) => {
-              console.log(response);
               if (response.data.code == 100) {
                 this.message = response.data.message;
                 this.$emit("updateQuickComponent");

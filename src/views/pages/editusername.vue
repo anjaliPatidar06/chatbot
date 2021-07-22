@@ -322,7 +322,7 @@ export default {
           chatbotname: this.rowdata[0].chatbotname.chatbotname || this.rowdata[0].chatbotname
         })
         .then((response) => {
-          this.msg = response.data.msg;
+          this.msg = response.data.result;
           if (response.data.code == 200) {
                   this.$vs.notify({
                   title: "Edit Status",
@@ -330,9 +330,16 @@ export default {
                   color: "success",
                   position: "top-center",
                 });
-            this.msg = response.data.msg;
+            // this.msg = response.data.msg;
             this.$router.go(-1);
           }
+           if (response.data.code == 100) {
+                 this.$vs.notify({
+                  title: this.msg,
+                  color: "warning",
+                  position: "top-center",
+                });
+              }
         });
         }
         })

@@ -39,7 +39,8 @@
               label="Company"
               name="company"
               v-model="rowdata[0].companyname"
-            />    <span class="text-danger text-sm">{{
+            />
+            <span class="text-danger text-sm">{{
               errors.first("company")
             }}</span>
           </div>
@@ -58,31 +59,28 @@
         </div>
         <div class="vx-row">
           <div class="vx-col sm:w-1/2 w-full mb-2">
-          <vx-input-group>
-                <vs-input
-                  ref="password"
-                  v-bind:type="[showPassword ? 'text' : 'password']"
-              label="Password"
-              v-validate="'required|min:6|max:10'"
-              placeholder="Your Password"
-              name="password"
-              v-model="rowdata[0].password"
-              class="w-full"
-            />
-             <template slot="append" class="mt-20">
-                  <div class="append-text bg-primary">
-                    <span
-                      @click="showPassword = !showPassword"
-                    >
-                      <i
-                        class="fa"
-                        :class="[showPassword ? 'fa-eye' : 'fa-eye-slash']"
-                        aria-hidden="true"
-                      ></i>
-                    </span>
-                  </div>
-                </template>
-              </vx-input-group>
+            <vx-input-group>
+              <vs-input
+                ref="password"
+                v-bind:type="[showPassword ? 'text' : 'password']"
+                label="Password"
+                v-validate="'required|min:6|max:10'"
+                name="password"
+                v-model="rowdata[0].password"
+                class="w-full"
+              />
+              <template slot="append" class="mt-20">
+                <div class="append-text bg-primary">
+                  <span @click="showPassword = !showPassword">
+                    <i
+                      class="fa"
+                      :class="[showPassword ? 'fa-eye' : 'fa-eye-slash']"
+                      aria-hidden="true"
+                    ></i>
+                  </span>
+                </div>
+              </template>
+            </vx-input-group>
             <span class="text-danger text-sm" v-show="errors.has('password')">{{
               errors.first("password")
             }}</span>
@@ -95,34 +93,28 @@
                 label="Confirm Password"
                 v-validate="'required|min:6|max:10|confirmed:password'"
                 data-vv-as="password"
-                placeholder="Confirm Password"
                 name="confirm_password"
                 v-model="rowdata[0].confirm_password"
-                class="w-full"
-              /> <template
-                  slot="append"
-                  class="mt-20"
-                >
-             <div class="append-text bg-primary">
-                    <span
-                      class="input-group-text"
-                      @click="showConfirmPassword = !showConfirmPassword"
-                    >
-                      <i
-                        class="fa"
-                        :class="[
-                          showConfirmPassword ? 'fa-eye' : 'fa-eye-slash',
-                        ]"
-                        aria-hidden="true"
-                      ></i>
-                    </span>
-                  </div> </template
-              ></vx-input-group>
+                class="w-full" />
+              <template slot="append" class="mt-20">
+                <div class="append-text bg-primary">
+                  <span
+                    class="input-group-text"
+                    @click="showConfirmPassword = !showConfirmPassword"
+                  >
+                    <i
+                      class="fa"
+                      :class="[showConfirmPassword ? 'fa-eye' : 'fa-eye-slash']"
+                      aria-hidden="true"
+                    ></i>
+                  </span>
+                </div> </template
+            ></vx-input-group>
             <span
               class="text-danger text-sm"
               v-show="errors.has('confirm_password')"
               >{{ errors.first("confirm_password") }}
-              </span>
+            </span>
           </div>
         </div>
 
@@ -608,20 +600,6 @@ export default {
     Update() {
       this.$validator.validateAll().then((result) => {
         if (result) {
-          function getRandomInt(min, max) {
-            return Math.floor(Math.random() * (max - min)) + min;
-          }
-          const color = `rgb(${getRandomInt(0, 255)},${getRandomInt(
-            0,
-            255
-          )},${getRandomInt(0, 255)})`;
-          this.$vs.notify({
-            title: "Details edited successfully.",
-            text: "Your account detail is updated",
-            color,
-            position: "top-center",
-          });
-
           const url = Base_URL.Actual_URL + "editallaccountname/";
           const id = this.$route.params.id;
           const url1 = url + id;
@@ -638,12 +616,24 @@ export default {
               country: this.rowdata[0].country.name || this.rowdata[0].country,
             })
             .then((response) => {
-              this.msg = response.data.msg;
+              this.msg = response.data.status;
 
               if (response.data.code == 200) {
-                this.msg = response.data.msg;
+                this.$vs.notify({
+                  title: "Details edited successfully.",
+                  text: "Your account detail is updated",
+                  color:"success",
+                  position: "top-center",
+                });
+                // this.msg = response.data.msg;
                 this.$router.go(-1);
-                timeInterval = setInterval(function () {}, 1200);
+              }
+               if (response.data.code == 100) {
+                 this.$vs.notify({
+                  title: this.msg,
+                  color: "warning",
+                  position: "top-center",
+                });
               }
             });
         }

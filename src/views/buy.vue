@@ -87,10 +87,10 @@ const dict = {
   custom: {
     chatbot_name: {
       required: "Please enter chatbot name",
-      alpha: "Your chatbot name may only contain alphabetic characters",
+      // alpha: "Your chatbot name may only contain alphabetic characters",
     },
     cost: {
-      required: "Please enter your cost",
+      required: "Please enter cost",
       numeric: "Cost must have numbers only.",
     },
     role: {
@@ -129,8 +129,6 @@ export default {
   },
   computed: {},
   mounted() {
-                  console.log(Math.floor(Math.random()))
-    var newemail = localStorage.getItem("email");
     axios
       .post(Base_URL.Actual_URL + "chatbottable", {
         company_id: localStorage.company_id,

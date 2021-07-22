@@ -64,7 +64,7 @@
     </div> -->
     <vx-card>
       <div class="vx-row">
-        <div class="vx-col w-full sm:w-1/2 md:w-1/2 lg:w-1/4 xl:w-1/2" >
+        <div class="vx-col w-full sm:w-1/2 md:w-1/2 lg:w-1/4 xl:w-1/2">
           <h6>Select Chatbot Name</h6>
           <v-select
             :dir="$vs.rtl ? 'rtl' : 'ltr'"
@@ -168,8 +168,7 @@
     <vx-card class="mt-4">
       <div class="vx-row">
         <div
-          class="vx-col w-full sm:w-1/2 md:w-1/2 lg:w-1/4 xl:w-1/2 mt-4 pt-4 
-          "
+          class="vx-col w-full sm:w-1/2 md:w-1/2 lg:w-1/4 xl:w-1/2 mt-4 pt-4"
         >
           <!-- <span class="sr-only">Loading...</span> -->
           <h6>Select Agent Name</h6>
@@ -194,7 +193,6 @@
         </div>
       </div>
     </vx-card>
-
   </div>
   <div v-else></div>
 </template>
@@ -202,7 +200,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
-
 import StatisticsCardLine from "@/components/statistics-cards/StatisticsCardLine.vue";
 import VueApexCharts from "vue-apexcharts";
 import analyticsData from "./ui-elements/card/analyticsData.js";
@@ -222,8 +219,8 @@ export default {
   data() {
     return {
       // Area charts
-          activeLoading:false,
-      userRole:localStorage.user_role,
+      activeLoading: false,
+      userRole: localStorage.user_role,
       moment,
       agentList: [],
       chatbotSelected5: "",
@@ -316,11 +313,11 @@ export default {
             zoom: {
               enabled: false,
             },
-          events: {
-            load() {
-              this.showLoading();
-            }
-          }
+            events: {
+              load() {
+                this.showLoading();
+              },
+            },
           },
           colors: ["#7367F0", "#28C76F", "#EA5455", "#FF9F43", "#1E1E1E"],
           dataLabels: {
@@ -514,31 +511,25 @@ export default {
   },
   methods: {
     selectChatbot(e) {
-      console.log(e, "e");
       this.leadGraphData(e.id);
       this.userGraphData(e.id);
       this.unansweredQustionGraphData(e.id);
       this.visitorReport(e.id);
-       this.$vs.loading({
+      this.$vs.loading({
         container: "#div-with-loading",
         scale: 0.6,
       });
     },
     selectChatbot2(e) {
-      console.log(e, "selectChatbot2");
       this.userGraphData(e.id);
-      
     },
     selectChatbot3(e) {
-      console.log(e, "e");
       this.unansweredQustionGraphData(e.id);
     },
     selectChatbot4(e) {
-      console.log(e, "eee");
-      //       alert('heyy')
       //             this.activeLoading = true
 
-       this.$vs.loading({
+      this.$vs.loading({
         container: "#div-with-loading",
         scale: 0.6,
       });
@@ -554,7 +545,6 @@ export default {
         })
         .then((response) => {
           this.agentList = response.data.agent_list;
-          console.log(response.data.Data, "response data++");
         });
     },
     visitorReport(chatbotID) {
@@ -564,15 +554,11 @@ export default {
           company_id: localStorage.company_id,
         })
         .then((response) => {
-          // this.visitorList = response.data.agent_list
-          console.log(response.data.Visiter_data, "response visitor_report++");
           var data = response.data.Visiter_data;
           var finalArray = [];
           for (const [key, value] of Object.entries(data)) {
-            // console.log(key, value);
             for (var key1 in value) {
               var value1 = value[key1];
-              console.log(key1, value1);
               finalArray.push({
                 x: key1,
                 y: value1,
@@ -595,15 +581,9 @@ export default {
           company_id: localStorage.company_id,
         })
         .then((response) => {
-          console.log(response.data.agent_user_count, "response data++");
-          // console.log(
-          //   this.liveAgentChartData.series,
-          //   "this.lineChartSimple.series"
-          // );
           var data = response.data.agent_user_count;
           var finalArray = [];
           for (const [key, value] of Object.entries(data)) {
-            // console.log(key, value);
             for (var key1 in value) {
               var value1 = value[key1];
               finalArray.push({
@@ -617,25 +597,21 @@ export default {
               data: finalArray,
             },
           ]);
-              setTimeout(() => {
+          setTimeout(() => {
             this.$vs.loading.close("#div-with-loading > .con-vs-loading");
           }, 1000);
         });
     },
-    //  selectChatbot2(e) {
-    //   console.log(e, 'e')
-    //   this.userGraphData(e.id)
-    // },
     unansweredQustionGraphData(chatbotID) {
       axios
-        .post(Base_URL.Actual_URL + "user_count_get", {
+        .post(Base_URL.Actual_URL + "unans_question_report", {
           chatbot_id: chatbotID,
           company_id: localStorage.company_id,
         })
         .then((response) => {
           this.$refs.chart3.updateSeries([
             {
-              data: response.data.Data,
+              data: response.data.unans_count,
             },
           ]);
         });
@@ -647,8 +623,6 @@ export default {
         })
         .then((response) => {
           this.chatbotName = response.data.userlist;
-          // this.userGraphData(this.chatbotName[0].id);
-          // this.leadGraphData(this.chatbotName[0].id);
         });
     },
     homeuserData() {
@@ -693,7 +667,7 @@ export default {
               data: response.data.Data,
             },
           ]);
-           setTimeout(() => {
+          setTimeout(() => {
             this.$vs.loading.close("#div-with-loading > .con-vs-loading");
           }, 1000);
         });

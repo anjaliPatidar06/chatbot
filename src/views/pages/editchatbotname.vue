@@ -7,7 +7,8 @@
       <vx-card title="Update ChatBot Name">
         <div class="vx-row">
           <div class="vx-col sm:w-1/2 w-full mb-2" :data="rowdata">
-            <vs-input v-if="rowdata[0]"
+            <vs-input
+              v-if="rowdata[0]"
               class="w-full"
               label="Chatbot Name"
               v-validate="'required|max:150'"
@@ -45,7 +46,7 @@ import { Validator } from "vee-validate";
 const dict = {
   custom: {
     chatbot_name: {
-        required: "Please enter chatbot name",
+      required: "Please enter chatbot name",
     },
   },
 };
@@ -72,11 +73,13 @@ export default {
   },
   computed: {
     validateForm() {
-      return !this.errors.any() && this.chatbotname !== null || this.chatbotname !== undefined;
+      return (
+        (!this.errors.any() && this.chatbotname !== null) ||
+        this.chatbotname !== undefined
+      );
     },
   },
-  created() {
-  },
+  created() {},
   mounted() {
     const url = Base_URL.Actual_URL + "editchatbotname/";
     const id = this.$route.params.id;
@@ -87,32 +90,32 @@ export default {
   },
   methods: {
     Update() {
-        this.$validator.validateAll().then((result) => {
+      this.$validator.validateAll().then((result) => {
         if (result) {
-      const url = Base_URL.Actual_URL + "editchatbotname/";
-      const id = this.$route.params.id;
-      const url1 = url + id;
-      axios
-        .post(url1, {
-          chatbotname: this.rowdata[0].chatbotname,
-        })
-        .then((response) => {
-          EventBus.$emit("selectedChatbotName", this.rowdata[0].chatbotname);
-          this.msg = response.data.msg;
-          if (response.data.code == 200) {
-            this.$vs.notify({
-              title: "ChatBot Name Updated.",
-              text: "The selected ChatBot Name is updated.",
-              color: "success",
-              position: "top-center",
-            });
+          const url = Base_URL.Actual_URL + "editchatbotname/";
+          const id = this.$route.params.id;
+          const url1 = url + id;
+          axios
+            .post(url1, {
+              chatbotname: this.rowdata[0].chatbotname,
+            })
+            .then((response) => {
+              EventBus.$emit("selectedChatbotName", this.$route.params.id);
+              this.msg = response.data.msg;
+              if (response.data.code == 200) {
+                this.$vs.notify({
+                  title: "ChatBot Name Updated.",
+                  text: "The selected ChatBot Name is updated.",
+                  color: "success",
+                  position: "top-center",
+                });
 
-            this.msg = response.data.msg;
-            this.$router.push({ name: "agent" });
-          }
-        });
+                this.msg = response.data.msg;
+                this.$router.push({ name: "agent" });
+              }
+            });
         }
-        })
+      });
     },
     resetForm() {
       var self = this;

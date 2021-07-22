@@ -13,7 +13,7 @@
       <div class="fa fa-exclamation-triangle" aria-hidden="true"></div>
       <div class="title">
         Payment {{payment_status.text}}.<br />
-        <p>Please try again.</p>
+        <p><a href="/Buy" style="cursor: pointer;">Please try again.</a></p>
       </div>
     </div>
     <div class="outerBox" v-if="payment_status.code == -2 || payment_status.code == -3">

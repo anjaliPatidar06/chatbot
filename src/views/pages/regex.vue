@@ -134,27 +134,19 @@ export default {
   },
   methods: {
     getRegexData() {
-      var newemail = localStorage.getItem("email");
-      console.log(newemail);
       var chatbot_id = localStorage.getItem("chatbot_id");
-      console.log(chatbot_id);
       axios
         .post(Base_URL.Actual_URL + "regextable", {
           company_id: localStorage.company_id,
           chatbot_id: chatbot_id,
         })
         .then((response) => {
-          console.log(response);
           this.rowdata = response.data.userlist;
 
-          console.log(this.rowdata);
         });
     },
     deleteTableRow: function (idx) {
-      var newemail = localStorage.getItem("email");
-      console.log(newemail);
       var chatbot_id = localStorage.getItem("chatbot_id");
-      console.log(chatbot_id);
       axios
         .post(Base_URL.Actual_URL + "regexpage", {
           delete: 1,
@@ -182,14 +174,9 @@ export default {
       });
     },
     regex() {
-      console.log('regex data')
       this.$validator.validateAll().then((result) => {
         if (result) {
-          console.log('heyyyyyyyyyyyy')
-          var newemail = localStorage.getItem("email");
-          console.log(newemail);
           var chatbot_id = localStorage.getItem("chatbot_id");
-          console.log(chatbot_id);
           axios
             .post(Base_URL.Actual_URL + "regex", {
               addregex: this.addregex,
@@ -199,9 +186,7 @@ export default {
               company_id: localStorage.company_id,
             })
             .then((response) => {
-              console.log(response);
               this.result = response.data.result;
-              console.log(localStorage.getItem("email"));
               if (response.data.code == 200) {
                 this.result = response.data.result;
                 (this.addregex = ""), (this.regexpattern = "");

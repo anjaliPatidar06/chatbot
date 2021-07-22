@@ -4,7 +4,7 @@
     <div class="vx-col w-full mb-base">
       <form v-on:submit.prevent="adduser">
         <vx-card title="Add User">
-          <span style="color: red">{{ result }}</span>
+          <!-- <span style="color: red">{{ result }}</span> -->
           <div class="vx-row">
             <div class="vx-col sm:w-1/2 w-full mb-2">
               <vs-input
@@ -302,7 +302,6 @@ export default {
       })
       .then((response) => {
         this.newsentence = response.data.sentence;
-        console.log(this.newsentence,'newvbdbs')
       });
   },
 
@@ -336,6 +335,13 @@ export default {
                 });
                 this.$router.push({
                   name: "alluser",
+                });
+              }
+              if (response.data.code == 100) {
+                 this.$vs.notify({
+                  title: this.result,
+                  color: "warning",
+                  position: "top-center",
                 });
               }
             });

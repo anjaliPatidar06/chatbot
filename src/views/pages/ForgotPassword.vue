@@ -58,7 +58,6 @@ export default {
                email_id: this.email
             })
             .then((response) => {
-              console.log(response,'nfjd')
               if(response.data.code == 200) {
                     this.email = ''
                     this.$vs.notify({

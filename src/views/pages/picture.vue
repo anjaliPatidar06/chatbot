@@ -274,7 +274,6 @@ export default {
           this.newlistdata = response.data.userlist;
           if (this.newlistdata.length > 0) {
             var st = this.newlistdata[0].picturepath;
-            console.log(st, "newlistdata");
             this.dataImg = st;
           } else {
             this.dataImg = null;
@@ -306,7 +305,6 @@ export default {
         this.file1 = e.target.result;
         this.previewImage = e.target.result;
         this.dataImg = e.target.result;
-        console.log(this.previewImage, "previewImage");
       };
     },
     submitAsItIs() {
@@ -321,7 +319,6 @@ export default {
       });
     },
     addEvent1() {
-      console.log(this.dataImg, "dataimg", this.selectedfile);
       this.$validator.validateAll().then((result) => {
         if (result) {
           var newemail = localStorage.email;
@@ -348,9 +345,7 @@ export default {
                 bot: "Picture",
               })
               .then((response) => {
-                console.log(typeof response.data.code);
                 if (parseInt(response.data.code) == 200) {
-                  console.log("inside codee");
                   setTimeout(() => {
                     this.$vs.loading.close();
                   }, 3000);

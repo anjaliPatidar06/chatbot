@@ -375,10 +375,10 @@ const dict = {
       required: "Please enter chatbot name.",
     },
     ui_Color: {
-      required: "Please select chatbot UI color",
+      required: "Please select chatbot UI color.",
     },
     select_font: {
-      required: "Please select font",
+      required: "Please select font.",
     },
   },
 };

@@ -300,8 +300,8 @@ export default {
     }
   },
   methods: {
-       openConfirm(id) {
-         this.deleteID = id
+    openConfirm(id) {
+      this.deleteID = id
       this.$vs.dialog({
         type: 'confirm',
         color: 'danger',
@@ -314,7 +314,6 @@ export default {
       this.deleteTableRow(this.deleteID)
     },
     chatbotBackup() {
-      console.log('inside backup')
         // this.$validator.validate().then((result) => {
         // if (result) {
       axios
@@ -325,7 +324,6 @@ export default {
           chatbotname: this.chatbot_backup_name,
         })
         .then((response) => {
-          console.log(response, "rsasdhs");
           this.chatbotBackupActive = false
           this.chatbotSelected = ''
           this.chatbot_backup_name= ''
@@ -444,7 +442,8 @@ export default {
 
     handleSelected(tr) {
       localStorage.setItem("selected_chatbot", tr.chatbotname);
-      EventBus.$emit("selectedChatbotName", tr.chatbotname);
+      localStorage.setItem("selected_chatbot_id", tr.id)
+      EventBus.$emit("selectedChatbotName", tr.id);
 
       this.$vs.notify({
         text: `${tr.chatbotname} Chatbot Selected `,
@@ -473,6 +472,7 @@ export default {
         .then((res) => {
           EventBus.$emit("chatbotDeleted", idx);
           localStorage.setItem("selected_chatbot", "No Chatbot Selected");
+          localStorage.removeItem("selected_chatbot_id")
           this.selectIntent = "";
           this.$vs.notify({
             color: "danger",

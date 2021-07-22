@@ -5,7 +5,7 @@
     <!-- MULTIPLE COLUMNS-->
     <div class="vx-col w-full mb-base">
       <vx-card title="Add Account">
-        <span style="color: red">{{ message }}</span>
+        <!-- <span style="color: red">{{ message }}</span> -->
         <div class="vx-row">
           <div class="vx-col sm:w-1/2 w-full mb-2">
             <vs-input
@@ -66,7 +66,6 @@
                 label="Password"
                 v-validate="'required|min:6|max:10'"
                 ref="password"
-                placeholder="Your Password"
                 name="password"
                 v-model="password"
                 class="w-full"
@@ -98,7 +97,6 @@
                 label="Confirm Password"
                 v-validate="'required|min:6|max:10|confirmed:password'"
                 data-vv-as="password"
-                placeholder="Confirm Password"
                 name="confirm_password"
                 v-model="confirmpassword"
                 class="w-full"
@@ -121,8 +119,7 @@
             </vx-input-group>
             <span
               class="text-danger text-sm"
-                              v-show="errors.has('confirm_password')"
-
+              v-show="errors.has('confirm_password')"
               >{{ errors.first("confirm_password") }}</span
             >
           </div>
@@ -216,9 +213,9 @@ import { Base_URL, API_List } from "./../../api.config";
 import { Validator } from "vee-validate";
 const dict = {
   custom: {
-    email:{
-      required:"Please enter email",
-      email : "Please enter valid email"
+    email: {
+      required: "Please enter email",
+      email: "Please enter valid email",
     },
     name: {
       required: "Please enter name",
@@ -615,12 +612,9 @@ export default {
     },
   },
   mounted() {
-    axios
-      .get(Base_URL.Actual_URL + "subscriptiondata", {
-      })
-      .then((response) => {
-        this.rowdata = response.data.userlist;
-      });
+    axios.get(Base_URL.Actual_URL + "subscriptiondata", {}).then((response) => {
+      this.rowdata = response.data.userlist;
+    });
   },
   methods: {
     addaccount() {
@@ -641,7 +635,7 @@ export default {
             .then((response) => {
               this.message = response.data.message;
               if (response.data.code == 200) {
-                  this.$vs.notify({
+                this.$vs.notify({
                   title: "Account Added",
                   text: "Account Added successfully.",
                   color: "success",
@@ -649,6 +643,13 @@ export default {
                 });
                 this.$router.push({
                   name: "allaccount",
+                });
+              }
+              if (response.data.code == 100) {
+                this.$vs.notify({
+                  text: response.data.message,
+                  color: "danger",
+                  position: "top-center",
                 });
               }
               // this.$router.push({

@@ -8,7 +8,12 @@
         <div class="vx-row">
           <div class="vx-col sm:w-5/6 w-full mb-2">
             <h6>Story Name</h6>
-            <vs-input class="w-full" label="" v-model="storyname" name="story name"/>
+            <vs-input
+              class="w-full"
+              label=""
+              v-model="storyname"
+              name="story name"
+            />
             <span class="text-danger text-sm">{{
               errors.first("story_name")
             }}</span>
@@ -115,7 +120,6 @@
               class="w-full"
               label="Entitykey"
               :options="newsentence"
-           
               v-model="assignentity"
               @input="button"
               :dir="$vs.rtl ? 'rtl' : 'ltr'"
@@ -280,7 +284,11 @@ export default {
   },
   computed: {
     validateForm() {
-      return (!this.errors.any() && this.storyname !== "" && (/^\S{3,}$/.test(this.storyname)));
+      return (
+        !this.errors.any() &&
+        this.storyname !== "" &&
+        /^\S{3,}$/.test(this.storyname)
+      );
     },
     validateForms() {
       return (
@@ -400,34 +408,28 @@ export default {
     button: function (e) {
       this.assignentityvalue = "";
       if (e !== null) {
-      var chatbotname = localStorage.getItem("chatbotname");
-      var newemail = localStorage.getItem("email");
+        var chatbot_id = localStorage.getItem("chatbot_id");
+        if (this.assignintent == "" && this.assignentityvalue == "") {
+          var abc =
+            "Please select Intent before selecting Entity Key and Entity value ";
 
-      var chatbot_id = localStorage.getItem("chatbot_id");
+          this.$vs.notify({
+            title: ` ${abc}`,
+            position: "top-center",
+          });
+        }
 
-      // console.log(this.assignintent);
-      // console.log(this.assignentityvalue, "assign value");
-      if (this.assignintent == "" && this.assignentityvalue == "") {
-        var abc =
-          "Please select Intent before selecting Entity Key and Entity value ";
-
-        this.$vs.notify({
-          title: ` ${abc}`,
-          position: "top-center",
-        });
-      }
-
-      axios
-        .post(Base_URL.Actual_URL + "entityvalue", {
-          company_id: localStorage.company_id,
-          chatbot_id: chatbot_id,
-          entity_key: this.assignentity.Entitykey,
-        })
-        .then((response) => {
-          this.entitycard = response.data.entity;
-        });
+        axios
+          .post(Base_URL.Actual_URL + "entityvalue", {
+            company_id: localStorage.company_id,
+            chatbot_id: chatbot_id,
+            entity_key: this.assignentity.Entitykey,
+          })
+          .then((response) => {
+            this.entitycard = response.data.entity;
+          });
       } else {
-        this.assignentityvalue = ''
+        this.assignentityvalue = "";
         this.assignentity = "";
       }
     },
@@ -443,10 +445,8 @@ export default {
       }
     },
     newstoryvalue() {
-      // console.log(this.selectvalue, "selectvalue");
       if (this.storyselect == "") {
         var abc = "Please select Story";
-        // console.log(this.abc, "abc is printed");
         this.$vs.notify({
           title: ` ${abc}`,
           position: "top-center",
@@ -485,10 +485,8 @@ export default {
           chatbot_id: chatbot_id,
         })
         .then((response) => {
-          // console.log(response);
-
           if (response.data.code == 100) {
-               this.textfile = "";
+            this.textfile = "";
             this.storyselect = "";
             this.$vs.notify({
               color: "danger",

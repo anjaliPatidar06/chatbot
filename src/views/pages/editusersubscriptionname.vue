@@ -34,8 +34,13 @@ Vue.component("v-select", vSelect);
               v-model="rowdata[0].duration"
               :dir="$vs.rtl ? 'rtl' : 'ltr'"
               @input="promptAddNewEvent(rowdata[0].duration, new Date())"
+              name="duration"
+              v-validate="'required'"
             >
-            </v-select>
+            </v-select>  
+            <span class="text-danger text-sm">{{
+              errors.first("duration")
+            }}</span>
           </div>
           <div class="vx-col sm:w-1/3 w-full mb-2">
             <h6>Number of Messages</h6>
@@ -87,8 +92,12 @@ Vue.component("v-select", vSelect);
               label="currencyname"
               :options="Currency"
               v-model="rowdata[0].currency"
+              v-validate="'required'"
+              name="currency"
               :dir="$vs.rtl ? 'rtl' : 'ltr'"
-            />
+            />   <span class="text-danger text-sm">{{
+              errors.first("currency")
+            }}</span>
           </div>
 
           <div class="vx-col sm:w-1/3 w-full mb-2">
@@ -107,8 +116,8 @@ Vue.component("v-select", vSelect);
           </div>
               <div class="vx-col sm:w-1/3 w-full mb-2">
             <h6>Number Of User</h6>
-            <vs-input-number min="1" v-model="rowdata[0].no_user" class="mr-0 ml-0"/>
-            <span class="text-danger text-sm">{{ errors.first('number1') }}</span>
+            <vs-input-number min="1" v-model="rowdata[0].no_user" class="mr-0 ml-0" v-validate="'required'" name="number_of_user"/>
+            <span class="text-danger text-sm">{{ errors.first('number_of_user') }}</span>
           </div>
         </div>
       </vx-card>
@@ -282,14 +291,46 @@ Vue.component("v-select", vSelect);
 <script>
 import vSelect from "vue-select";
 import axios from "axios";
-import {Base_URL, API_List} from '../../../api.config';
+import {Base_URL} from '../../../api.config';
 import { CalendarView, CalendarViewHeader } from "vue-simple-calendar";
 import moduleCalendar from "@/store/calendar/moduleCalendar.js";
 require("vue-simple-calendar/static/css/default.css");
 
 import Datepicker from "vuejs-datepicker";
 import { en, he } from "vuejs-datepicker/src/locale";
+import { Validator } from "vee-validate";
 
+const dict = {
+  custom: {
+    subname: {
+      required: "Please enter subscriptionnName.",
+    },
+    subcost: {
+      required: "Please enter subscription cost.",
+    },
+    message: {
+      required: "Please enter number of messages.",
+    },
+    duration: {
+      required: "Please select subscription duration.",
+    },
+    currency: {
+      required: "Please select currency",
+    },
+    number_of_user: {
+      required: "Please enter number of user",
+    },
+    // confirm_password: {
+    //   required: "Please enter confirm password",
+    // },
+    // phone: {
+    //   required: " Please enter phone number.",
+    //   digits: "Phone number must be numeric and have 10 digits",
+    //   // regex:'Phone number must be valid'
+    // },
+  },
+};
+Validator.localize("en", dict);
 export default {
   data() {
     return {
@@ -348,9 +389,9 @@ export default {
       listPosition: ["top-center"],
       me: "",
       result: "",
-      subcost: "",
-      subname: "",
-      message: "",
+      // subcost: "",
+      // subname: "",
+      // message: "",
       between: "",
       selectedDuration: "",
       selectedCurrency: "",
@@ -492,7 +533,6 @@ export default {
       this.labelLocal = "none";
     },
     promptAddNewEvent(type, date) {
-      console.log(this.rowdata,'ejhrfrhej')
       this.disabledFrom = false;
       this.addNewEventDialog(type, date);
     },

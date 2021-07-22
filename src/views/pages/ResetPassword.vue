@@ -53,14 +53,10 @@ export default {
       cpassword: ''
     }
   },
-  created(){
-          console.log(this.$route.query.reset_token,'route')
 
-  },
   methods:{
       submit() {
       this.$validator.validateAll().then((result) => {
-          console.log(this.$route,'route')
         if (result) {
           var newemail = localStorage.email;
           axios

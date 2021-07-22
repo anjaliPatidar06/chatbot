@@ -996,11 +996,11 @@ ShowSendButton: false,
   },
   beforeDestroy() {
     this.$store.unregisterModule("chat");
-  //  this.$socket.removeAllListeners("my_response");
+  //  socket.removeAllListeners("my_response");
     this.sockets.unsubscribe("my_response");
   },
   sockets: {
-    connect() {
+    connect(socket) {
       // Fired when the socket connects.
       this.isConnected = true;
       console.log("hello socket connected");
