@@ -1,4 +1,3 @@
-
 <template>
   <div class="vx-row">
     <!-- MULTIPLE COLUMNS-->
@@ -17,9 +16,7 @@
               name="response_name"
             >
             </v-select>
-            <span class="text-danger text-sm">
-              {{ errors.first("response_name") }}</span
-            >
+            <span class="text-danger text-sm"> {{ errors.first("response_name") }}</span>
           </div>
           <div class="vx-col sm:w-1/3 w-full mb-2">
             <h6>Button Title</h6>
@@ -31,9 +28,7 @@
               data-vv-validate-on="blur"
               :dir="$vs.rtl ? 'rtl' : 'ltr'"
             ></vs-input>
-            <span class="text-danger text-sm">
-              {{ errors.first("btn_title") }}</span
-            >
+            <span class="text-danger text-sm"> {{ errors.first("btn_title") }}</span>
           </div>
           <div class="vx-col sm:w-1/3 w-full mb-2">
             <h6>Card Name</h6>
@@ -45,9 +40,7 @@
               v-validate="'required'"
               data-vv-validate-on="blur"
             ></vs-input>
-            <span class="text-danger text-sm">
-              {{ errors.first("cardname") }}</span
-            >
+            <span class="text-danger text-sm"> {{ errors.first("cardname") }}</span>
           </div>
           <div class="vx-col sm:w-1/2 w-full mb-2">
             <h6>Description Card</h6>
@@ -58,9 +51,7 @@
               v-validate="'required'"
               data-vv-validate-on="blur"
             ></vs-input>
-            <span class="text-danger text-sm">
-              {{ errors.first("description") }}</span
-            >
+            <span class="text-danger text-sm"> {{ errors.first("description") }}</span>
           </div>
 
           <div class="vx-col sm:w-1/2 w-full mb-2">
@@ -76,9 +67,7 @@
               name="intent"
             >
             </v-select>
-            <span class="text-danger text-sm">
-              {{ errors.first("intent") }}</span
-            >
+            <span class="text-danger text-sm"> {{ errors.first("intent") }}</span>
           </div>
           <div class="vx-col sm:w-1/2 w-full mb-2">
             <h6>Entity Key</h6>
@@ -91,9 +80,7 @@
               :dir="$vs.rtl ? 'rtl' : 'ltr'"
               name="entity_key"
             />
-            <span class="text-danger text-sm">
-              {{ errors.first("entity_key") }}</span
-            >
+            <span class="text-danger text-sm"> {{ errors.first("entity_key") }}</span>
           </div>
           <div class="vx-col sm:w-1/2 w-full mb-2">
             <h6>Entity Value</h6>
@@ -106,52 +93,38 @@
               v-validate="{ required: rowdata[0].entitykey !== '' }"
               name="entity_value"
             />
-            <span class="text-danger text-sm">{{
-              errors.first("entity_value")
-            }}</span>
+            <span class="text-danger text-sm">{{ errors.first("entity_value") }}</span>
           </div>
-                 <div class="vx-col sm:w-1/3 w-full mb-2">
+          <div class="vx-col sm:w-1/3 w-full mb-2">
             <h6>Button 2 Title</h6>
             <vs-input
               class="w-full"
               v-model="rowdata[0].title_2"
               name="title2"
-              v-validate="'required'"
               data-vv-validate-on="blur"
               :dir="$vs.rtl ? 'rtl' : 'ltr'"
             ></vs-input>
-            <span class="text-danger text-sm">
-              {{ errors.first("title2") }}</span
-            >
+            <span class="text-danger text-sm"> {{ errors.first("title2") }}</span>
           </div>
-           <div class="vx-col sm:w-1/3 w-full mb-2">
+          <div class="vx-col sm:w-1/3 w-full mb-2">
             <h6>Button 2 Payload</h6>
             <vs-input
               class="w-full"
               v-model="rowdata[0].payload_2"
               name="Payload"
-              v-validate="'required'"
               data-vv-validate-on="blur"
               :dir="$vs.rtl ? 'rtl' : 'ltr'"
             ></vs-input>
-            <span class="text-danger text-sm">
-              {{ errors.first("Payload") }}</span
-            >
+            <span class="text-danger text-sm"> {{ errors.first("Payload") }}</span>
           </div>
-          
+
           <div class="vx-row">
-            <div class="vx-col sm:w-1/3 w-full">
-            <div
-              class="img-container w-64 flex items-center justify-center"
-            >
-              <img
-                :src="rowdata[0].image_path"
-                alt="img"
-                class="responsive mt-3"
-              />
-            </div>
+            <div class="vx-col sm:w-1/3 w-full ml-4">
+              <div class="img-container w-64 flex items-center justify-center">
+                <img :src="rowdata[0].image_path" alt="img" class="responsive mt-3" />
+              </div>
               <div class="vx-col sm:w-1/3 w-full"></div>
-            <!-- <template v-if="dataImgnewbackground">
+              <!-- <template v-if="dataImgnewbackground">
                 <div
                   class="img-container w-64 mx-auto flex items-center justify-center"
                 >
@@ -186,10 +159,8 @@
                   >
                 </div>
               </template> -->
-              
-            
-          </div>
-              <div class="vx-col w-full mb-2">
+            </div>
+            <div class="vx-col w-full mb-2 ml-4">
               <div class="upload-img mt-5">
                 <input
                   type="file"
@@ -207,26 +178,21 @@
                   icon="icon icon-upload"
                   >Card Image</vs-button
                 >
-                <span class="text-danger text-sm">
-                  {{ errors.first("cardimage") }}</span
-                >
+                <span class="text-danger text-sm"> {{ errors.first("cardimage") }}</span>
               </div>
             </div>
-              </div>
+          </div>
         </div>
 
-        <div class="vx-col sm:w-1/3 w-full">
-          <vs-button class="mr-3 mt-4" @click="addEvent5">Update</vs-button>
+        <div class="vx-col sm:w-1/3 w-full contained-example-container pt-2 pb-2">
+          <div id="div-with-loading" class="vs-con-loading__container">
+            <vs-button class="mr-3 mt-4" @click="addEvent5">Update</vs-button>
+          </div>
         </div>
       </vx-card>
     </div>
   </div>
 </template>
-
-
-
-
-
 
 <script>
 import axios from "axios";
@@ -260,12 +226,12 @@ const dict = {
     btn_title: {
       required: "Please enter button title",
     },
-     title2: {
-    required: "Please enter button 2 title",
-  },
-  Payload: {
-    required: "Please enter button 2 payload",
-  },
+    title2: {
+      required: "Please enter button 2 title",
+    },
+    Payload: {
+      required: "Please enter button 2 payload",
+    },
   },
 };
 Validator.localize("en", dict);
@@ -274,11 +240,11 @@ export default {
   name: "card-component",
   data() {
     return {
-        Payload:'',
-      title:"",
+      Payload: "",
+      title: "",
       rowdata: [],
       name: "",
-      responsename:"",
+      responsename: "",
       title: "",
       namecard: "",
       Imagecard: "",
@@ -378,6 +344,7 @@ export default {
           })
           .then((response) => {
             this.entitycard = response.data.entity;
+            this.rowdata[0].entityvalue = "";
           });
       } else {
         this.rowdata[0].entityvalue = "";
@@ -404,6 +371,10 @@ export default {
     addEvent5() {
       this.$validator.validateAll().then((result) => {
         if (result) {
+          this.$vs.loading({
+            container: "#div-with-loading",
+            scale: 0.6,
+          });
           var newemail = localStorage.getItem("email");
           var chatbot_id = localStorage.getItem("chatbot_id");
           var chatbotname = localStorage.getItem("chatbotname");
@@ -416,25 +387,25 @@ export default {
             description: this.rowdata[0].description,
             image_path: this.selectedfilePath,
             image_base: this.file1,
-            intent: this.rowdata[0].intent.intent|| this.rowdata[0].intent,
-            entitykey:
-              this.rowdata[0].entitykey.Entitykey|| this.rowdata[0].entitykey,
+            intent: this.rowdata[0].intent.intent || this.rowdata[0].intent,
+            entitykey: this.rowdata[0].entitykey.Entitykey || this.rowdata[0].entitykey,
             entityvalue:
-             this.rowdata[0].entityvalue.Entityvalue || this.rowdata[0].entityvalue,
-            responsename: this.rowdata[0].responsename.responsename || this.rowdata[0].responsename,
-             title_2: this.rowdata[0].title_2,
-            payload_2 : this.rowdata[0].payload_2
+              this.rowdata[0].entityvalue.Entityvalue || this.rowdata[0].entityvalue,
+            responsename:
+              this.rowdata[0].responsename.responsename || this.rowdata[0].responsename,
+            title_2: this.rowdata[0].title_2,
+            payload_2: this.rowdata[0].payload_2,
           };
           axios
-            .post(
-              Base_URL.Actual_URL + "editcardname/" + this.$route.params.id,
-              body
-            )
+            .post(Base_URL.Actual_URL + "editcardname/" + this.$route.params.id, body)
             .then((response) => {
+              setTimeout(() => {
+                this.$vs.loading.close("#div-with-loading > .con-vs-loading");
+              }, 500);
               if (response.data.code == 200) {
                 this.$router.push({
                   name: "botTemplate",
-                  params:{ name:'card'}
+                  params: { name: "card" },
                 });
                 this.$emit("selectedComponent", "cardEvent");
                 this.$vs.notify({
@@ -444,6 +415,17 @@ export default {
                   position: "top-center",
                 });
               }
+            })
+            .catch((err) => {
+              setTimeout(() => {
+                this.$vs.loading.close("#div-with-loading > .con-vs-loading");
+              }, 1000);
+              this.$vs.notify({
+                text: "Please try again.",
+                title: "Failed to process your request.",
+                color: "danger",
+                position: "top-center",
+              });
             });
         }
       });
@@ -451,4 +433,9 @@ export default {
   },
 };
 </script>
-
+<style scoped>
+/* span.vs__selected {
+    display: inline-block !important;
+    width: 25rem !important;
+} */
+</style>

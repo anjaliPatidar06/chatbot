@@ -29,9 +29,7 @@
                 v-model="latitude"
                 @change="number_latitude_test(latitude)"
               ></vs-input>
-              <span class="text-danger text-sm">
-                {{ errors.first("latitude") }}</span
-              >
+              <span class="text-danger text-sm"> {{ errors.first("latitude") }}</span>
               <span class="text-danger text-sm" v-if="testLatitude == false"
                 >Please enter latitude in decimal.</span
               >
@@ -45,9 +43,7 @@
                 v-model="longitude"
                 @change="number_longitude_test(longitude)"
               ></vs-input>
-              <span class="text-danger text-sm">
-                {{ errors.first("longitude") }}</span
-              >
+              <span class="text-danger text-sm"> {{ errors.first("longitude") }}</span>
               <span class="text-danger text-sm" v-if="testLongitude == false"
                 >Please enter latitude in decimal.</span
               >
@@ -57,29 +53,24 @@
               <vs-textarea
                 class="w-full"
                 v-model="description"
-                v-validate="'max:100'"
+                v-validate="'max:500'"
                 name="description"
-                counter="100"
-                label="Counter: 100"
+                counter="500"
+                label="Counter: 500"
                 :counter-danger.sync="counterDanger"
               />
-              <span
-                class="text-danger text-sm"
-                v-show="errors.has('description')"
-                >{{ errors.first("description") }}</span
-              >
+              <span class="text-danger text-sm" v-show="errors.has('description')">{{
+                errors.first("description")
+              }}</span>
             </div>
             <div class="vx-col w-1/3 mb-2">
-                  <div
-              class="img-container w-64 flex items-center justify-center" v-if="file1"
-            >
-              <img
-                :src="file1"
-                alt="img"
-                class="responsive mt-3"
-              />
-            </div>
-              <div class="upload-img" :class="file1 ? 'mt-5': 'mt-2'">
+              <div
+                class="img-container w-64 flex items-center justify-center"
+                v-if="file1"
+              >
+                <img :src="file1" alt="img" class="responsive mt-3" />
+              </div>
+              <div class="upload-img" :class="file1 ? 'mt-5' : 'mt-2'">
                 <input
                   type="file"
                   class="hidden"
@@ -102,12 +93,11 @@
               </div>
             </div>
           </div>
-
           <div class="vx-row">
-            <div class="vx-col sm:w-1/3 w-full">
-              <vs-button class="mr-3 mt-4" @click="submitLocation"
-                >Submit</vs-button
-              >
+            <div class="vx-col sm:w-1/3 w-full contained-example-container pt-2 pb-2">
+              <div id="div-with-loading" class="vs-con-loading__container">
+                <vs-button class="mr-3 mt-4" @click="submitLocation">Submit</vs-button>
+              </div>
             </div>
           </div>
         </vx-card>
@@ -186,9 +176,9 @@ const dict = {
     latitude: {
       required: "Please enter latitude",
     },
-    locationImage:{
+    locationImage: {
       required: "Please enter location image",
-    }
+    },
   },
 };
 Validator.localize("en", dict);
@@ -225,6 +215,9 @@ export default {
     this.getResponseData();
   },
   methods: {
+    //  onPaste (evt) {
+    //       console.log('on paste', evt)
+    //     },
     number_latitude_test(n) {
       var result = n - Math.floor(n) !== 0;
       if (!parseInt(n)) {
@@ -326,23 +319,28 @@ export default {
     },
     submitLocation() {
       this.$validator.validateAll().then((result) => {
-        // this.testLatitude = this.number_latitude_test(this.latitude);
-        // this.testLongitude = this.number_longitude_test(this.longitude);
         if (result) {
+          this.$vs.loading({
+            container: "#div-with-loading",
+            scale: 0.6,
+          });
           if (this.testLatitude && this.testLatitude) {
             var body = {
               company_id: localStorage.company_id,
               chatbot_id: localStorage.chatbot_id,
               latitude: this.latitude,
               longitude: this.longitude,
-              description: this.description || '',
+              description: this.description || "",
               response_name: this.responsename.responsename,
-              image_base:this.file1,
+              image_base: this.file1,
               image_name: this.selectedfile,
             };
             axios
               .post(Base_URL.Actual_URL + "addlocation", body)
               .then((response) => {
+                setTimeout(() => {
+                  this.$vs.loading.close("#div-with-loading > .con-vs-loading");
+                }, 500);
                 if (response.data.code == 200) {
                   this.$emit("updateLocationComponent");
                   this.$vs.notify({
@@ -353,6 +351,24 @@ export default {
                   });
                   this.getTableData();
                 }
+                if (response.data.code == 100) {
+                  this.$vs.notify({
+                    color: "danger",
+                    text: response.data.result,
+                    position: "top-center",
+                  });
+                }
+              })
+              .catch((err) => {
+                setTimeout(() => {
+                  this.$vs.loading.close("#div-with-loading > .con-vs-loading");
+                }, 1000);
+                this.$vs.notify({
+                  text: "Please try again.",
+                  title: "Failed to process your request.",
+                  color: "danger",
+                  position: "top-center",
+                });
               });
           }
         }

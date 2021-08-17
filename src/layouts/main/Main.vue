@@ -305,6 +305,7 @@ export default {
             const url1 = url + id;
             axios.get(url1, {}).then((response) => {
               this.rowdata = response.data.userlist;
+              console.log(e, this.rowdata[0],'chatbot')
               this.chatbotname = this.rowdata[0].chatbotname;
             });
           }

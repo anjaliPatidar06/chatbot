@@ -146,23 +146,12 @@
             ></chat-log>
           </div>
         </component>
-        <!-- <a href="#nav"><span>Click Here</span></a>
-         <div class="expandable" id="nav">
-            <p>Cum enim magna parturient</p>
-          </div> -->
         <div
           style="background: white; position: inherit"
           :class="[showEmojis ? 'custom-chatlog' : 'inherit-chatlog']"
         >
           <div class="chat__input flex p-4 bg-white" style="z-index: 1">
-            <!-- <div class="w-100">
-              <ckeditor
-                :config="editorConfig"
-                v-model="message"
-                id="ckeditor"
-              ></ckeditor>
-            </div> -->
-            <div class="vx-row w-full">
+             <div class="vx-row w-full">
               <div class="vx-col w-1/2 pr-0">
                 <VEmojiPicker
                   @select="selectEmoji"
@@ -172,17 +161,6 @@
                   :showSearch="true"
                   :dark="false"
                 />
-
-                <!-- </div> -->
-                <!-- <vs-input
-              id="editor1"
-              class="flex-1"
-              placeholder="Type Your Message"
-              v-model="message"
-              @keyup.enter="queuePurchase"
-              @select="testFunction"
-              ref="boldText"
-            ></vs-input> -->
                 <div
                   id="editor1"
                   contenteditable
@@ -190,23 +168,17 @@
                   @keyup.enter.exact="inputHandler"
                   @keydown.enter.exact.prevent
                   @input="CheckMessage"
+                  @paste="onPaste"
                 ></div>
               </div>
-              <!-- <div id="editor1"
-              class="flex-1"
-              placeholder="Type Your Message"
-              @keyup.enter="queuePurchase"
-              @select="testFunction"
-              ref="boldText"><p>Test...</p></div> -->
-              <!-- </vx-input-group> -->
-
-              <input
+                <input
                 type="file"
                 class="hidden"
                 @change="sendChatImage"
                 data-vv-as="file"
                 ref="chatImage"
-                accept="*"
+                accept="image/*|pdf/*"
+                v-validate="'mimes:image/*,pdf'"
                 name="chatImage"
                 :dir="$vs.rtl ? 'rtl' : 'ltr'"
               />
@@ -246,17 +218,11 @@
                   id="que"
                   :disabled="!ShowSendButton"
                   >Send
-                  <!-- <i class="fa fa-paper-plane fa-lg pl-1" aria-hidden="true"></i> -->
                 </vs-button>
               </div>
             </div>
-
-            <!-- <span class="text-danger text-sm mb-2">
-                {{ errors.first("chatImage") }}</span> -->
           </div>
         </div>
-
-        <!-- <div class="chat__input flex p-4 bg-white"></div> -->
       </template>
       <template v-else>
         <div class="flex flex-col items-center">
@@ -297,16 +263,15 @@ import chatUsersData from "./chatData.json";
 import { VEmojiPicker } from "v-emoji-picker";
 // import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { EventBus } from "../../../event-bus";
-import visibility from 'vue-visibility-change';
- 
+import visibility from "vue-visibility-change";
+import { Validator } from "vee-validate";
+
 // registry directive
 export default {
   name: "chat",
   data() {
     return {
-      // editor: ClassicEditor,
-      // message: "<p>Type a message</p>",
-ShowSendButton: false,
+     ShowSendButton: false,
       editorConfig: {
         placeholder: "type a message",
         toolbar: [["Bold", "Italic"]],
@@ -426,23 +391,7 @@ ShowSendButton: false,
       document.getElementById("editor1").innerHTML += span;
     },
     testFunction(e) {
-      // console.log(window.getSelection().toString());
-      //    value = value.replace(hashReg, "<b>$&</b>");
-      // let hashReg1 = /_\w+/gm;
-      // value = value.replace(hashReg1, "<i>$&</i>");
-      // value = value.replaceAll(/#/gi, "");
-      // value = value.replaceAll(/_/gi, "");
-      // console.log(e.target.innerHTML,'innerHtml')
-      // console.log((window.getSelection().toString()).bold(),'(window.getSelection().toString()).bold()')
-      // console.log(document.getElementById('editor1').innerHTML,'document.getElementById.innerhtml()')
       var highlight = window.getSelection().toString();
-      console.log(highlight, "textt function");
-      console.log(
-        document.getElementById("editor1").innerHTML,
-        " document.getElementById().innerHTML"
-      );
-      // console.log(this.$refs.boldText.innerHTML,this.$refs.boldText.value ,'ref boldtext')
-      // console.log(document.getElementById('editor1'),'textarea')
       var span = '<span style="font-weight:bold;">' + highlight + "</span>";
 
       document.getElementById("editor1").innerHTML = document
@@ -497,8 +446,8 @@ ShowSendButton: false,
           // non-standard and not supported in all browsers (IE9, for one)
           var el = document.createElement("div");
           el.innerHTML = emoji.data;
-          if(el.innerHTML !== '' || el.innerHTML !== null) {
-             this.ShowSendButton = true
+          if (el.innerHTML !== "" || el.innerHTML !== null) {
+            this.ShowSendButton = true;
           }
           var frag = document.createDocumentFragment(),
             node,
@@ -529,54 +478,65 @@ ShowSendButton: false,
       this.showEmojis = false;
     },
     sendChatImage() {
-      if (
-        this.$refs.chatImage.files[0].type == "image/jpeg" ||
-        this.$refs.chatImage.files[0].type == "image/png"
-      ) {
-        this.file1 = this.$refs.chatImage.files[0];
-        this.createBase64Image(this.file1);
-      } else {
-        this.file1 = this.$refs.chatImage.files[0];
-        const reader = new FileReader();
-        reader.readAsDataURL(this.file1);
-        reader.onload = (e) => {
-          this.file1 = e.target.result;
-          const payload = {
-            isPinned: this.isChatPinned,
-            msg: {
-              textContent: this.file1,
-              msg_time: String(new Date()),
-              is_sent: true,
-              is_seen: true,
-              msg_from: localStorage.id,
-              msg_type: this.$refs.chatImage.files[0].type,
-              file_name: this.$refs.chatImage.files[0].name,
-            },
-            id: this.activeChatUser,
-          };
-          this.$store.dispatch("chat/sendChatMessage", payload);
-          var body = {
-            chatbot_id: localStorage.chatbot_id,
-            company_id: localStorage.company_id,
-            username: localStorage.id,
-            chatbot_user_name: this.activeContact.contact,
-            agent_id: localStorage.id,
-            message: this.file1,
-            isSent: true,
-            isSeen: true,
-            author: localStorage.logged_in_user_name,
-            room: this.activeContact.room,
-            msg_type: this.$refs.chatImage.files[0].type,
-            file_name: this.$refs.chatImage.files[0].name,
-          };
-          this.$socket.emit("join_room", {
-            username: localStorage.logged_in_user_name,
-            room: this.activeContact.room,
+      this.$validator.validateAll().then((result) => {
+        console.log(result, "result");
+        if (result) {
+          if (
+            this.$refs.chatImage.files[0].type == "image/jpeg" ||
+            this.$refs.chatImage.files[0].type == "image/png"
+          ) {
+            this.file1 = this.$refs.chatImage.files[0];
+            this.createBase64Image(this.file1);
+          } else {
+            this.file1 = this.$refs.chatImage.files[0];
+            const reader = new FileReader();
+            reader.readAsDataURL(this.file1);
+            reader.onload = (e) => {
+              this.file1 = e.target.result;
+              const payload = {
+                isPinned: this.isChatPinned,
+                msg: {
+                  textContent: this.file1,
+                  msg_time: String(new Date()),
+                  is_sent: true,
+                  is_seen: true,
+                  msg_from: localStorage.id,
+                  msg_type: this.$refs.chatImage.files[0].type,
+                  file_name: this.$refs.chatImage.files[0].name,
+                },
+                id: this.activeChatUser,
+              };
+              this.$store.dispatch("chat/sendChatMessage", payload);
+              var body = {
+                chatbot_id: localStorage.chatbot_id,
+                company_id: localStorage.company_id,
+                username: localStorage.id,
+                chatbot_user_name: this.activeContact.contact,
+                agent_id: localStorage.id,
+                message: this.file1,
+                isSent: true,
+                isSeen: true,
+                author: localStorage.logged_in_user_name,
+                room: this.activeContact.room,
+                msg_type: this.$refs.chatImage.files[0].type,
+                file_name: this.$refs.chatImage.files[0].name,
+              };
+              this.$socket.emit("join_room", {
+                username: localStorage.logged_in_user_name,
+                room: this.activeContact.room,
+              });
+              this.$socket.emit("pdf_send", body);
+              this.message = "";
+            };
+          }
+        } else {
+          this.$vs.notify({
+            color: "danger",
+            title: "Please select image or pdf only.",
+            position: "top-center",
           });
-          this.$socket.emit("pdf_send", body);
-          this.message = "";
-        };
-      }
+        }
+      });
     },
     createBase64Image(fileObject) {
       const reader = new FileReader();
@@ -693,11 +653,16 @@ ShowSendButton: false,
       this.queuePurchase();
     },
     CheckMessage() {
-      if(document.getElementById("editor1").innerText !== '') {
-        this.ShowSendButton = true
+      if (document.getElementById("editor1").innerText !== "") {
+        this.ShowSendButton = true;
       } else {
-        this.ShowSendButton = false
+        this.ShowSendButton = false;
       }
+    },
+  onPaste(e) {
+         e.preventDefault()
+           var text = e.clipboardData.getData("text/plain");
+        document.execCommand("insertText", false, text);
     },
     queuePurchase() {
       // var aSound = document.createElement("audio");
@@ -708,10 +673,16 @@ ShowSendButton: false,
       // aSound.play();
       this.message = document.getElementById("editor1").innerHTML;
       if (
-        document.getElementById("editor1").innerText == '' ||
-        document.getElementById("editor1").innerText == null) {
+        document.getElementById("editor1").innerText == "" ||
+        document.getElementById("editor1").innerText == null
+      ) {
+        console.log("hey if");
         return;
       } else {
+        console.log(
+          this.message,
+          "msg elseeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee&&&&&&&&&&&&&&&&&&&&&s"
+        );
         const payload = {
           isPinned: this.isChatPinned,
           msg: {
@@ -725,30 +696,30 @@ ShowSendButton: false,
           id: this.activeChatUser,
         };
 
-      this.$store.dispatch("chat/sendChatMessage", payload);
-      var body = {
-        chatbot_id: localStorage.chatbot_id,
-        company_id: localStorage.company_id,
-        username: localStorage.id,
-        chatbot_user_name: this.activeContact.contact,
-        agent_id: localStorage.id,
-        message: this.message,
-        isSent: true,
-        isSeen: true,
-        author: localStorage.logged_in_user_name,
-        room: this.activeContact.room,
-        msg_type: "text",
-        file_name: null,
-      };
-      console.log(this.fontBoldAndItalic(this.message), this.message, "emit");
+        this.$store.dispatch("chat/sendChatMessage", payload);
+        var body = {
+          chatbot_id: localStorage.chatbot_id,
+          company_id: localStorage.company_id,
+          username: localStorage.id,
+          chatbot_user_name: this.activeContact.contact,
+          agent_id: localStorage.id,
+          message: this.message,
+          isSent: true,
+          isSeen: true,
+          author: localStorage.logged_in_user_name,
+          room: this.activeContact.room,
+          msg_type: "text",
+          file_name: null,
+        };
+        console.log(this.fontBoldAndItalic(this.message), this.message, "emit");
 
-      this.$socket.emit("join_room", {
-        username: localStorage.logged_in_user_name,
-        room: this.activeContact.room,
-      });
-      this.$socket.emit("my event", body);
-      this.message = "";
-      document.getElementById("editor1").innerHTML = "";
+        this.$socket.emit("join_room", {
+          username: localStorage.logged_in_user_name,
+          room: this.activeContact.room,
+        });
+        this.$socket.emit("my event", body);
+        this.message = "";
+        document.getElementById("editor1").innerHTML = "";
       }
     },
     showProfileSidebar(userId, openOnLeft = false) {
@@ -798,7 +769,7 @@ ShowSendButton: false,
       });
     },
     fillData(data) {
-      console.log(data,'data')
+      console.log(data, "data");
       var body;
       if (!this.containsKey(data, "author")) {
         console.log("hey if", data);
@@ -844,8 +815,8 @@ ShowSendButton: false,
       axios
         .post(Base_URL.Actual_URL + "store_message", body)
         .then((response) => {
-          count = count+1
-          console.log(count,'count')
+          count = count + 1;
+          console.log(count, "count");
           console.log("store response", response);
           this.newMsg = data.message;
           localStorage.removeItem("message");
@@ -989,14 +960,11 @@ ShowSendButton: false,
   mounted() {
     console.log("chat mount");
     this.$store.dispatch("chat/setChatSearchQuery", "");
-    EventBus.$on(
-      "user_detail_updated",
-      this.user_detail_updated
-    );
+    EventBus.$on("user_detail_updated", this.user_detail_updated);
   },
   beforeDestroy() {
     this.$store.unregisterModule("chat");
-  //  socket.removeAllListeners("my_response");
+    //  socket.removeAllListeners("my_response");
     this.sockets.unsubscribe("my_response");
   },
   sockets: {
@@ -1009,6 +977,10 @@ ShowSendButton: false,
       // console.log(data, "iamge get");
       this.fillData(data);
       if (data.username !== localStorage.id) {
+        //  this.newChatBotUserName = data.username;
+        var sound = require("../../../assets/audio/just-saying-593.mp3");
+        var audio = new Audio(sound);
+        audio.play();
         const payload = {
           isPinned: this.isChatPinned,
           msg: {
@@ -1030,6 +1002,9 @@ ShowSendButton: false,
     pdf_get(data) {
       console.log(data, "pdf get");
       if (data.username !== localStorage.id) {
+        var sound = require("../../../assets/audio/just-saying-593.mp3");
+        var audio = new Audio(sound);
+        audio.play();
         const payload = {
           isPinned: this.isChatPinned,
           msg: {
@@ -1050,12 +1025,15 @@ ShowSendButton: false,
       }
       this.getRealtimeData(data);
     },
-   
+
     // Fired when the server sends something on the "messageChannel" channel.
     my_response: function (data) {
       console.log(data, "my_response ");
-    //  if(!visibility.hidden()) {
-         if (data.username !== localStorage.id) {
+      //  if(!visibility.hidden()) {
+      if (data.username !== localStorage.id) {
+        var sound = require("../../../assets/audio/just-saying-593.mp3");
+        var audio = new Audio(sound);
+        audio.play();
         console.log(this.newContacts[0], "nwew contacts");
         const payload = {
           isPinned: this.isChatPinned,
@@ -1074,7 +1052,7 @@ ShowSendButton: false,
         }
         this.$store.dispatch("chat/sendChatMessage", payload);
       }
-             this.getRealtimeData(data);
+      this.getRealtimeData(data);
       // }
     },
     custom_connection: function (data) {
@@ -1283,6 +1261,6 @@ iframe.cke_wysiwyg_frame.cke_reset {
 </style>
 <style lang="stylus" scoped>
 .vs-button:not(.vs-radius):not(.includeIconOnly):not(.small):not(.large) {
-    padding: .75rem 2rem !important;
+  padding: 0.75rem 2rem !important;
 }
 </style>

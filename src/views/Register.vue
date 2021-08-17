@@ -171,7 +171,6 @@ export default {
           icon: "icon-alert-circle",
           color: "warning",
         });
-
         return false;
       }
       return true;

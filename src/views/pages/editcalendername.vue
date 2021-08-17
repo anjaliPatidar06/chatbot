@@ -6,7 +6,7 @@
     <div class="vx-col w-full mb-base">
       <vx-card title="Update Calendar">
         <div class="vx-row">
-          <div class="vx-col sm:w-1/4 w-full mb-2" :data="rowdata">
+          <div class="vx-col sm:w-1/3 w-full mb-2" :data="rowdata">
             <small class="date-label">Response Name</small>
             <v-select
               class="w-full"
@@ -44,14 +44,14 @@
               />
             </div>
           </div>
-              <div class="vx-col sm:w-1/4 w-full mb-2" v-if="rowdata[0].calendar">
+              <!-- <div class="vx-col sm:w-1/4 w-full mb-2" v-if="rowdata[0].calendar">
             <div class="flex items-center mt-5 pt-4">
               <vs-switch color="success" v-model="rowdata[0].future_date" id="dateSwitch">
                 <span slot="on">Future Date</span>
                 <span slot="off">Past Date</span>
               </vs-switch>
             </div>
-          </div>
+          </div> -->
         </div>
         <div class="vx-row" v-if="rowdata[0].time == true">
           <div class="vx-col sm:w-1/3 w-full mt-5">
@@ -83,8 +83,12 @@
             >
           </div>
         </div>
-        <div class="vx-row mt-4" v-if="rowdata[0].calendar == true">            
-            <span class="mt-3 ml-4">Sun</span>
+        <div class="vx-row mt-4" v-if="rowdata[0].calendar == true">   
+               <vs-switch color="success" v-model="rowdata[0].future_date" id="dateSwitch" class="mt-3 ml-4">
+                <span slot="on">Future Date</span>
+                <span slot="off">Past Date</span>
+              </vs-switch>         
+            <span class="mt-3 ml-4 pl-4">Sun</span>
               <vs-switch
                 v-model="sunTime"
                 @change="weekDaySelection"
@@ -201,7 +205,6 @@ export default {
     const id = this.$route.params.id;
     const url1 = url + id;
     axios.get(url1, {}).then((response) => {
-      console.log(response,'response')
       this.rowdata = response.data.userlist;
       this.sunTime = this.rowdata[0].week_days[0]
       this.monTime = this.rowdata[0].week_days[1]
@@ -258,7 +261,7 @@ export default {
             this.msg = response.data.msg;
             EventBus.$emit("selectedComponent", "calendarEvent");
             this.$vs.notify({
-              title: "Edit Calendar ",
+              title: "Edit Calendar",
               text: "Your Calendar data is updated",
               color: "success",
               position: "top-center",
@@ -268,6 +271,13 @@ export default {
               params:{
                 name: 'calendar'
               }
+            });
+          }
+          if (response.data.code == 100) {
+            this.$vs.notify({
+              color: "danger",
+              text: response.data.result,
+              position: "top-center",
             });
           }
         });

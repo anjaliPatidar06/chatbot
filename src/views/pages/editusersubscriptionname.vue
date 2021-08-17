@@ -303,7 +303,7 @@ import { Validator } from "vee-validate";
 const dict = {
   custom: {
     subname: {
-      required: "Please enter subscriptionnName.",
+      required: "Please enter subscription name.",
     },
     subcost: {
       required: "Please enter subscription cost.",
@@ -320,14 +320,6 @@ const dict = {
     number_of_user: {
       required: "Please enter number of user",
     },
-    // confirm_password: {
-    //   required: "Please enter confirm password",
-    // },
-    // phone: {
-    //   required: " Please enter phone number.",
-    //   digits: "Phone number must be numeric and have 10 digits",
-    //   // regex:'Phone number must be valid'
-    // },
   },
 };
 Validator.localize("en", dict);

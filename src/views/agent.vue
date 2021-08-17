@@ -18,10 +18,7 @@
         <vs-button class="mr-2 mb-4" @click="popupActive = true"
           >Create New Chatbot
         </vs-button>
-        <vs-button
-          class="mr-2 mb-4"
-          @click="chatbotBackupActive = true"
-          color="warning"
+        <vs-button class="mr-2 mb-4" @click="chatbotBackupActive = true" color="warning"
           >Chatbot Backup
         </vs-button>
       </div>
@@ -32,9 +29,7 @@
         title="Chatbot Name"
         @accept="addEvent1"
       >
-        <span class="text-danger text-sm">{{
-          errors.first("chatbot_name")
-        }}</span>
+        <span class="text-danger text-sm">{{ errors.first("chatbot_name") }}</span>
         <vs-input
           name="chatbot_name"
           v-validate="'required'"
@@ -47,15 +42,15 @@
           >Save</vs-button
         >
       </vs-popup>
-        <vs-prompt
-          class="calendar-event-dialog"
+      <vs-prompt
+        class="calendar-event-dialog"
         title="Chatbot Backup"
-          accept-text="Save"
-          @accept="chatbotBackup()"
-          :is-valid="validBackupForm"
-          :active.sync="chatbotBackupActive"
-          @cancel="chatbotBackupActive = false"
-        >
+        accept-text="Save"
+        @accept="chatbotBackup()"
+        :is-valid="validBackupForm"
+        :active.sync="chatbotBackupActive"
+        @cancel="chatbotBackupActive = false"
+      >
         <div class="vx-row">
           <div class="vx-col w-full mb-2">
             <small class="date-label">Select Chatbot </small>
@@ -68,48 +63,46 @@
               v-model="chatbotSelected"
               :dir="$vs.rtl ? 'rtl' : 'ltr'"
             />
-            <span class="text-danger text-sm">{{
-              errors.first("chatbotSelected")
+            <span class="text-danger text-sm">{{ errors.first("chatbotSelected") }}</span>
+          </div>
+
+          <div class="vx-col w-full mb-2">
+            <small class="date-label">Chatbot Name</small>
+            <vs-input
+              name="chatbot_backup_name"
+              v-validate="'required'"
+              class="w-full"
+              v-model="chatbot_backup_name"
+              data-vv-validate-on="blur"
+            /><span class="text-danger text-sm">{{
+              errors.first("chatbot_backup_name")
             }}</span>
           </div>
-       
-        <div class="vx-col w-full mb-2">
-          <small class="date-label">Chatbot Name</small>
-          <vs-input
-            name="chatbot_backup_name"
-            v-validate="'required'"
-            class="w-full"
-            v-model="chatbot_backup_name"
-            data-vv-validate-on="blur"
-          /><span class="text-danger text-sm">{{
-            errors.first("chatbot_backup_name")
-          }}</span>
         </div>
-         </div>
         <!-- <vs-button class="mt-3" color="primary" @click="chatbotBackup" type="filled"
           >Save</vs-button
         > -->
-        </vs-prompt>
+      </vs-prompt>
       <vx-card title="Agent Table" search>
         <!-- <vs-table search max-items="10" pagination :data="users" > -->
-        <vs-table
-          search
-          max-items="10"
-          pagination
-          v-model="selected"
-          :data="rowdata"
-        >
+        <vs-table search max-items="10" pagination v-model="selected" :data="rowdata">
           <template slot="thead">
             <vs-th style="width: 20%">Chatbot Name</vs-th>
             <vs-th>Deployed Url</vs-th>
             <vs-th>Train Chatbot</vs-th>
             <vs-th>Deploy chatbot</vs-th>
-
             <vs-th>Train status</vs-th>
             <vs-th>Actions</vs-th>
+            <vs-th>Copy</vs-th>
           </template>
           <template slot-scope="{ data }">
             <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data">
+              <input
+                type="hidden"
+                name=""
+                :id="'#' + tr.deploystatus"
+                :value="tr.deploystatus"
+              />
               <vs-td :data="tr.chatbotname">
                 {{ tr.chatbotname }}
               </vs-td>
@@ -182,10 +175,31 @@
                   >
                 </div>
               </vs-td>
-              <vs-td :data="tr.trainstatus">
+              <vs-td
+                v-if="
+                  tr.trainstatus ==
+                  'Model is trained successfully!Chatbot Server is On Action Server is On.'
+                "
+                :data="tr.trainstatus"
+              >
                 {{ tr.trainstatus }}
               </vs-td>
-
+              <vs-td
+                v-if="
+                  tr.trainstatus !==
+                    'Model is trained successfully!Chatbot Server is On Action Server is On.' &&
+                  tr.trainstatus !== null &&
+                  tr.trainstatus !== ''
+                "
+                ><a
+                  type="filled"
+                  color="primary"
+                  @click="msgPopupActiveFunc(tr.trainstatus)"
+                >
+                  Error: View More</a
+                ></vs-td
+              >
+              <vs-td v-if="tr.trainstatus == null || tr.trainstatus == ''"></vs-td>
               <vs-td>
                 <div class="flex">
                   <vs-button
@@ -207,10 +221,32 @@
                   >
                 </div>
               </vs-td>
+              <vs-td>
+                <vs-button
+                  type="filled"
+                  v-clipboard:copy="
+                    copy_text_1 + 'http://' + tr.deploystatus + copy_text_2
+                  "
+                  v-clipboard:success="onCopy"
+                  v-clipboard:error="onError"
+                  :disabled="!tr.deploystatus"
+                >
+                  Iframe Link
+                </vs-button></vs-td
+              >
             </vs-tr>
           </template>
         </vs-table>
       </vx-card>
+
+      <vs-popup
+        class="holamundo"
+        title="Train Status"
+        :active.sync="msgPopupActive"
+        @accept="msgPopupActive"
+      >
+        <p>{{ errorMsg }}</p>
+      </vs-popup>
     </div>
   </div>
 </template>
@@ -225,12 +261,12 @@ const dict = {
     chatbot_name: {
       required: "Please enter chatbot name",
     },
-    chatbotSelected:{
+    chatbotSelected: {
       required: "Please select chatbot",
     },
-    chatbot_backup_name:{
+    chatbot_backup_name: {
       required: "Please enter chatbot name",
-    }
+    },
   },
 };
 Validator.localize("en", dict);
@@ -240,6 +276,12 @@ export default {
   props: ["agent"],
   data() {
     return {
+      msgPopupActive: false,
+      check: [],
+      copy_text_1:
+        '<div class="Chatbot" style="border: 0px;background-color:transparent;pointer-events:none;z-index:2000000000;position:fixed;bottom:0px;width:100%;height:570px;overflow:hidden;opacity:1;-ms-filter:progid:DXImageTransform.Microsoft.Alpha(Opacity1);-moz-opacity:1;-khtml-opacity:1;max-width:100%;right:0px;max-height:100%;-moz-transition-property:none;-webkit-transition-property:none;-o-transition-property:none;transition-property:none;transform:none;-webkit-transform:none;-ms-transform:none;"><iframe src="',
+      copy_text_2:
+        '" style="pointer-events: all;background:none;border:0px;float:none;position:absolute;inset:0px;width:100%;height:100%;margin:0px;padding:0px;min-height:0px;"></iframe></div>',
       trainingID: 0,
       trainingData: "",
       chatbotname: "",
@@ -258,8 +300,9 @@ export default {
       trainingchatbot: [],
       chatbotBackupActive: false,
       chatbotSelected: "",
-      chatbot_backup_name:'',
-      deleteID:0
+      chatbot_backup_name: "",
+      deleteID: 0,
+      errorMsg: "",
     };
   },
   watch: {
@@ -277,7 +320,7 @@ export default {
     validateForm() {
       return !this.errors.any() && this.chatbotname !== "";
     },
-     validBackupForm() {
+    validBackupForm() {
       return this.chatbot_backup_name !== "" && this.chatbotSelected !== "";
     },
   },
@@ -300,22 +343,41 @@ export default {
     }
   },
   methods: {
+    msgPopupActiveFunc(e) {
+      this.msgPopupActive = true;
+      this.errorMsg = e;
+      console.log(e, "errorMsg");
+    },
+    onCopy: function (e) {
+      this.$vs.notify({
+        color: "success",
+        title: "You just copied the Ifrmae Link",
+        position: "top-center",
+      });
+    },
+    onError: function (e) {
+      this.$vs.notify({
+        color: "danger",
+        title: "Failed to copy the Iframe Link.",
+        position: "top-center",
+      });
+    },
     openConfirm(id) {
-      this.deleteID = id
+      this.deleteID = id;
       this.$vs.dialog({
-        type: 'confirm',
-        color: 'danger',
+        type: "confirm",
+        color: "danger",
         title: `Confirm`,
-        text: 'Are you sure you want to delete this chatbot?',
-        accept: this.acceptAlert
-      })
+        text: "Are you sure you want to delete this chatbot?",
+        accept: this.acceptAlert,
+      });
     },
     acceptAlert() {
-      this.deleteTableRow(this.deleteID)
+      this.deleteTableRow(this.deleteID);
     },
     chatbotBackup() {
-        // this.$validator.validate().then((result) => {
-        // if (result) {
+      // this.$validator.validate().then((result) => {
+      // if (result) {
       axios
         .post(Base_URL.Actual_URL + "chatbot_backup", {
           from_chatbot_id: this.chatbotSelected.id,
@@ -324,18 +386,18 @@ export default {
           chatbotname: this.chatbot_backup_name,
         })
         .then((response) => {
-          this.chatbotBackupActive = false
-          this.chatbotSelected = ''
-          this.chatbot_backup_name= ''
-          this.chatbotList()
+          this.chatbotBackupActive = false;
+          this.chatbotSelected = "";
+          this.chatbot_backup_name = "";
+          this.chatbotList();
           this.$vs.notify({
             color: "success",
             title: response.data.result,
             position: "top-center",
           });
         });
-        // }
-        // })
+      // }
+      // })
     },
     chatbotList() {
       axios
@@ -398,6 +460,7 @@ export default {
             chatbot_id: trainingchatbot_id,
           })
           .then((response) => {
+            console.log(response, "eroror check");
             this.message = response.data.messages;
 
             if (this.message == "Try again") {
@@ -436,13 +499,19 @@ export default {
               localStorage.removeItem("chatbotidtrain");
               this.chatbotList();
             }
-          }, 10);
+          }, 10)
+          .catch((err) => {
+            console.log("inside catch", err);
+          });
+        //  .catch((e) => {
+        //  console.log("Caught", e);
+        // })
       }
     },
 
     handleSelected(tr) {
       localStorage.setItem("selected_chatbot", tr.chatbotname);
-      localStorage.setItem("selected_chatbot_id", tr.id)
+      localStorage.setItem("selected_chatbot_id", tr.id);
       EventBus.$emit("selectedChatbotName", tr.id);
 
       this.$vs.notify({
@@ -463,7 +532,7 @@ export default {
         });
     },
     deleteTableRow: function (idx) {
-      this.deleteID = 0
+      this.deleteID = 0;
       axios
         .post(Base_URL.Actual_URL + "deletechatbot", {
           delete: 1,
@@ -472,7 +541,7 @@ export default {
         .then((res) => {
           EventBus.$emit("chatbotDeleted", idx);
           localStorage.setItem("selected_chatbot", "No Chatbot Selected");
-          localStorage.removeItem("selected_chatbot_id")
+          localStorage.removeItem("selected_chatbot_id");
           this.selectIntent = "";
           this.$vs.notify({
             color: "danger",
@@ -529,11 +598,39 @@ export default {
           this.IsTraining = true;
           this.message = response.data.messages;
           document.getElementById("training" + id).innerText = this.message;
-          document.getElementById("training" + id).innerHTML =
-            '<i class="fa fa-refresh fa-spin"></i>&nbsp' + this.message;
-          this.trainingData = setInterval(() => {
-            this.apicalling(id);
-          }, 30000);
+          if (this.message == "Training Started") {
+            document.getElementById("training" + id).innerHTML =
+              '<i class="fa fa-refresh fa-spin"></i>&nbsp' + this.message;
+            this.trainingData = setInterval(() => {
+              this.apicalling(id);
+            }, 30000);
+          } else {
+            this.$vs.notify({
+              title: this.message,
+              color: "danger",
+              position: "top-center",
+            });
+          }
+        })
+        .catch((err) => {
+          this.$vs.notify({
+            text: "Training failed. Please try again.",
+            color: "danger",
+            position: "top-center",
+          });
+          this.IsTraining = false;
+          var Id = localStorage.getItem("chatbotidtrain");
+          document.querySelectorAll(".mr-2.buttontr").forEach((elem) => {
+            elem.disabled = false;
+          });
+          document.getElementById("training" + Id).innerHTML =
+            '<i  class="fa fa-play"></i>&nbspTrain';
+          const button = document.getElementById("training" + Id);
+          button.disabled = false;
+          localStorage.setItem("trainingID", "");
+          localStorage.removeItem("trainingID");
+          localStorage.removeItem("chatbotidtrain");
+          this.chatbotList();
         });
     },
 
@@ -560,6 +657,14 @@ export default {
             });
           }
           this.$vs.loading.close();
+        })
+        .catch((err) => {
+          this.$vs.loading.close();
+          this.$vs.notify({
+            text: "Deploy failed. Please try again.",
+            color: "danger",
+            position: "top-center",
+          });
         });
       this.mes = "";
     },
@@ -601,7 +706,7 @@ export default {
   },
 };
 </script>
-<style >
+<style>
 .buttonload {
   /* background-color: #4CAF50; Green background */
   border: none; /* Remove borders */
@@ -609,7 +714,8 @@ export default {
   padding: 12px 16px; /* Some padding */
   font-size: 16px; /* Set a font size */
 }
+.scroll {
+  line-height: 30px;
+  width: 100px;
+}
 </style>
-
-
-

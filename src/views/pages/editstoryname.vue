@@ -83,13 +83,13 @@ export default {
       const url1 = url + id;
       axios
         .post(url1, {
-          name: this.rowdata[0].name,
+          name: this.rowdata[0].name
         })
         .then((response) => {
           this.msg = response.data.msg;
 
-          if (response.data.code == 100) {
-            this.msg = response.data.msg;
+          if (response.data.code == 200) {
+            // this.msg = response.data.result;
             this.$vs.notify({
               title: "Edit Story Name ",
               text: "Your story Name  is updated",
@@ -100,6 +100,13 @@ export default {
               name: "stories",
             });
           }
+          if (response.data.code == 100) {
+                  this.$vs.notify({
+                    color: "danger",
+                    title: response.data.result,
+                    position: "top-center",
+                  });
+                }
         });
     },
     resetForm() {

@@ -115,9 +115,7 @@
           ></vue-apex-charts>
           <!-- </vx-card> -->
         </div>
-        <div
-          class="vx-col w-full sm:w-1/2 md:w-1/2 lg:w-1/4 xl:w-1/2 mt-4 pt-4"
-        >
+        <div class="vx-col w-full sm:w-1/2 md:w-1/2 lg:w-1/4 xl:w-1/2 mt-4 pt-4">
           <!-- <vx-card> -->
           <!-- <h6>Select Chatbot Name</h6>
           <v-select
@@ -139,9 +137,7 @@
           ></vue-apex-charts>
           <!-- </vx-card> -->
         </div>
-        <div
-          class="vx-col w-full sm:w-1/2 md:w-1/2 lg:w-1/4 xl:w-1/2 mt-4 pt-4"
-        >
+        <div class="vx-col w-full sm:w-1/2 md:w-1/2 lg:w-1/4 xl:w-1/2 mt-4 pt-4">
           <!-- <vx-card> -->
           <!-- <h6>Select Chatbot Name</h6>
             <v-select
@@ -167,9 +163,7 @@
     </vx-card>
     <vx-card class="mt-4">
       <div class="vx-row">
-        <div
-          class="vx-col w-full sm:w-1/2 md:w-1/2 lg:w-1/4 xl:w-1/2 mt-4 pt-4"
-        >
+        <div class="vx-col w-full sm:w-1/2 md:w-1/2 lg:w-1/4 xl:w-1/2 mt-4 pt-4">
           <!-- <span class="sr-only">Loading...</span> -->
           <h6>Select Agent Name</h6>
           <v-select
@@ -196,9 +190,9 @@
   </div>
   <div v-else></div>
 </template>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
 import StatisticsCardLine from "@/components/statistics-cards/StatisticsCardLine.vue";
 import VueApexCharts from "vue-apexcharts";
@@ -600,6 +594,17 @@ export default {
           setTimeout(() => {
             this.$vs.loading.close("#div-with-loading > .con-vs-loading");
           }, 1000);
+        })
+        .catch((err) => {
+          setTimeout(() => {
+            this.$vs.loading.close("#div-with-loading > .con-vs-loading");
+          }, 1000);
+          this.$vs.notify({
+            text: "Please try again.",
+            title: "Failed to process your request.",
+            color: "danger",
+            position: "top-center",
+          });
         });
     },
     unansweredQustionGraphData(chatbotID) {
@@ -670,6 +675,17 @@ export default {
           setTimeout(() => {
             this.$vs.loading.close("#div-with-loading > .con-vs-loading");
           }, 1000);
+        })
+        .catch((err) => {
+          setTimeout(() => {
+            this.$vs.loading.close("#div-with-loading > .con-vs-loading");
+          }, 1000);
+          this.$vs.notify({
+            text: "Please try again.",
+            title: "Failed to process your request.",
+            color: "danger",
+            position: "top-center",
+          });
         });
     },
   },
@@ -694,5 +710,3 @@ export default {
   }
 }
 </style>
-
-

@@ -22,10 +22,12 @@
           <div class="vx-col sm:w-1/2 mb-2 ml-4">
             <h6 class="ml-1">Response Text</h6>
             <div class="vx-row ml-2">
-              <div id="editor1" contenteditable class="sm:w-1/2" @input="checkError">
-                <!-- <span  style="border-radius:0">
-          </span> -->
-              </div>
+              <div
+                id="editor1"
+                contenteditable
+                class="sm:w-1/2"
+                @input="checkError"
+              ></div>
 
               <div class="sm:w-1/2">
                 <vs-button
@@ -132,7 +134,9 @@
               emojisByRow="8"
               :dark="false"
             /> -->
-            <span class="text-danger text-sm" v-if="response_error == true">Please enter response text.</span>
+            <span class="text-danger text-sm" v-if="response_error == true"
+              >Please enter response text.</span
+            >
           </div>
           <!-- <div class="vx-col sm:w-1/3 w-full">
             <h6 style="color: red">Add multiple text for this response</h6>
@@ -143,7 +147,7 @@
               v-model="addresponse1"
             />
           </div> -->
-           <div class="vx-col sm:w-1/2 w-full mb-2 ml-1" :data="rowdata">
+          <div class="vx-col sm:w-1/2 w-full mb-2 ml-1" :data="rowdata">
             <h6>Mutiple Response Text</h6>
             <!-- <vs-input
               class="w-full"
@@ -173,7 +177,9 @@
                   <i class="fa fa-chevron-down" aria-hidden="true"></i>
                 </vs-button>
 
-                <vs-button @click="makeBold2('editor2')" style="border-radius: 0"
+                <vs-button
+                  @click="makeBold2('editor2')"
+                  style="border-radius: 0"
                   ><i class="fa fa-bold fa-lg" aria-hidden="true"></i
                 ></vs-button>
                 <vs-button
@@ -223,11 +229,9 @@
                 {{ tr.responsename }}
               </vs-td>
 
-              <vs-td :data="tr.text" v-html="tr.text">
-              </vs-td>
+              <vs-td :data="tr.text" v-html="tr.text"> </vs-td>
 
-              <vs-td :data="tr.textnew" v-html="tr.textnew">
-              </vs-td>
+              <vs-td :data="tr.textnew" v-html="tr.textnew"> </vs-td>
               <vs-td>
                 <div class="flex">
                   <vs-button
@@ -294,7 +298,7 @@ export default {
   name: "response",
   data() {
     return {
-      response_error:false,
+      response_error: false,
       inputs: [
         {
           name: "",
@@ -326,11 +330,13 @@ export default {
       responsedata: [],
       message: "",
       showEmojis: false,
-      showEmojis2: false
+      showEmojis2: false,
     };
   },
   mounted() {
     this.getEntityIntent();
+    this.onPaste1()
+    this.onPaste2()
   },
 
   computed: {
@@ -432,11 +438,32 @@ export default {
     VEmojiPicker,
   },
   methods: {
+    onPaste1() {
+      //  var ce = document.querySelector('[contenteditable]')
+      var ce = document.querySelector("div#editor1");
+      ce.addEventListener("paste", function (e) {
+        e.preventDefault();
+        console.log('isndie paste')
+        var text = e.clipboardData.getData("text/plain");
+        document.execCommand("insertText", false, text);
+      });
+    },
+     onPaste2() {
+      var ce = document.querySelector("div#editor2");
+      ce.addEventListener("paste", function (e) {
+        e.preventDefault();
+        var text = e.clipboardData.getData("text/plain");
+        document.execCommand("insertText", false, text);
+      });
+    },
     checkError() {
-      if(document.getElementById('editor1').innerHTML == '' || document.getElementById('editor1').innerHTML == null) {
-        this.response_error = true
+      if (
+        document.getElementById("editor1").innerHTML == "" ||
+        document.getElementById("editor1").innerHTML == null
+      ) {
+        this.response_error = true;
       } else {
-        this.response_error = false
+        this.response_error = false;
       }
     },
     selectionIsBold() {
@@ -454,7 +481,7 @@ export default {
       return isItalic;
     },
     makeBold2(Id) {
-         if (Id == "editor2") {
+      if (Id == "editor2") {
         var state = document.queryCommandState("bold");
         switch (state) {
           case true:
@@ -464,7 +491,7 @@ export default {
           case null:
             break;
         }
-        document.execCommand('bold');
+        document.execCommand("bold");
       }
     },
     makeBold(Id) {
@@ -478,11 +505,11 @@ export default {
           case null:
             break;
         }
-        document.execCommand('bold');
+        document.execCommand("bold");
       }
     },
     makeItalic(Id) {
-        if (Id == "editor1") {
+      if (Id == "editor1") {
         var state = document.queryCommandState("italic");
         switch (state) {
           case true:
@@ -492,7 +519,7 @@ export default {
           case null:
             break;
         }
-        document.execCommand('italic');
+        document.execCommand("italic");
       }
     },
     makeItalic2(Id) {
@@ -506,36 +533,18 @@ export default {
           case null:
             break;
         }
-        document.execCommand('italic');
+        document.execCommand("italic");
       }
     },
     closeEmojiContainer() {
       this.showEmojis = false;
     },
     selectEmoji(emoji) {
-      // alert('hey')
-      //   var elInput = document.getElementById('editor1')
-      //   console.log(elInput,'elInput');
-      //   var start = elInput // Record the position of the cursor
-      //   var end = elInput // Record the location of the last character of the selected character
-      //   if (start === undefined || end === undefined) return
-      //   var txt = elInput.value
-      //   console.log(txt, 'txt')
-      //   var result =
-      //     txt.substring(0, start) + emoji.data + txt.substring(end)
-      //   elInput.value = result // Assignment to the value of INPUT
-      //   elInput.focus()
-      //   elInput.selectionStart = start + emoji.data.length
-      //   elInput.selectionEnd = start + emoji.data.length
-      //   document.getElementById('editor1').innerHTML = result
-      //   console.log(document.getElementById('editor1').innerHTML,'console.log')
       var sel, range;
-      document.getElementById('editor1').focus();
+      document.getElementById("editor1").focus();
       if (window.getSelection) {
-        // alert('if 1')
         sel = window.getSelection();
         if (sel.getRangeAt && sel.rangeCount) {
-          // alert('if 2')
           range = sel.getRangeAt(0);
           range.deleteContents();
           var el = document.createElement("div");
@@ -548,23 +557,20 @@ export default {
           }
           range.insertNode(frag);
           if (lastNode) {
-            // alert('last node',lastNode)
             range = range.cloneRange();
             range.setStartAfter(lastNode);
             range.collapse(true);
             sel.removeAllRanges();
-            console.log(sel, 'range')
             sel.addRange(range);
           }
         }
       } else if (document.selection && document.selection.type != "Control") {
-        // alert('else if')
         document.selection.createRange().pasteHTML(emoji.data);
       }
     },
     selectEmoji2(emoji) {
       var sel, range;
-      document.getElementById('editor2').focus();
+      document.getElementById("editor2").focus();
       if (window.getSelection) {
         // IE9 and non-IE
         sel = window.getSelection();
@@ -594,24 +600,20 @@ export default {
           }
         }
       } else if (document.selection && document.selection.type != "Control") {
-          // IE < 9
-            document.selection.createRange().pasteHTML(emoji.data);
-          }
+        // IE < 9
+        document.selection.createRange().pasteHTML(emoji.data);
+      }
     },
 
     showEmojiContainer() {
       this.showEmojis = true;
     },
-     showEmojiContainer2() {
+    showEmojiContainer2() {
       this.showEmojis2 = true;
     },
     closeEmojiContainer2() {
       this.showEmojis2 = false;
     },
-    // selectEmoji2(emoji) {
-    //   console.log(emoji);
-    //   this.rowdata[0].textnew = this.rowdata[0].textnew + emoji.data;
-    // },
     getEntityIntent() {
       this.chatbotname = localStorage.getItem("chatbotname");
       var newemail = localStorage.getItem("email");
@@ -663,43 +665,50 @@ export default {
         });
     },
     SubmitResponse() {
-      this.addresponse = document.getElementById('editor1').innerHTML
-      if(this.addresponse == '' || this.addresponse == null) {
-        this.response_error = true
+      this.addresponse = document.getElementById("editor1").innerHTML;
+      if (this.addresponse == "" || this.addresponse == null) {
+        this.response_error = true;
       } else {
-        this.response_error = false
-      this.$validator.validateAll().then((result) => {
-        if (result) {
-          var newemail = localStorage.getItem("email");
-          var chatbot_id = localStorage.getItem("chatbot_id");
+        this.response_error = false;
+        this.$validator.validateAll().then((result) => {
+          if (result) {
+            var newemail = localStorage.getItem("email");
+            var chatbot_id = localStorage.getItem("chatbot_id");
 
-          axios
-            .post(Base_URL.Actual_URL + "addresponse", {
-              chatbot_id: chatbot_id,
-              company_id: localStorage.company_id,
-              addresponse: document.getElementById('editor1').innerHTML,
-              createresponse: this.createresponse,
-              addresponse1: document.getElementById('editor2').innerHTML,
-            })
-            .then((response) => {
-              if (response.data.code == 100) {
-                document.getElementById('editor1').innerHTML = ''
-                document.getElementById('editor2').innerHTML = ''
-                this.getEntityIntent();
-                this.$vs.notify({
-                  color: "success",
-                  title: "Response Record",
-                  text: "The Response Name  was successfully Added",
-                  position: "top-center",
-                });
-                this.addresponse = "";
-                this.createresponse = "";
-                this.addresponse1 = "";
-              }
-            });
-        }
-      })
-      };
+            axios
+              .post(Base_URL.Actual_URL + "addresponse", {
+                chatbot_id: chatbot_id,
+                company_id: localStorage.company_id,
+                addresponse: document.getElementById("editor1").innerHTML,
+                createresponse: this.createresponse,
+                addresponse1: document.getElementById("editor2").innerHTML,
+              })
+              .then((response) => {
+                if (response.data.code == 200) {
+                  document.getElementById("editor1").innerHTML = "";
+                  document.getElementById("editor2").innerHTML = "";
+                  this.getEntityIntent();
+                  this.$vs.notify({
+                    color: "success",
+                    title: "Response Record",
+                    text: "The Response Name  was successfully Added",
+                    position: "top-center",
+                  });
+                  this.addresponse = "";
+                  this.createresponse = "";
+                  this.addresponse1 = "";
+                }
+                if (response.data.code == 100) {
+                    this.$vs.notify({
+                    color: "danger",
+                    title: response.data.result,
+                    position: "top-center",
+                  });
+                }
+              });
+          }
+        });
+      }
     },
 
     quick: function () {

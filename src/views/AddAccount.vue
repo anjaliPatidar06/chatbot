@@ -209,7 +209,7 @@ export default {
 <script>
 import axios from "axios";
 import vSelect from "vue-select";
-import { Base_URL, API_List } from "./../../api.config";
+import { Base_URL } from "./../../api.config";
 import { Validator } from "vee-validate";
 const dict = {
   custom: {
@@ -232,6 +232,9 @@ const dict = {
     },
     subscription: {
       required: "Please select subscription duration",
+    },
+    password: {
+      required: "Please enter password",
     },
     confirm_password: {
       required: "Please enter confirm password",

@@ -6,16 +6,16 @@
     <div class="vx-col w-full mb-base">
       <vx-card title="Calendar & Clock">
         <div class="vx-row">
-          <div class="vx-col sm:w-1/4 w-full mb-2">
+          <div class="vx-col sm:w-1/3 w-full mb-2">
             <small class="date-label">Response Name</small>
             <v-select
-              class="w-full"
               label="responsename"
               :options="responsedata"
               v-model="responsename"
               :dir="$vs.rtl ? 'rtl' : 'ltr'"
               v-validate="'required'"
               name="response_name"
+              id="response_name"
             >
             </v-select>
             <span class="text-danger text-sm">
@@ -52,14 +52,14 @@
         <span slot="off">Cancel</span>
       </vs-switch> -->
           </div>
-          <div class="vx-col sm:w-1/4 w-full mb-2" v-if="calendar">
+          <!-- <div class="vx-col sm:w-1/4 w-full mb-2" v-if="calendar">
             <div class="flex items-center mt-5 pt-4">
               <vs-switch color="success" v-model="switch2" id="dateSwitch">
                 <span slot="on">Future Date</span>
                 <span slot="off">Past Date</span>
               </vs-switch>
             </div>
-          </div>
+          </div> -->
         </div>
         <div class="vx-row" v-if="time == true">
           <div class="vx-col sm:w-1/3 w-full mt-5">
@@ -92,7 +92,11 @@
           </div>
         </div>
         <div class="vx-row mt-4" v-if="calendar == true">
-            <span class="mt-3 ml-4">Sun</span>
+              <vs-switch color="success" v-model="switch2" id="dateSwitch" class="mt-3 ml-4">
+                <span slot="on">Future Date</span>
+                <span slot="off">Past Date</span>
+              </vs-switch>
+            <span class="mt-3 ml-4 pl-4">Sun</span>
               <vs-switch
                 v-model="sunTime"
                 @change="weekDaySelection"
@@ -424,4 +428,42 @@ button#dateSwitch {
   width: 90px !important;
   height: 26px !important;
 }
+/* .vs__selected-options {
+  overflow: hidden !important;
+    text-overflow: ellipsis !important;
+} */
+/* [dir] .vs__selected-options {
+    overflow: hidden !important;
+} */
+/* div#vs1__combobox
+{
+  overflow: hidden !important;
+    text-overflow: ellipsis !important;
+} */
+span.vs__selected {
+    display: inline-block !important;
+    width: 20rem !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+</style>
+<style scoped>
+ span.vs__selected {
+  display: inline-block !important;
+  width: 21rem !important;
+  max-width: 100%;
+    box-sizing: border-box;
+    white-space: normal;
+    word-wrap: break-word;
+    word-break: break-all;
+}
+
+ul#vs1__listbox{
+  max-width: 100%;
+    overflow: hidden;
+    word-wrap: normal !important;
+    white-space: normal;
+}
+
 </style>

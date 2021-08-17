@@ -1,5 +1,3 @@
-
-
 <template>
   <!-- <form v-on:submit.prevent="addsubscription" v-on:keydown.enter.prevent="addsubscription" >   -->
   <div class="vx-row">
@@ -17,9 +15,7 @@
               class="w-full"
               v-model="subname"
             />
-            <span class="text-danger text-sm">{{
-              errors.first("subname")
-            }}</span>
+            <span class="text-danger text-sm">{{ errors.first("subname") }}</span>
           </div>
           <div class="vx-col sm:w-1/3 w-full mb-2">
             <h6>Subscription Duration</h6>
@@ -36,16 +32,14 @@
           <div class="vx-col sm:w-1/3 w-full mb-2">
             <h6>Number of Messages</h6>
             <vs-input
-            type="number"
+              type="number"
               v-validate="'required'"
               data-vv-validate-on="blur"
               class="w-full"
               name="message"
               v-model="message"
             />
-            <span class="text-danger text-sm">{{
-              errors.first("message")
-            }}</span>
+            <span class="text-danger text-sm">{{ errors.first("message") }}</span>
           </div>
         </div>
         <vs-prompt
@@ -90,23 +84,19 @@
           <div class="vx-col sm:w-1/3 w-full mb-2">
             <h6>Subscription Cost</h6>
             <vs-input
-            type="number"
+              type="number"
               v-validate="'required'"
               data-vv-validate-on="blur"
               class="w-full"
               name="subcost"
               v-model="subcost"
             />
-            <span class="text-danger text-sm">{{
-              errors.first("subcost")
-            }}</span>
+            <span class="text-danger text-sm">{{ errors.first("subcost") }}</span>
           </div>
           <div class="vx-col sm:w-1/3 w-full mb-2">
             <h6>Number Of User</h6>
             <vs-input-number min="1" v-model="number1" class="mr-0 ml-0" />
-            <span class="text-danger text-sm">{{
-              errors.first("number1")
-            }}</span>
+            <span class="text-danger text-sm">{{ errors.first("number1") }}</span>
           </div>
         </div>
       </vx-card>
@@ -118,8 +108,8 @@
         <div class="vx-col w-full mb-base">
           <vx-card title="Module Access">
             <p>
-              Toggle yes or no to grant user permissions to each of the modules
-              listed below.
+              Toggle yes or no to grant user permissions to each of the modules listed
+              below.
             </p>
             <br />
             <br />
@@ -242,35 +232,32 @@
         </div>
       </div>
       <template slot="codeContainer">
-        &lt;template&gt; &lt;div class=&quot;demo-alignment&quot;&gt;
-        &lt;vs-button @click=&quot;addsubscription()&quot;
-        color=&quot;success&quot; type=&quot;gradient&quot;&gt;Position Top
-        Center Random Color&lt;/vs-button&gt; &lt;/div&gt; &lt;div
-        class=&quot;demo-alignment&quot;&gt; &lt;vs-button
+        &lt;template&gt; &lt;div class=&quot;demo-alignment&quot;&gt; &lt;vs-button
+        @click=&quot;addsubscription()&quot; color=&quot;success&quot;
+        type=&quot;gradient&quot;&gt;Position Top Center Random Color&lt;/vs-button&gt;
+        &lt;/div&gt; &lt;div class=&quot;demo-alignment&quot;&gt; &lt;vs-button
         @click=&quot;addsubscription&quot; type=&quot;filled&quot;
-        color=&quot;primary&quot;&gt;Loading Default&lt;/vs-button&gt;
-        &lt;/div&gt; &lt;div class=&quot;demo-alignment&quot;&gt;
-        &lt;vs-dropdown&gt; &lt;a class=&quot;flex items-center&quot;
-        href.prevent&gt; Dropdown Option Group &lt;i
+        color=&quot;primary&quot;&gt;Loading Default&lt;/vs-button&gt; &lt;/div&gt;
+        &lt;div class=&quot;demo-alignment&quot;&gt; &lt;vs-dropdown&gt; &lt;a
+        class=&quot;flex items-center&quot; href.prevent&gt; Dropdown Option Group &lt;i
         class=&quot;material-icons&quot;&gt; expand_more &lt;/i&gt; &lt;/a&gt;
         &lt;vs-dropdown-menu&gt; &lt;vs-dropdown-item&gt; Option 1
         &lt;/vs-dropdown-item&gt; &lt;vs-dropdown-item&gt; Option 2
-        &lt;/vs-dropdown-item&gt; &lt;vs-dropdown-group&gt;
-        &lt;vs-dropdown-item&gt; Option 1 &lt;/vs-dropdown-item&gt;
-        &lt;vs-dropdown-item&gt; Option 2 &lt;/vs-dropdown-item&gt;
-        &lt;vs-dropdown-group&gt; &lt;vs-dropdown-item&gt; sub Options 1
-        &lt;/vs-dropdown-item&gt; &lt;vs-dropdown-item&gt; sub Options 2
-        &lt;/vs-dropdown-item&gt; &lt;/vs-dropdown-group&gt;
-        &lt;/vs-dropdown-group&gt; &lt;vs-dropdown-item divider&gt; Option 3
-        &lt;/vs-dropdown-item&gt; &lt;/vs-dropdown-menu&gt; &lt;/vs-dropdown&gt;
-        &lt;/div&gt; &lt;/template&gt; &lt;script&gt; export default { methods:
-        { addsubscription() { function getRandomInt(min, max) { return
-        Math.floor(Math.random() * (max - min)) + min; } let color =
+        &lt;/vs-dropdown-item&gt; &lt;vs-dropdown-group&gt; &lt;vs-dropdown-item&gt;
+        Option 1 &lt;/vs-dropdown-item&gt; &lt;vs-dropdown-item&gt; Option 2
+        &lt;/vs-dropdown-item&gt; &lt;vs-dropdown-group&gt; &lt;vs-dropdown-item&gt; sub
+        Options 1 &lt;/vs-dropdown-item&gt; &lt;vs-dropdown-item&gt; sub Options 2
+        &lt;/vs-dropdown-item&gt; &lt;/vs-dropdown-group&gt; &lt;/vs-dropdown-group&gt;
+        &lt;vs-dropdown-item divider&gt; Option 3 &lt;/vs-dropdown-item&gt;
+        &lt;/vs-dropdown-menu&gt; &lt;/vs-dropdown&gt; &lt;/div&gt; &lt;/template&gt;
+        &lt;script&gt; export default { methods: { addsubscription() { function
+        getRandomInt(min, max) { return Math.floor(Math.random() * (max - min)) + min; }
+        let color =
         &grave;rgb(${getRandomInt(0,255)},${getRandomInt(0,255)},${getRandomInt(0,255)})&grave;
-        this.$vs.notify({ title: &apos;Subscription status&apos;, text:
-        &apos;Thank you for subscription!!&apos;, color, position:
-        &apos;top-center&apos; }) this.$vs.loading() setTimeout( ()=&gt; {
-        this.$vs.loading.close() }, 2000); } } } &lt;/script&gt;
+        this.$vs.notify({ title: &apos;Subscription status&apos;, text: &apos;Thank you
+        for subscription!!&apos;, color, position: &apos;top-center&apos; })
+        this.$vs.loading() setTimeout( ()=&gt; { this.$vs.loading.close() }, 2000); } } }
+        &lt;/script&gt;
       </template>
     </div>
 
@@ -291,7 +278,31 @@ import Vue from "vue";
 import vSelect from "vue-select";
 
 Vue.component("v-select", vSelect);
+import { Validator } from "vee-validate";
 
+const dict = {
+  custom: {
+    subname: {
+      required: "Please enter subscription name.",
+    },
+    subcost: {
+      required: "Please enter subscription cost.",
+    },
+    message: {
+      required: "Please enter number of messages.",
+    },
+    duration: {
+      required: "Please select subscription duration.",
+    },
+    currency: {
+      required: "Please select currency",
+    },
+    number_of_user: {
+      required: "Please enter number of user",
+    },
+  },
+};
+Validator.localize("en", dict);
 export default {
   data() {
     return {
@@ -440,9 +451,7 @@ export default {
     myFunctionAccept() {
       this;
       this.durations[4].durationName =
-        this.startDate.toLocaleDateString() +
-        " to " +
-        this.endDate.toLocaleDateString();
+        this.startDate.toLocaleDateString() + " to " + this.endDate.toLocaleDateString();
     },
     changedLabel(event) {
       this.selected = event;
@@ -531,12 +540,12 @@ export default {
         .then((response) => {
           this.result = response.data.result;
           if (response.data.code == 200) {
-              this.$vs.notify({
-                title: "Subscription Added",
-                text: "Subscription plan is added successfully.",
-                color: "success",
-                position: "top-center",
-              });
+            this.$vs.notify({
+              title: "Subscription Added",
+              text: "Subscription plan is added successfully.",
+              color: "success",
+              position: "top-center",
+            });
             this.result = response.data.result;
 
             this.$vs.loading();
@@ -545,6 +554,17 @@ export default {
               this.$router.push({ name: "allsubscription" });
             }, 2000);
           }
+        })
+        .catch((err) => {
+          setTimeout(() => {
+            this.$vs.loading.close();
+          }, 1000);
+          this.$vs.notify({
+            text: "Please try again.",
+            title: "Failed to process your request.",
+            color: "danger",
+            position: "top-center",
+          });
         });
     },
   },
@@ -553,5 +573,3 @@ export default {
 <style lang="scss">
 @import "@/assets/scss/vuexy/apps/simple-calendar.scss";
 </style>
-
-  

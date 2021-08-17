@@ -53,10 +53,7 @@
                   class="mr-2"
                   >Edit</vs-button
                 >
-                <vs-button
-                  @click="deleteTableRow(tr.id)"
-                  type="filled"
-                  color="danger"
+                <vs-button @click="deleteTableRow(tr.id)" type="filled" color="danger"
                   >Delete</vs-button
                 >
                 <!-- <vs-button type="border" size="medium" icon-pack="feather" icon="icon-edit-2 null" color="success" class="mr-2" value='Update' @click='updateRecord(index,tr.Email);'></vs-button>
@@ -75,8 +72,8 @@
       &lt;vs-th&gt;Name&lt;/vs-th&gt; &lt;vs-th&gt;Website&lt;/vs-th&gt;
       &lt;vs-th&gt;Nro&lt;/vs-th&gt; &lt;/template&gt; &lt;template
       slot-scope=&quot;{data}&quot;&gt; &lt;vs-tr :data=&quot;tr&quot;
-      :key=&quot;indextr&quot; v-for=&quot;(tr, indextr) in data&quot;&gt;
-      &lt;vs-td :data=&quot;tr.email&quot;&gt;
+      :key=&quot;indextr&quot; v-for=&quot;(tr, indextr) in data&quot;&gt; &lt;vs-td
+      :data=&quot;tr.email&quot;&gt;
       {{ &quot;\{\{ tr.email \}\}&quot; }}
       &lt;/vs-td&gt; &lt;vs-td :data=&quot;tr.username&quot;&gt;
       {{ &quot;\{\{ tr.name \}\}&quot; }}
@@ -85,30 +82,27 @@
       &lt;/vs-td&gt; &lt;vs-td :data=&quot;tr.id&quot;&gt;
       {{ &quot;\{\{ tr.id \}\}&quot; }}
       &lt;/vs-td&gt; &lt;template class=&quot;expand-user&quot;
-      slot=&quot;expand&quot;&gt; &lt;div class=&quot;con-expand-users
-      w-full&quot;&gt; &lt;div class=&quot;con-btns-user flex items-center
-      justify-between&quot;&gt; &lt;div class=&quot;con-userx flex items-center
-      justify-start&quot;&gt; &lt;vs-avatar :badge=&quot;tr.id&quot;
-      size=&quot;45px&quot;
-      :src=&quot;`https://randomuser.me/api/portraits/women/${indextr}.jpg`&quot;
-      /&gt; &lt;span&gt;{{ "\{\{ tr.name \}\}" }}&lt;/span&gt; &lt;/div&gt;
-      &lt;div class=&quot;flex&quot;&gt; &lt;vs-button type=&quot;border&quot;
-      size=&quot;small&quot; icon-pack=&quot;feather&quot;
-      icon=&quot;icon-phone&quot; class=&quot;mr-2&quot;&gt;&lt;/vs-button&gt;
-      &lt;vs-button type=&quot;border&quot; size=&quot;small&quot;
-      icon-pack=&quot;feather&quot; icon=&quot;icon-send&quot;
-      color=&quot;success&quot; class=&quot;mr-2&quot;&gt;&lt;/vs-button&gt;
-      &lt;vs-button type=&quot;border&quot; size=&quot;small&quot;
-      icon-pack=&quot;feather&quot; icon=&quot;icon-trash&quot;
-      color=&quot;danger&quot;&gt;&lt;/vs-button&gt; &lt;/div&gt; &lt;/div&gt;
-      &lt;vs-list&gt; &lt;vs-list-item icon-pack=&quot;feather&quot;
-      icon=&quot;icon-mail&quot;
+      slot=&quot;expand&quot;&gt; &lt;div class=&quot;con-expand-users w-full&quot;&gt;
+      &lt;div class=&quot;con-btns-user flex items-center justify-between&quot;&gt;
+      &lt;div class=&quot;con-userx flex items-center justify-start&quot;&gt;
+      &lt;vs-avatar :badge=&quot;tr.id&quot; size=&quot;45px&quot;
+      :src=&quot;`https://randomuser.me/api/portraits/women/${indextr}.jpg`&quot; /&gt;
+      &lt;span&gt;{{ "\{\{ tr.name \}\}" }}&lt;/span&gt; &lt;/div&gt; &lt;div
+      class=&quot;flex&quot;&gt; &lt;vs-button type=&quot;border&quot;
+      size=&quot;small&quot; icon-pack=&quot;feather&quot; icon=&quot;icon-phone&quot;
+      class=&quot;mr-2&quot;&gt;&lt;/vs-button&gt; &lt;vs-button type=&quot;border&quot;
+      size=&quot;small&quot; icon-pack=&quot;feather&quot; icon=&quot;icon-send&quot;
+      color=&quot;success&quot; class=&quot;mr-2&quot;&gt;&lt;/vs-button&gt; &lt;vs-button
+      type=&quot;border&quot; size=&quot;small&quot; icon-pack=&quot;feather&quot;
+      icon=&quot;icon-trash&quot; color=&quot;danger&quot;&gt;&lt;/vs-button&gt;
+      &lt;/div&gt; &lt;/div&gt; &lt;vs-list&gt; &lt;vs-list-item
+      icon-pack=&quot;feather&quot; icon=&quot;icon-mail&quot;
       :title=&quot;tr.email&quot;&gt;&lt;/vs-list-item&gt; &lt;vs-list-item
       icon-pack=&quot;feather&quot; icon=&quot;icon-globe&quot;
-      :title=&quot;tr.website&quot;&gt;&lt;/vs-list-item&gt; &lt;/vs-list&gt;
-      &lt;/div&gt; &lt;/template&gt; &lt;/vs-tr&gt; &lt;/template&gt;
-      &lt;/vs-table&gt; &lt;/template&gt; &lt;script&gt; export default { data()
-      { return { users: [.....] } }, } &lt;/script&gt;
+      :title=&quot;tr.website&quot;&gt;&lt;/vs-list-item&gt; &lt;/vs-list&gt; &lt;/div&gt;
+      &lt;/template&gt; &lt;/vs-tr&gt; &lt;/template&gt; &lt;/vs-table&gt;
+      &lt;/template&gt; &lt;script&gt; export default { data() { return { users: [.....] }
+      }, } &lt;/script&gt;
     </template>
   </vx-card>
 </template>
@@ -142,6 +136,17 @@ export default {
             this.$vs.loading.close("#div-with-loading > .con-vs-loading");
           }, 1000);
           this.rowdata = response.data.userlist;
+        })
+        .catch((err) => {
+          setTimeout(() => {
+            this.$vs.loading.close("#div-with-loading > .con-vs-loading");
+          }, 1000);
+          this.$vs.notify({
+            text: "Please try again.",
+            title: "Failed to process your request.",
+            color: "danger",
+            position: "top-center",
+          });
         });
     },
     deleteTableRow: function (idx) {

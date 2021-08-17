@@ -7,7 +7,6 @@ Item Name: Vuexy - Vuejs, HTML & Laravel Admin Dashboard Template
 Author URL: http://www.themeforest.net/user/pixinvent
 ========================================================================================== -->
 
-
 <template>
   <div class="clearfix">
     <vs-input
@@ -55,9 +54,7 @@ Author URL: http://www.themeforest.net/user/pixinvent
           v-model="companyname"
           class="w-full mt-6"
         />
-        <span class="text-danger text-sm">{{
-          errors.first("company_name")
-        }}</span>
+        <span class="text-danger text-sm">{{ errors.first("company_name") }}</span>
       </div>
       <div class="vx-col sm:w-1/2 w-full">
         <v-select
@@ -67,7 +64,7 @@ Author URL: http://www.themeforest.net/user/pixinvent
           class="w-full mt-6"
           label="name"
           name="country"
-          :options="country"
+          :options="countryData"
           placeholder="Select Country"
           v-validate="'required'"
           style="
@@ -96,10 +93,7 @@ Author URL: http://www.themeforest.net/user/pixinvent
           />
           <template slot="append" class="mt-20">
             <div class="append-text bg-primary">
-              <span
-                class="input-group-text"
-                @click="showPassword = !showPassword"
-              >
+              <span class="input-group-text" @click="showPassword = !showPassword">
                 <i
                   class="fa"
                   :class="[showPassword ? 'fa-eye' : 'fa-eye-slash']"
@@ -139,9 +133,7 @@ Author URL: http://www.themeforest.net/user/pixinvent
             </div>
           </template>
         </vx-input-group>
-        <span class="text-danger text-sm">{{
-          errors.first("confirm_password")
-        }}</span>
+        <span class="text-danger text-sm">{{ errors.first("confirm_password") }}</span>
       </div>
     </div>
     <div class="vx-row">
@@ -175,6 +167,7 @@ import axios from "axios";
 import vSelect from "vue-select";
 import { Base_URL } from "../../../../api.config";
 import { Validator } from "vee-validate";
+import countryList from "../../../../country.json";
 
 const dict = {
   custom: {
@@ -208,10 +201,12 @@ const dict = {
   },
 };
 Validator.localize("en", dict);
+import FileSaver from "file-saver";
 
 export default {
   data() {
     return {
+      countryData: [],
       showPassword: false,
       showConfirmPassword: false,
       msg: "",
@@ -223,300 +218,300 @@ export default {
       confirm_password: "",
       isTermsConditionAccepted: true,
       selectedCountry: "",
-      country: [
-        {
-          name: "Afghanistan",
-          code: "AF",
-        },
-        {
-          name: "Åland Islands",
-          code: "AX",
-        },
-        {
-          name: "Albania",
-          code: "AL",
-        },
-        {
-          name: "Algeria",
-          code: "DZ",
-        },
-        {
-          name: "American Samoa",
-          code: "AS",
-        },
-        {
-          name: "Andorra",
-          code: "AD",
-        },
-        {
-          name: "Angola",
-          code: "AO",
-        },
-        {
-          name: "Anguilla",
-          code: "AI",
-        },
-        {
-          name: "Antarctica",
-          code: "AQ",
-        },
-        {
-          name: "Antigua and Barbuda",
-          code: "AG",
-        },
-        {
-          name: "Argentina",
-          code: "AR",
-        },
-        {
-          name: "Armenia",
-          code: "AM",
-        },
-        {
-          name: "Aruba",
-          code: "AW",
-        },
-        {
-          name: "Australia",
-          code: "AU",
-        },
-        {
-          name: "Austria",
-          code: "AT",
-        },
-        {
-          name: "Azerbaijan",
-          code: "AZ",
-        },
-        {
-          name: "Bahamas",
-          code: "BS",
-        },
-        {
-          name: "Bahrain",
-          code: "BH",
-        },
-        {
-          name: "Bangladesh",
-          code: "BD",
-        },
-        {
-          name: "Barbados",
-          code: "BB",
-        },
-        {
-          name: "Belarus",
-          code: "BY",
-        },
-        {
-          name: "Belgium",
-          code: "BE",
-        },
-        {
-          name: "Belize",
-          code: "BZ",
-        },
-        {
-          name: "Benin",
-          code: "BJ",
-        },
-        {
-          name: "Bermuda",
-          code: "BM",
-        },
-        {
-          name: "Bhutan",
-          code: "BT",
-        },
-        {
-          name: "Bolivia, Plurinational State of",
-          code: "BO",
-        },
-        {
-          name: "Bonaire, Sint Eustatius and Saba",
-          code: "BQ",
-        },
-        {
-          name: "Bosnia and Herzegovina",
-          code: "BA",
-        },
-        {
-          name: "Botswana",
-          code: "BW",
-        },
-        {
-          name: "Bouvet Island",
-          code: "BV",
-        },
-        {
-          name: "Brazil",
-          code: "BR",
-        },
-        {
-          name: "British Indian Ocean Territory",
-          code: "IO",
-        },
-        {
-          name: "Brunei Darussalam",
-          code: "BN",
-        },
-        {
-          name: "Bulgaria",
-          code: "BG",
-        },
-        {
-          name: "Burkina Faso",
-          code: "BF",
-        },
-        {
-          name: "Burundi",
-          code: "BI",
-        },
-        {
-          name: "Cambodia",
-          code: "KH",
-        },
-        {
-          name: "Cameroon",
-          code: "CM",
-        },
-        {
-          name: "Canada",
-          code: "CA",
-        },
-        {
-          name: "Cape Verde",
-          code: "CV",
-        },
-        {
-          name: "Cayman Islands",
-          code: "KY",
-        },
-        {
-          name: "Central African Republic",
-          code: "CF",
-        },
-        {
-          name: "Chad",
-          code: "TD",
-        },
-        {
-          name: "Chile",
-          code: "CL",
-        },
-        {
-          name: "China",
-          code: "CN",
-        },
-        {
-          name: "Christmas Island",
-          code: "CX",
-        },
-        {
-          name: "Cocos (Keeling) Islands",
-          code: "CC",
-        },
-        {
-          name: "Colombia",
-          code: "CO",
-        },
-        {
-          name: "Comoros",
-          code: "KM",
-        },
-        {
-          name: "Congo",
-          code: "CG",
-        },
-        {
-          name: "Congo, the Democratic Republic of the",
-          code: "CD",
-        },
-        {
-          name: "Cook Islands",
-          code: "CK",
-        },
-        {
-          name: "Costa Rica",
-          code: "CR",
-        },
-        {
-          name: "India",
-          code: "IN",
-        },
-        {
-          name: "Dubai",
-          code: "Du",
-        },
-        {
-          name: "Côte d'Ivoire",
-          code: "CI",
-        },
-        {
-          name: "Croatia",
-          code: "HR",
-        },
-        {
-          name: "Cuba",
-          code: "CU",
-        },
-        {
-          name: "Curaçao",
-          code: "CW",
-        },
-        {
-          name: "Cyprus",
-          code: "CY",
-        },
-        {
-          name: "Czech Republic",
-          code: "CZ",
-        },
-        {
-          name: "Denmark",
-          code: "DK",
-        },
-        {
-          name: "Djibouti",
-          code: "DJ",
-        },
-        {
-          name: "Dominica",
-          code: "DM",
-        },
-        {
-          name: "Dominican Republic",
-          code: "DO",
-        },
-        {
-          name: "Ecuador",
-          code: "EC",
-        },
-        {
-          name: "Egypt",
-          code: "EG",
-        },
-        {
-          name: "El Salvador",
-          code: "SV",
-        },
-        {
-          name: "Equatorial Guinea",
-          code: "GQ",
-        },
-        {
-          name: "Eritrea",
-          code: "ER",
-        },
-        {
-          name: "Estonia",
-          code: "EE",
-        },
-        {
-          name: "Ethiopia",
-          code: "ET",
-        },
-      ],
+      // country: [
+      //   {
+      //     name: "Afghanistan",
+      //     code: "AF",
+      //   },
+      //   {
+      //     name: "Åland Islands",
+      //     code: "AX",
+      //   },
+      //   {
+      //     name: "Albania",
+      //     code: "AL",
+      //   },
+      //   {
+      //     name: "Algeria",
+      //     code: "DZ",
+      //   },
+      //   {
+      //     name: "American Samoa",
+      //     code: "AS",
+      //   },
+      //   {
+      //     name: "Andorra",
+      //     code: "AD",
+      //   },
+      //   {
+      //     name: "Angola",
+      //     code: "AO",
+      //   },
+      //   {
+      //     name: "Anguilla",
+      //     code: "AI",
+      //   },
+      //   {
+      //     name: "Antarctica",
+      //     code: "AQ",
+      //   },
+      //   {
+      //     name: "Antigua and Barbuda",
+      //     code: "AG",
+      //   },
+      //   {
+      //     name: "Argentina",
+      //     code: "AR",
+      //   },
+      //   {
+      //     name: "Armenia",
+      //     code: "AM",
+      //   },
+      //   {
+      //     name: "Aruba",
+      //     code: "AW",
+      //   },
+      //   {
+      //     name: "Australia",
+      //     code: "AU",
+      //   },
+      //   {
+      //     name: "Austria",
+      //     code: "AT",
+      //   },
+      //   {
+      //     name: "Azerbaijan",
+      //     code: "AZ",
+      //   },
+      //   {
+      //     name: "Bahamas",
+      //     code: "BS",
+      //   },
+      //   {
+      //     name: "Bahrain",
+      //     code: "BH",
+      //   },
+      //   {
+      //     name: "Bangladesh",
+      //     code: "BD",
+      //   },
+      //   {
+      //     name: "Barbados",
+      //     code: "BB",
+      //   },
+      //   {
+      //     name: "Belarus",
+      //     code: "BY",
+      //   },
+      //   {
+      //     name: "Belgium",
+      //     code: "BE",
+      //   },
+      //   {
+      //     name: "Belize",
+      //     code: "BZ",
+      //   },
+      //   {
+      //     name: "Benin",
+      //     code: "BJ",
+      //   },
+      //   {
+      //     name: "Bermuda",
+      //     code: "BM",
+      //   },
+      //   {
+      //     name: "Bhutan",
+      //     code: "BT",
+      //   },
+      //   {
+      //     name: "Bolivia, Plurinational State of",
+      //     code: "BO",
+      //   },
+      //   {
+      //     name: "Bonaire, Sint Eustatius and Saba",
+      //     code: "BQ",
+      //   },
+      //   {
+      //     name: "Bosnia and Herzegovina",
+      //     code: "BA",
+      //   },
+      //   {
+      //     name: "Botswana",
+      //     code: "BW",
+      //   },
+      //   {
+      //     name: "Bouvet Island",
+      //     code: "BV",
+      //   },
+      //   {
+      //     name: "Brazil",
+      //     code: "BR",
+      //   },
+      //   {
+      //     name: "British Indian Ocean Territory",
+      //     code: "IO",
+      //   },
+      //   {
+      //     name: "Brunei Darussalam",
+      //     code: "BN",
+      //   },
+      //   {
+      //     name: "Bulgaria",
+      //     code: "BG",
+      //   },
+      //   {
+      //     name: "Burkina Faso",
+      //     code: "BF",
+      //   },
+      //   {
+      //     name: "Burundi",
+      //     code: "BI",
+      //   },
+      //   {
+      //     name: "Cambodia",
+      //     code: "KH",
+      //   },
+      //   {
+      //     name: "Cameroon",
+      //     code: "CM",
+      //   },
+      //   {
+      //     name: "Canada",
+      //     code: "CA",
+      //   },
+      //   {
+      //     name: "Cape Verde",
+      //     code: "CV",
+      //   },
+      //   {
+      //     name: "Cayman Islands",
+      //     code: "KY",
+      //   },
+      //   {
+      //     name: "Central African Republic",
+      //     code: "CF",
+      //   },
+      //   {
+      //     name: "Chad",
+      //     code: "TD",
+      //   },
+      //   {
+      //     name: "Chile",
+      //     code: "CL",
+      //   },
+      //   {
+      //     name: "China",
+      //     code: "CN",
+      //   },
+      //   {
+      //     name: "Christmas Island",
+      //     code: "CX",
+      //   },
+      //   {
+      //     name: "Cocos (Keeling) Islands",
+      //     code: "CC",
+      //   },
+      //   {
+      //     name: "Colombia",
+      //     code: "CO",
+      //   },
+      //   {
+      //     name: "Comoros",
+      //     code: "KM",
+      //   },
+      //   {
+      //     name: "Congo",
+      //     code: "CG",
+      //   },
+      //   {
+      //     name: "Congo, the Democratic Republic of the",
+      //     code: "CD",
+      //   },
+      //   {
+      //     name: "Cook Islands",
+      //     code: "CK",
+      //   },
+      //   {
+      //     name: "Costa Rica",
+      //     code: "CR",
+      //   },
+      //   {
+      //     name: "India",
+      //     code: "IN",
+      //   },
+      //   {
+      //     name: "Dubai",
+      //     code: "Du",
+      //   },
+      //   {
+      //     name: "Côte d'Ivoire",
+      //     code: "CI",
+      //   },
+      //   {
+      //     name: "Croatia",
+      //     code: "HR",
+      //   },
+      //   {
+      //     name: "Cuba",
+      //     code: "CU",
+      //   },
+      //   {
+      //     name: "Curaçao",
+      //     code: "CW",
+      //   },
+      //   {
+      //     name: "Cyprus",
+      //     code: "CY",
+      //   },
+      //   {
+      //     name: "Czech Republic",
+      //     code: "CZ",
+      //   },
+      //   {
+      //     name: "Denmark",
+      //     code: "DK",
+      //   },
+      //   {
+      //     name: "Djibouti",
+      //     code: "DJ",
+      //   },
+      //   {
+      //     name: "Dominica",
+      //     code: "DM",
+      //   },
+      //   {
+      //     name: "Dominican Republic",
+      //     code: "DO",
+      //   },
+      //   {
+      //     name: "Ecuador",
+      //     code: "EC",
+      //   },
+      //   {
+      //     name: "Egypt",
+      //     code: "EG",
+      //   },
+      //   {
+      //     name: "El Salvador",
+      //     code: "SV",
+      //   },
+      //   {
+      //     name: "Equatorial Guinea",
+      //     code: "GQ",
+      //   },
+      //   {
+      //     name: "Eritrea",
+      //     code: "ER",
+      //   },
+      //   {
+      //     name: "Estonia",
+      //     code: "EE",
+      //   },
+      //   {
+      //     name: "Ethiopia",
+      //     code: "ET",
+      //   },
+      // ],
     };
   },
   components: {
@@ -536,6 +531,13 @@ export default {
         this.phone !== ""
       );
     },
+  },
+  mounted() {
+    this.countryData = countryList;
+    //    axios.get("https://restcountries.eu/rest/v2/all")
+    //             .then((response) => {
+    //               console.log(response,'sdfg++++')
+    // })`
   },
   methods: {
     registerUserJWt() {
@@ -577,6 +579,17 @@ export default {
                   position: "top-center",
                 });
               }
+            })
+            .catch((err) => {
+              setTimeout(() => {
+                this.$vs.loading.close("#div-with-loading > .con-vs-loading");
+              }, 1000);
+              this.$vs.notify({
+                text: "Please try again.",
+                title: "Failed to process your request.",
+                color: "danger",
+                position: "top-center",
+              });
             });
         } else {
           console.log(this.$validator);
@@ -587,3 +600,9 @@ export default {
   },
 };
 </script>
+<style scoped>
+ul#vs95__listbox {
+  /* top: auto; */
+  bottom: 100%;
+}
+</style>

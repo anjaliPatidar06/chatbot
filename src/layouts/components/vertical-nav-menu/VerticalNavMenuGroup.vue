@@ -200,7 +200,7 @@ export default {
           return false
         }
         if(localStorage.user_role === 'Live Agent') {
-        console.log(group.name ,'group name')
+        // console.log(group.name ,'group name')
           if (group.name == 'User'){
           return false
         }

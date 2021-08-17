@@ -26,10 +26,9 @@ Vue.component("v-select", vSelect);
           </div>
           <div class="vx-col sm:w-1/3 w-full mb-2">
             <h6>Chatbot Heading</h6>
-
             <vs-input
               class="w-full"
-              v-validate="'required'"
+              v-validate="'required|max:14'"
               v-model="chatbotheading"
               name="chatbotheading"
               data-vv-validate-on="blur"
@@ -370,6 +369,7 @@ const dict = {
   custom: {
     chatbotheading: {
       required: "Please enter chatbot heading.",
+      max:"Chatbot heading may not be greater than 14 characters."
     },
     bot_name: {
       required: "Please enter chatbot name.",

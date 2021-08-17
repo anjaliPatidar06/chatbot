@@ -34,11 +34,7 @@
     <div class="flex flex-wrap justify-between" style="margin-top: 40px">
       <vs-button type="border" to="/register">Register</vs-button>
 
-      <vs-button
-        @click="loginJWT"
-        class="float-right"
-        type="filled"
-        color="primary"
+      <vs-button @click="loginJWT" class="float-right" type="filled" color="primary"
         >Login</vs-button
       >
     </div>
@@ -53,7 +49,7 @@ const dict = {
   custom: {
     email: {
       required: "Please enter your email",
-      email: "Please enter a valid email."
+      email: "Please enter a valid email.",
     },
     password: {
       required: "Please enter your password",
@@ -109,9 +105,6 @@ export default {
             .then((response) => {
               this.$vs.loading();
               this.email = response.data.msg;
-              console.log(response);
-              console.log(response.data, "datat from");
-              
               if (response.data.code == 100) {
                 this.$vs.notify({
                   color: "danger",
@@ -126,25 +119,23 @@ export default {
                 }, 2000);
               } else {
                 if (
-                response.data.User_Role == "Live Agent" ||
-                response.data.User_Role == "Chatbot Manager"
-              ) {
-               
+                  response.data.User_Role == "Live Agent" ||
+                  response.data.User_Role == "Chatbot Manager"
+                ) {
+                  localStorage.setItem(
+                    "chatbot_id",
+                    response.data.user_list[0].chatbot_id
+                  );
+                }
+                localStorage.setItem("company_id", response.data.user_list[0].company_id);
+                localStorage.setItem("user_role", response.data.User_Role);
+                localStorage.setItem("email", response.data.user_list[0].email);
+                localStorage.setItem("id", response.data.user_list[0].id);
                 localStorage.setItem(
-                  "chatbot_id",
-                  response.data.user_list[0].chatbot_id
+                  "logged_in_user_name",
+                  response.data.user_list[0].firstname
                 );
-              }
-               localStorage.setItem(
-                  "company_id",
-                  response.data.user_list[0].company_id
-                );
-              console.log(response.data,'login data')
-                  localStorage.setItem("user_role", response.data.User_Role);
-                  localStorage.setItem("email", response.data.user_list[0].email);
-                  localStorage.setItem("id", response.data.user_list[0].id);
-                  localStorage.setItem("logged_in_user_name", response.data.user_list[0].firstname);
-                  localStorage.setItem("trainingID", "");
+                localStorage.setItem("trainingID", "");
                 this.$vs.notify({
                   color: "success",
                   title: "Login Successful.",
@@ -158,6 +149,17 @@ export default {
                   // window.location.href = "/";
                 }, 2000);
               }
+            })
+            .catch((err) => {
+              setTimeout(() => {
+                this.$vs.loading.close("#div-with-loading > .con-vs-loading");
+              }, 1000);
+              this.$vs.notify({
+                text: "Please try again.",
+                title: "Failed to process your request.",
+                color: "danger",
+                position: "top-center",
+              });
             });
         }
       });
@@ -166,4 +168,3 @@ export default {
   },
 };
 </script>
-

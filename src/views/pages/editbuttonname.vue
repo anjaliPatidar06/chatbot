@@ -196,6 +196,7 @@ export default {
           })
           .then((response) => {
             this.entitycard = response.data.entity;
+            this.rowdata[0].entityvalue = "";
           });
       } else {
         this.entitycard = [];

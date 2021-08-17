@@ -1,8 +1,10 @@
+
+
 <template>
   <div class="vx-row">
     <!-- MULTIPLE COLUMNS-->
     <div class="vx-col w-full mb-base">
-      <vx-card title="Pdf">
+      <vx-card title="Video">
         <div class="vx-row">
           <div class="vx-col sm:w-1/3 w-full mb-2">
             <h6>Response Name</h6>
@@ -16,23 +18,13 @@
               :dir="$vs.rtl ? 'rtl' : 'ltr'"
             >
             </v-select>
-            <span class="text-danger text-sm"> {{ errors.first("response_name") }}</span>
-          </div>
-          <div class="vx-col sm:w-1/3 w-full mb-2">
-            <h6>Pdf Title</h6>
-            <vs-input
-              name="title"
-              v-validate="'required'"
-              data-vv-validate-on="blur"
-              class="w-full"
-              v-model="title"
-            ></vs-input>
-            <span class="text-danger text-sm"> {{ errors.first("title") }}</span>
+            <span class="text-danger text-sm">
+              {{ errors.first("response_name") }}</span
+            >
           </div>
         </div>
         <div class="vx-row">
           <div class="vx-col sm:w-1/3 w-full mt-2">
-            <!-- <h6>Pdf Upload</h6> -->
             <span>{{ selectedfile }}</span>
 
             <div class="vx-col w-full mb-2">
@@ -42,39 +34,42 @@
                   class="hidden"
                   @change="handleFileUpload"
                   ref="updateImgInputnewbackground"
-                  accept="pdf/*"
+                  accept="video/mp4,video/x-m4v,video/*"
                   v-validate="'required'"
-                  name="pdffile"
+                  name="videofile"
                   :dir="$vs.rtl ? 'rtl' : 'ltr'"
                 />
                 <vs-button
                   @click="$refs.updateImgInputnewbackground.click()"
                   icon-pack="feather"
                   icon="icon icon-upload"
-                  >Upload pdf</vs-button
+                  >Upload Video</vs-button
                 >
-                <span class="text-danger text-sm"> {{ errors.first("pdffile") }}</span>
+                <span class="text-danger text-sm">
+                  {{ errors.first("videofile") }}</span
+                >
                 <span class="text-danger text-sm" v-if="!IsValidFile"
-                  >Please select pdf files only.
+                  >Please select files in mp4 format only.
                 </span>
               </div>
             </div>
-            <div class="vx-col sm:w-1/3 w-full contained-example-container pt-2 pb-2">
-              <div id="div-with-loading" class="vs-con-loading__container">
-                <vs-button class="mr-3 mt-4" @click="addEvent1">Submit</vs-button>
-              </div>
+            <div class="vx-col sm:w-1/3 w-full">
+              <vs-button class="mr-3 mt-4" @click="addEvent1">Submit</vs-button>
             </div>
           </div>
         </div>
+          <div class="demo-alignment">
+        <div class="fill-row-loading">
+        <div :class="{'activeLoading':activeLoading}" id="loading-default" class="vs-con-loading__container loading-example">
+        </div></div></div>
       </vx-card>
     </div>
     <div class="vx-col w-full mb-base">
-      <vx-card title="Pdf Table" search>
+      <vx-card title="Video Table" search>
         <vs-table search max-items="10" pagination :data="rowdata">
           <template slot="thead">
             <vs-th style="width: 20%">Response Name</vs-th>
-            <vs-th style="width: 20%">Title</vs-th>
-            <vs-th style="width: 20%">Pdf</vs-th>
+            <vs-th style="width: 20%">Video</vs-th>
             <vs-th>Actions</vs-th>
           </template>
           <template slot-scope="{ data }">
@@ -82,15 +77,12 @@
               <vs-td :data="tr.response_name">
                 {{ tr.response_name }}
               </vs-td>
-              <vs-td :data="tr.title">
-                {{ tr.title }}
-              </vs-td>
-              <vs-td :data="tr.url">
-                <a :href="tr.url" target="_blank">{{ tr.url }}</a>
+              <vs-td :data="tr.video_path">
+                <a :href="tr.video_path" target="_blank">{{ tr.video_path }}</a>
               </vs-td>
               <vs-td>
                 <div class="flex">
-                  <vs-button
+                    <vs-button
                     @click="updateRecord(tr.id)"
                     type="filled"
                     color="warning"
@@ -127,23 +119,21 @@ import { Validator } from "vee-validate";
 
 const dict = {
   custom: {
-    pdffile: {
-      required: "Please upload a pdf",
+    videofile: {
+      required: "Please upload a video",
     },
     response_name: {
       required: "Please select response name",
-    },
-    title: {
-      required: "Please enter pdf title",
     },
   },
 };
 Validator.localize("en", dict);
 
 export default {
-  name: "pdf",
+  name: "videoComponent",
   data() {
     return {
+          activeLoading:false,
       responsename: "",
       rowdata: [],
       responsedata: [],
@@ -176,17 +166,21 @@ export default {
   },
   mounted() {
     this.getResponseData();
-    this.getPdfList();
+    this.getVideoList();
   },
   methods: {
     handleFileUpload() {
       this.file1 = this.$refs.updateImgInputnewbackground.files[0];
-      if (this.file1.type !== "application/pdf") {
+      console.log(this.file1.type, "this.file1.type");
+      if (this.file1.type !== "video/mp4") {
+        // if((this.file1.type != 'video/webm')|| (this.file1.type != 'video/mp4')|| (this.file1.type != 'video/MPEG-2') ||
+        // (this.file1.type != 'video/mov') || (this.file1.type != 'video/wmv')) {
         this.IsValidFile = false;
         return;
       } else {
         this.IsValidFile = true;
-        this.selectedfile = this.$refs.updateImgInputnewbackground.files[0].name;
+        this.selectedfile =
+          this.$refs.updateImgInputnewbackground.files[0].name;
         this.selectedfilePath = this.selectedfile;
         this.createBase64Image(this.file1);
       }
@@ -198,7 +192,6 @@ export default {
       reader.onload = (e) => {
         this.file1 = "";
         this.file1 = e.target.result;
-        this.rowdata[0].image_path = e.target.result;
       };
     },
     getResponseData() {
@@ -213,28 +206,26 @@ export default {
           this.responsedata = response.data.response1;
         });
     },
-    getPdfList() {
-      if (localStorage.chatbot_id) {
-        axios
-          .post(Base_URL.Actual_URL + "pdf_data", {
-            company_id: localStorage.company_id,
-            chatbot_id: localStorage.chatbot_id,
-          })
-          .then((response) => {
-            this.rowdata = response.data.pdf_Data;
-          });
-      }
+    getVideoList() {
+      axios
+        .post(Base_URL.Actual_URL + "video_data", {
+          company_id: localStorage.company_id,
+          chatbot_id: localStorage.chatbot_id,
+        })
+        .then((response) => {
+          this.rowdata = response.data.Video_Data;
+        });
     },
     updateRecord: function (index) {
       this.$router.push({
-        name: "edit-pdf",
+        name: "editvideo",
         params: { id: index },
       });
     },
     deleteTableRow: function (idx) {
       axios
-        .post(Base_URL.Actual_URL + "delete_pdf", {
-          pdf_id: idx,
+        .post(Base_URL.Actual_URL + "deleteVideo", {
+          idx: idx,
         })
         .then(() => {
           this.$vs.notify({
@@ -243,7 +234,7 @@ export default {
             text: "The selected Record was successfully deleted",
             position: "top-center",
           });
-          this.getPdfList();
+          this.getVideoList();
           this.counter--;
           this.rowdata.splice(idx, 1);
         });
@@ -253,61 +244,87 @@ export default {
     addEvent1() {
       this.$validator.validateAll().then((result) => {
         if (result) {
-          this.$vs.loading({
-            container: "#div-with-loading",
-            scale: 0.6,
-          });
-          var chatbot_id = localStorage.getItem("chatbot_id");
-          axios
-            .post(Base_URL.Actual_URL + "upload_pdf", {
-              chatbot_id: chatbot_id,
-              company_id: localStorage.company_id,
-              title: this.title,
-              pdf_base: this.file1,
-              pdf_name: this.selectedfile,
-              chatbot_name: localStorage.chatbotname,
-              response_name: this.responsename.responsename,
-            })
-            .then((response) => {
-              setTimeout(() => {
-                this.$vs.loading.close("#div-with-loading > .con-vs-loading");
-              }, 500);
-              if (response.data.code == 200) {
-                this.$emit("updatePdfComponent");
-                this.getPdfList();
-                this.title = "";
-                this.selectedfile = "";
-                this.file1 = "";
-                this.responsename = "";
-                this.$vs.notify({
-                  color: "success",
-                  title: "Data Saved",
-                  text: "Data saved successfully.",
-                  position: "top-center",
-                });
-              }
-              if (response.data.code == 100) {
-                this.$vs.notify({
-                  color: "warning",
-                  text: response.data.message,
-                  position: "top-center",
-                });
-              }
-            })
-            .catch((err) => {
-              setTimeout(() => {
-                this.$vs.loading.close("#div-with-loading > .con-vs-loading");
-              }, 1000);
+       this.activeLoading = true
+      this.$vs.loading({
+                container: `#loading-default`,
+        type:'default',
+      })
+          // var chatbot_id = localStorage.getItem("chatbot_id");
+          var body = {
+            video_base64: this.file1,
+            video_path: this.selectedfile,
+            responsename: this.responsename.responsename,
+            company_id: localStorage.company_id,
+            chatbot_id: localStorage.chatbot_id,
+          };
+          console.log(body, "body");
+          axios.post(Base_URL.Actual_URL + "video", body).then((response) => {
+            if (response.data.code == 200) {
+                  setTimeout( ()=> {
+        this.activeLoading = false
+        this.$vs.loading.close()
+      }, 3000);
+
+              this.$emit("updateVideoComponent");
+              this.getVideoList();
+              this.title = "";
+              this.selectedfile = "";
+              this.file1 = "";
+              this.responsename = "";
               this.$vs.notify({
-                text: "Please try again.",
-                title: "Failed to process your request.",
-                color: "danger",
+                color: "success",
+                title: "Data Saved",
+                text: "Data saved successfully.",
                 position: "top-center",
               });
-            });
+            }
+
+            if (response.data.code == 100) {
+              this.$vs.notify({
+                color: "warning",
+                text: response.data.result,
+                position: "top-center",
+              });
+            }
+          });
         }
       });
     },
   },
 };
 </script>
+
+<style lang="scss" scoped>
+
+.fill-row-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+   .loading-example {
+    width: 120px;
+    float: left;
+    height: 120px;
+    box-shadow: 0px 5px 20px 0px rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+    margin: 8px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    &:hover {
+      box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.05);
+      transform: translate(0, 4px);
+    }
+    h4 {
+      z-index: 40000;
+      position: relative;
+      text-align: center;
+      padding: 10px;
+    }
+    &.activeLoading {
+      opacity: 0 !important;
+      transform: scale(0.5);
+    }
+  }
+}
+  </style>
+

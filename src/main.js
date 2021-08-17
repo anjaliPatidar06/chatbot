@@ -120,6 +120,11 @@ Vue.use(visibility);
 // require("vue-chat-emoji/dist/vue-chat-emoji.min.css");
 
 // Vue.use(Emoji);
+import VueClipboard from 'vue-clipboard2'
+
+Vue.use(VueClipboard)
+import vueCountryRegionSelect from 'vue-country-region-select'
+Vue.use(vueCountryRegionSelect)
 
 Vue.use(new VueSocketIO({
   debug: true,

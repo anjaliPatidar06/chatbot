@@ -15,7 +15,6 @@
               v-validate="'required'"
               :options="responsedata"
               v-model="responsename"
-              :dir="$vs.rtl ? 'rtl' : 'ltr'"
             >
             </v-select>
             <span class="text-danger text-sm">
@@ -229,9 +228,17 @@ export default {
         .then((response) => {
           this.rowdata = response.data.userlist;
           this.newsentence = response.data.sentence;
-          this.responsedata = response.data.response1;
+          // this.responsedata = response.data.response1;
           this.buttonnew = response.data.button;
         });
+         axios
+        .post(Base_URL.Actual_URL + "entityintentdropdown", {
+          company_id: localStorage.company_id,
+          chatbot_id: chatbot_id,
+        })
+        .then((response) => {
+          this.responsedata = response.data.response1;
+        })
     },
 
     updateRecord: function (index) {
@@ -272,6 +279,7 @@ export default {
           })
           .then((response) => {
             this.entitycard = response.data.entity;
+            this.assignentityvalue = ""
           });
       } else {
         this.assignentity = "";

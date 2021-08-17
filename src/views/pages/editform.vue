@@ -167,7 +167,7 @@ export default {
 <script>
 import axios from "axios";
 import vSelect from "vue-select";
-import { Base_URL, API_List } from "../../../api.config";
+import { Base_URL } from "../../../api.config";
 
 export default {
   data() {

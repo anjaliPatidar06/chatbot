@@ -23,9 +23,9 @@
               </v-select>
             </div>
           </div>
-        </div> --> 
-      <div class="float-right">
-        <date-picker v-model="time3" range  @change="filterData" placeholder="Choose a date"></date-picker></div>
+        </div> -->
+      
+      <div class="float-right"><date-picker v-model="time3" range  @change="filterData" placeholder="Choose a date"></date-picker></div>
         <div id="div-with-loading" class="vs-con-loading__container">
           <vs-table
             pagination
@@ -94,6 +94,7 @@
                   {{ row.value }}
                 </vs-td>
                                  <vs-td v-if="row.key == 'sender_id'" style="background: lightgrey;">{{ row.value }}</vs-td>
+
               </vs-tr>
             </template>
           </vs-table>
@@ -146,9 +147,9 @@ var selectedRowData;
 var selectform;
 var dateExist;
 import html2canvas from "html2canvas";
+import JSPDF from "jspdf";
 import CsvExportor from "csv-exportor";
-import jsPDF from 'jspdf'
-import 'jspdf-autotable'
+import "jspdf-autotable";
   import DatePicker from 'vue2-datepicker';
   import 'vue2-datepicker/index.css';
   var moment = require("moment-timezone");
@@ -178,15 +179,12 @@ export default {
       from_date:'',
       to_date:'',
         time3: null,
-        form_name:[],
-        allData:[],
     };
   },
   computed: {},
   mounted() {
     if (localStorage.chatbot_id !== undefined && localStorage.chatbot_id !== null) {
       this.getFormData();
-      this.getDataForExport()
       this.$vs.loading({
         container: "#div-with-loading",
         scale: 0.6,
@@ -197,28 +195,23 @@ export default {
       components: { DatePicker },
 
   methods: {
-    getDataForExport() {
-      axios
-          .post(Base_URL.Actual_URL + "Lead_ip_wise_pdf", {
-            chatbot_id: localStorage.chatbot_id,
-            company_id: localStorage.company_id,
-            from_date: this.from_date,
-            to_date: this.to_date
-          })
-          .then((response) => {
-            // console.log(response,'pdf response')
-            this.allData = []
-            this.allData = response.data.Data
-           
-      })
-    },
+    //     downLoadPdf() {
+    //     var pdf = new JSPDF();
+    //     var element = document.getElementById('pdfContent');
+    //     var width= element.style.width;
+    //     var height = element.style.height;
+    //     html2canvas(element).then(canvas => {
+    //         var image = canvas.toDataURL('image/png');
+    //                      pdf.addImage(page.toDataURL("image/jpeg", 1.0), "JPEG", 10, 10, a4w, Math.min(a4h, a4w * page.height / page.width)) // Add image to the page , Keep 10mm margin
+    //         pdf.save('facture.pdf');
+    //     });
+    // },
     filterData(e) {
       console.log(e[0],'e')
       console.log(moment(e[0]).format("DD-MMM-YYYY"))
       this.from_date = moment(e[0]).format("DD-MMM-YYYY")
       this.to_date = moment(e[1]).format("DD-MMM-YYYY")
       this.getFormData();
-      this.getDataForExport()
     },
     makeFinalArrData() {
       let arrNew = [this.newData];
@@ -241,88 +234,147 @@ export default {
       }
     },
     ExportAsCSV() {
-        var heads = []
-            var rows =[]
-            var body1 = []
-            let columnLength = 0     
-            this.allData.forEach((element, index1) => {
-                 for (const [key, value,index] of Object.entries(element)) {
-                   console.log(key, value,'key value')
-                   body1.push(value);
-                   if (index1 == 0) {
-                     heads.push(key);
-                   }
-              }
-              columnLength = Object.entries(heads).length;
-              rows.push(body1);
-              body1 = [];
-            })
+      // let heads = [ 'name', 'mark', "age"] // csv head table
+      // let csvData = [] // csv table
+      // let arrNew = [
+      //     {name:"111", mark: "wowo", age: "30" },
+      //     {name:"222", mark: "nnn", age: "30" },
+      //     {name:"333", mark: "ttt", age: "30" },
+      // ]
+      // for(let i=0; i<arrNew.length; i++) {
+      //     let obj = arrNew [i]; // for each row is obj
+      //     csvData.push({
+      //       [this.heads[0]]: obj.name,
+      //       [this.heads[1]]: obj.mark,
+      //                 [this.heads[2]]: obj.age,
+      //     })
+      //   }
+      //   console.log(csvData,'csvData')
+      // // Export csv file:
+      // CsvExportor.downloadCsv(
+      //   csvData,
+      //   { header: this.heads },
+      //   'File .csv'
+      // )
+      let arrNew = [this.newData];
       let csvData = []; // csv table
       // this.makeFinalArrData()
-      // for (let i = 0; i < this.allData.length; i++) {
-        csvData = rows;
-      // }
-      CsvExportor.downloadCsv(csvData, { header: heads }, "lead.csv");
+      for (let i = 0; i < this.finalArr.length; i++) {
+        let obj = arrNew[i]; // for each row is obj
+        csvData = this.finalArr;
+      }
+      CsvExportor.downloadCsv(csvData, { header: this.heads }, "lead.csv");
     },
     downLoadPdf() {
-     var heads = []
-            var rows =[]
-            var body1 = []
-            let columnLength = 0     
-            this.allData.forEach((element, index1) => {
-                 for (const [key, value,index] of Object.entries(element)) {
-                   console.log(key, value,'key value')
-                   body1.push(value);
-                   if (index1 == 0) {
-                     heads.push(key);
-                   }
-              }
-              columnLength = Object.entries(heads).length;
-              rows.push(body1);
-              body1 = [];
-            })
-              if (columnLength > 14) {
-              const doc = new jsPDF("l", "mm", [800, 210]);
-              doc.autoTable({
-                styles: { minCellWidth: 30 },
-                head: [heads],
-                body: rows,
-              });
-              doc.save("table.pdf");
-            }
-            if (columnLength > 6 && columnLength < 10) {
-              console.log("if 2",heads,rows);
-              const doc = new jsPDF("l", "mm", [400, 210]);
-              doc.autoTable({
-                styles: { minCellWidth: 30 },
-                head: [heads],
-                body: rows,
-              });
-              console.log(doc.save("table.pdf"),'doc')
-              doc.save("table.pdf");
-            }
-            if (columnLength > 10 && columnLength < 14) {
-              console.log("if 3");
-              const doc = new jsPDF("l", "mm", [600, 210]);
-              doc.autoTable({
-                styles: { minCellWidth: 30 },
-                //      columnStyles: {
-                // 0: { cellWidth: 20 },1:{ cellWidth: 50}
-                //      },
-                head: [heads],
-                body: rows,
-              });
-              doc.save("table.pdf");
-            }
-          if (columnLength <= 5) {
-            const doc = new jsPDF();
-            doc.autoTable({
-              styles: { minCellWidth: 30 },
-              head: [heads],
-              body: rows,
-            });
-            doc.save("table.pdf");
-            }     
+      console.log('heyy, doqnload',this.finalArr.length)
+      let body1 = [];
+      let row = [];
+      let columnLength = 0;
+      for (let i = 0; i < this.finalArr.length; i++) {
+        for (const [key, value,index] of Object.entries(this.finalArr[i])) {
+        
+            body1.push(value);
+            columnLength = Object.entries(this.finalArr[i]).length;
+        }
+        row.push(body1);
+        body1 = [];
+
+      }
+      if (columnLength > 14) {
+        const doc = new JSPDF("l", "mm", [800, 210]);
+        doc.autoTable({
+          styles: { minCellWidth: 30 },
+          head: [this.heads],
+          body: row,
+        });
+        doc.save("table.pdf");
+      }
+      if (columnLength > 6 && columnLength < 10) {
+        console.log("if 2");
+        const doc = new JSPDF("l", "mm", [400, 210]);
+        doc.autoTable({
+          styles: { minCellWidth: 30 },
+          head: [this.heads],
+          body: row,
+        });
+        doc.save("table.pdf");
+      }
+      if (columnLength > 10 && columnLength < 14) {
+        console.log("if 3");
+        const doc = new JSPDF("l", "mm", [600, 210]);
+        doc.autoTable({
+          styles: { minCellWidth: 30 },
+          //      columnStyles: {
+          // 0: { cellWidth: 20 },1:{ cellWidth: 50}
+          //      },
+          head: [this.heads],
+          body: row,
+        });
+        doc.save("table.pdf");
+      }
+        //     if (columnLength <= 5) {
+        //          const doc = new JSPDF();
+        // doc.autoTable({
+        //   styles: { minCellWidth: 30 },
+        //   head: [this.heads],
+        //   body: row,
+        // });
+        // doc.save("table.pdf");
+        //     }
+      console.log(columnLength,'columnLength')
+      // Or use javascript directly:
+      // doc.autoTable({
+      //       columnStyles: { halign: 'center'},
+      //       // rowStyles:{cellWidth:'30px'} ,
+      //        bodyStyles: {
+      //     valign: 'top'
+      // },
+      //        styles: {
+      //     cellWidth: 'wrap',
+      //     rowPageBreak: 'auto',
+      //     halign: 'justify'
+      // },// Cells in first column centered and green
+      //  columnStyles: {
+      //     text: {
+      //         cellWidth: 'auto'
+      //     }
+      // },
+      // styles:{ minCellWidth:40 },
+
+      //   head: [this.heads],
+      //   body: row
+      // })
+
+      // doc.save('table.pdf')
+      // var pdf = new JSPDF("p", "mm", "a4")
+      // html2canvas(element, {
+      //   logging: false
+      // }).then(function (canvas) {
+      //            var pdf = new JSPDF("p", "mm", "a4") // A4 paper, portrait
+      //   var ctx = canvas.getContext("2d")
+      //            var a4w = 170; var a4h = 257 // A4 size, 210mm x 297mm, 20mm margin on each side, display area 170x257
+      //            var imgHeight = Math.floor(a4h * canvas.width / a4w) // Convert the pixel height of a page image according to the A4 display ratio
+      //   var renderedHeight = 0
+
+      //   while (renderedHeight < canvas.height) {
+      //     var page = document.createElement("canvas")
+      //     page.width = canvas.width
+      //                page.height = Math.min(imgHeight, canvas.height-renderedHeight)// may be less than one page
+
+      //                // Use getImageData to crop the specified area and draw it to the canvas object created earlier
+      //     page.getContext("2d").putImageData(ctx.getImageData(0, renderedHeight, canvas.width, Math.min(imgHeight, canvas.height - renderedHeight)), 0, 0)
+      //                pdf.addImage(page.toDataURL("image/jpeg", 1.0), "JPEG", 15, 15, a4w, Math.min(a4h, a4w * page.height / page.width)) // Add image to the page , Keep 10mm margin
+
+      //     renderedHeight += imgHeight
+      //                if (renderedHeight <canvas.height) {pdf.addPage() }// If there is content behind, add an empty page
+      //     // delete page;
+      //   }
+
+      // pdf.save('leads')
+      // })
+      //  setTimeout(() => {
+      //     this.$vs.loading.close("#div-with-loading > .con-vs-loading");
+      //   }, 500);
     },
     getFormData() {
       axios
@@ -336,10 +388,17 @@ export default {
           var test = [];
           this.newData = []
           test = response.data;
-          this.form_name = response.data.Form_list
+          // console.log(test ,typeof response.data)
+          //  for(let i in response.data) {
+          //    console.log(i ,'iiiiiiiiii')
+          //  }
+          // response.data.forEach(element => {
+          //   console.log(element,'element')
+          // });
           setTimeout(() => {
             this.$vs.loading.close("#div-with-loading > .con-vs-loading");
           }, 1000);
+          // this.formData = response.data.Data;
           if (Array.isArray(response.data.Data)) {
             var count = 0;
             this.dateExist = false;
@@ -376,6 +435,10 @@ export default {
               }
               // console.log(this.dateExist,columnCount,'columnCount')
               if (this.dateExist == false && columnCount > 4) {
+                console.log(
+                  element.Date_of_Creation,
+                  "element.Date_of_Creation\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\+++"
+                );
                 this.leadRowdata.splice(5, 0, {
                   key: "Date_of_Creation",
                   value: element.Date_of_Creation,

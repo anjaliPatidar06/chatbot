@@ -17,7 +17,7 @@ Vue.use(Router)
 console.log('hey user type');
 function guardMyroute(to, from, next) {
   
-  console.log(router.apps, 'to from router')
+  // console.log(router.apps, 'to from router')
   var isAuthenticated = false;
   if (localStorage.getItem('email'))
     isAuthenticated = true;
@@ -27,6 +27,7 @@ function guardMyroute(to, from, next) {
     next(); // allow to enter route
   }
   else {
+    // next('/subscription');
     next('/login');
 
   }
@@ -231,6 +232,16 @@ var router = new Router({
           path: '/pdf',
           name: 'pdf',
           component: () => import('./views/pages/pdf.vue')
+        },
+        {
+          path: '/video',
+          name: 'video',
+          component: () => import('./views/pages/videoComponent.vue')
+        },
+        {
+          path: '/edit/video/:id',
+          name: 'editvideo',
+          component: () => import('./views/pages/editVideo.vue')
         },
         {
           path: '/edit/pdf/:id',
@@ -537,7 +548,11 @@ var router = new Router({
           name: 'collected-leads',
           component: () => import('./views/pages/forms.vue'),
         },
-
+        {
+          path: '/featured',
+          name: 'featured',
+          component: () => import('./views/pages/featured.vue'),
+        },
       ],
     },
 
@@ -551,6 +566,11 @@ var router = new Router({
         // =============================================================================
         // PAGES
         // =============================================================================
+        {
+          path: '/subscription',
+          name: 'subscription',
+          component: () => import('@/views/pages/subscription.vue'),
+        },
         {
           path: '/login',
           name: 'page-login',
@@ -597,6 +617,7 @@ var router = new Router({
           name: 'email',
           component: () => import('@/views/pages/email.vue'),
         },
+       
       ]
     },
     // Redirect to 404 page, if no match found

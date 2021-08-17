@@ -438,6 +438,14 @@ export default {
               name: "Intent",
             });
           }
+          if (response.data.code == 100) {
+            this.msg = response.data.status;
+            this.$vs.notify({
+              title: this.msg,
+              color: "danger",
+              position: "top-center",
+            });
+          }
         });
     },
     resetForm() {

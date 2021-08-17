@@ -101,7 +101,6 @@ export default {
           return false
         }
       } else if(localStorage.user_role == 'Chatbot Manager') {
-        console.log(to ,'to')
         if (to == "/Buy") {
           return false
         }
@@ -109,6 +108,10 @@ export default {
           return false
         }
          
+      }else if(localStorage.user_role == 'Admin') { 
+        if (to == "/Chat") {
+          return false
+        }
       }
         return true
     }

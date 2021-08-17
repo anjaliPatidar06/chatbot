@@ -288,6 +288,7 @@ export default {
           })
           .then((response) => {
             this.entitycard = response.data.entity;
+            this.assignentityvaluedropdown = "";
           });
       } else {
         this.assignentitydropdown = "";

@@ -117,7 +117,6 @@
               class="w-full"
               v-model="title2"
               name="title2"
-              v-validate="'required'"
               data-vv-validate-on="blur"
               :dir="$vs.rtl ? 'rtl' : 'ltr'"
             ></vs-input>
@@ -131,7 +130,6 @@
               class="w-full"
               v-model="Payload"
               name="Payload"
-              v-validate="'required'"
               data-vv-validate-on="blur"
               :dir="$vs.rtl ? 'rtl' : 'ltr'"
             ></vs-input>
@@ -202,9 +200,10 @@
             </div>
           </div>
         </div>
-
-        <div class="vx-col sm:w-1/3 w-full">
-          <vs-button class="mr-3 mt-4" @click="addEvent5">Submit</vs-button>
+        <div class="vx-col sm:w-1/3 w-full contained-example-container pt-2 pb-2">
+          <div id="div-with-loading" class="vs-con-loading__container">          
+            <vs-button class="mr-3 mt-4" @click="addEvent5">Submit</vs-button>
+        </div>
         </div>
       </vx-card>
     </div>
@@ -293,38 +292,38 @@ import { Base_URL } from "../../../api.config";
 import { Validator } from "vee-validate";
 
 const dict = {
-    custom: {
-  cardname: {
-    required: "Please enter card name.",
+  custom: {
+    cardname: {
+      required: "Please enter card name.",
+    },
+    description: {
+      required: "Please enter description",
+    },
+    cardimage: {
+      required: "Please select card image",
+    },
+    entity_value: {
+      required: "Please select entity value",
+    },
+    entity_key: {
+      required: "Please select entity key",
+    },
+    intent: {
+      required: "Please select intent",
+    },
+    response_name: {
+      required: "Please select response name",
+    },
+    btn_title: {
+      required: "Please enter button title",
+    },
+    title2: {
+      required: "Please enter button 2 title",
+    },
+    Payload: {
+      required: "Please enter button 2 payload",
+    },
   },
-  description: {
-    required: "Please enter description",
-  },
-  cardimage: {
-    required: "Please select card image",
-  },
-  entity_value: {
-    required: "Please select entity value",
-  },
-  entity_key: {
-    required: "Please select entity key",
-  },
-  intent: {
-    required: "Please select intent",
-  },
-  response_name: {
-    required: "Please select response name",
-  },
-  btn_title: {
-    required: "Please enter button title",
-  },
-  title2: {
-    required: "Please enter button 2 title",
-  },
-  Payload: {
-    required: "Please enter button 2 payload",
-  },
-    }
 };
 Validator.localize("en", dict);
 var responsename;
@@ -332,11 +331,11 @@ export default {
   name: "card-component",
   data() {
     return {
-      Payload:'',
-      title:"",
+      Payload: "",
+      title: "",
       rowdata: [],
       name: "",
-      responsename:"",
+      responsename: "",
       title: "",
       namecard: "",
       Imagecard: "",
@@ -413,7 +412,7 @@ export default {
         })
         .then((res) => {
           this.getCardList();
-                this.counter--;
+          this.counter--;
           this.rowdata.splice(idx, 1);
           this.$vs.notify({
             color: "danger",
@@ -421,22 +420,22 @@ export default {
             text: "The selected Record was successfully deleted",
             position: "top-center",
           });
-    
         });
     },
     RefreshGrid: function (e) {
       if (e !== null) {
-      var newemail = localStorage.getItem("email");
-      var chatbot_id = localStorage.getItem("chatbot_id");
-      axios
-        .post(Base_URL.Actual_URL + "entityvalue", {
-          chatbot_id: chatbot_id,
-          company_id: localStorage.company_id,
-          entity_key: e.Entitykey,
-        })
-        .then((response) => {
-          this.entitycard = response.data.entity;
-        });
+        var newemail = localStorage.getItem("email");
+        var chatbot_id = localStorage.getItem("chatbot_id");
+        axios
+          .post(Base_URL.Actual_URL + "entityvalue", {
+            chatbot_id: chatbot_id,
+            company_id: localStorage.company_id,
+            entity_key: e.Entitykey,
+          })
+          .then((response) => {
+            this.entitycard = response.data.entity;
+            this.assignentityvaluecard = "";
+          });
       } else {
         this.assignentityvaluecard = "";
         this.assignentitycard = "";
@@ -459,6 +458,10 @@ export default {
     addEvent5() {
       this.$validator.validateAll().then((result) => {
         if (result) {
+          this.$vs.loading({
+            container: "#div-with-loading",
+            scale: 0.6,
+          });
           const reader = new FileReader();
           var newemail = localStorage.getItem("email");
           var chatbot_id = localStorage.getItem("chatbot_id");
@@ -481,15 +484,18 @@ export default {
               this.assignentityvaluecard,
             addresponse: this.responsename.responsename,
             title_2: this.title2,
-            payload_2 : this.Payload
+            payload_2: this.Payload,
           };
           axios
             .post(Base_URL.Actual_URL + "cardvalue", body)
             .then((response) => {
+              setTimeout(() => {
+                this.$vs.loading.close("#div-with-loading > .con-vs-loading");
+              }, 500);
               if (response.data.code == 100) {
                 this.message = response.data.message;
                 this.getCardList();
-                this.$emit('updateCardComponent')
+                this.$emit("updateCardComponent");
                 this.$vs.notify({
                   color: "success",
                   title: "Card data added.",
@@ -504,4 +510,3 @@ export default {
   },
 };
 </script>
-

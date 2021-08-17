@@ -1,5 +1,3 @@
-
-
 <template>
   <div class="vx-row">
     <!-- MULTIPLE COLUMNS-->
@@ -56,6 +54,7 @@
                 contenteditable
                 class="sm:w-1/2"
                 @input="checkError"
+                @paste="onPaste1"
                 v-html="rowdata[0].text"
               ></div>
 
@@ -113,6 +112,7 @@
                 contenteditable
                 class="sm:w-1/2"
                 v-html="rowdata[0].textnew"
+                @paste="onPaste2"
               ></div>
 
               <div class="sm:w-1/2">
@@ -131,7 +131,9 @@
                   <i class="fa fa-chevron-down" aria-hidden="true"></i>
                 </vs-button>
 
-                <vs-button @click="makeBold2('editor2')" style="border-radius: 0"
+                <vs-button
+                  @click="makeBold2('editor2')"
+                  style="border-radius: 0"
                   ><i class="fa fa-bold fa-lg" aria-hidden="true"></i
                 ></vs-button>
                 <vs-button
@@ -176,13 +178,13 @@ import { Validator } from "vee-validate";
 const dict = {
   custom: {
     response_name: {
-      required: "Please enter response name",
+      required: "Please enter response name"
       // alpha: "Your first name may only contain alphabetic characters",
     },
     response_text: {
-      required: "Please enter response Text",
-    },
-  },
+      required: "Please enter response Text"
+    }
+  }
 };
 Validator.localize("en", dict);
 import axios from "axios";
@@ -197,7 +199,7 @@ export default {
       rowdata: {
         responsename: "",
         text: "",
-        textnew: "",
+        textnew: ""
       },
       name: "",
       company: "",
@@ -209,14 +211,14 @@ export default {
       selectedCountry: "",
       selectedCountry1: "",
       showEmojis: false,
-      checkError: false,
-      showEmojis2: false,
+      // checkError: false,
+      showEmojis2: false
     };
   },
 
   components: {
     "v-select": vSelect,
-    VEmojiPicker,
+    VEmojiPicker
   },
   computed: {
     validateForm() {
@@ -225,18 +227,58 @@ export default {
         this.rowdata[0].responsename.length > 0 &&
         this.rowdata[0].text.length > 0
       );
-    },
+    }
   },
   mounted() {
-    const url = Base_URL.Actual_URL + "editresponsename/";
-    const id = this.$route.params.id;
-    const url1 = url + id;
-    axios.get(url1, {}).then((response) => {
-      this.rowdata = response.data.userlist;
-      // document.getElementById('editor1').innerHTML = this.rowdata[0].text
-    });
+    this.entityData();
+    // this.onPaste1()
+    // this.onPaste2()
   },
   methods: {
+    entityData() {
+      const url = Base_URL.Actual_URL + "editresponsename/";
+      const id = this.$route.params.id;
+      const url1 = url + id;
+      axios.get(url1, {}).then(response => {
+        this.rowdata = response.data.userlist;
+      });
+    },
+    onPaste1(e) {
+      //  alert('paste111')
+      //        var ce = document.querySelector("div#editor1");
+
+      //   ce.addEventListener("paste", function (e) {
+      e.preventDefault();
+      //   console.log('isndie paste')
+      //   var text = e.clipboardData.getData("text/plain");
+      //   document.execCommand("insertText", false, text);
+      // });
+      var text = e.clipboardData.getData("text/plain");
+      document.execCommand("insertText", false, text);
+    },
+    onPaste2(e) {
+      e.preventDefault();
+      var text = e.clipboardData.getData("text/plain");
+      document.execCommand("insertText", false, text);
+      // var ce = document.querySelector("div#editor2");
+      // console.log(ce,'cece')
+      // ce.addEventListener("paste", function (e) {
+      //   console.log('isnide paste 2')
+      //   // e.preventDefault();
+      //   var text = e.clipboardData.getData("text/plain");
+      //   document.execCommand("insertText", false, text);
+      // });
+    },
+    checkError() {
+      if (
+        document.getElementById("editor1").innerHTML == "" ||
+        document.getElementById("editor1").innerHTML == null
+      ) {
+        this.response_error = true;
+      } else {
+        this.response_error = false;
+      }
+    },
     selectionIsBold() {
       var isBold = false;
       if (document.queryCommandState) {
@@ -257,20 +299,17 @@ export default {
       return html;
     },
     makeBold2(Id) {
-         if (Id == "editor2") {
+      if (Id == "editor2") {
         var state = document.queryCommandState("bold");
         switch (state) {
           case true:
-            // alert("The bold formatting will be removed from the selected text.");
             break;
           case false:
-            // alert("The selected text will be displayed in bold.");
             break;
           case null:
-            // alert("The state of the 'bold' command is indeterminable.");
             break;
         }
-        document.execCommand('bold');
+        document.execCommand("bold");
       }
     },
     makeBold(Id) {
@@ -278,50 +317,41 @@ export default {
         var state = document.queryCommandState("bold");
         switch (state) {
           case true:
-            // alert("The bold formatting will be removed from the selected text.");
             break;
           case false:
-            // alert("The selected text will be displayed in bold.");
             break;
           case null:
-            // alert("The state of the 'bold' command is indeterminable.");
             break;
         }
-        document.execCommand('bold');
+        document.execCommand("bold");
       }
     },
     makeItalic(Id) {
-        if (Id == "editor1") {
+      if (Id == "editor1") {
         var state = document.queryCommandState("italic");
         switch (state) {
           case true:
-            // alert("The bold formatting will be removed from the selected text.");
             break;
           case false:
-            // alert("The selected text will be displayed in bold.");
             break;
           case null:
-            // alert("The state of the 'bold' command is indeterminable.");
             break;
         }
-        document.execCommand('italic');
+        document.execCommand("italic");
       }
     },
     makeItalic2(Id) {
-        if (Id == "editor2") {
+      if (Id == "editor2") {
         var state = document.queryCommandState("italic");
         switch (state) {
           case true:
-            // alert("The bold formatting will be removed from the selected text.");
             break;
           case false:
-            // alert("The selected text will be displayed in bold.");
             break;
           case null:
-            // alert("The state of the 'bold' command is indeterminable.");
             break;
         }
-        document.execCommand('italic');
+        document.execCommand("italic");
       }
     },
     // fontBold(Id) {
@@ -410,7 +440,7 @@ export default {
       this.showEmojis2 = false;
     },
     selectEmoji2(emoji) {
-      document.getElementById('editor2').focus();
+      document.getElementById("editor2").focus();
       if (window.getSelection) {
         // IE9 and non-IE
         sel = window.getSelection();
@@ -443,11 +473,10 @@ export default {
         // IE < 9
         document.selection.createRange().pasteHTML(emoji.data);
       }
-
     },
     selectEmoji1(emoji) {
       var sel, range;
-      document.getElementById('editor1').focus();
+      document.getElementById("editor1").focus();
       if (window.getSelection) {
         // IE9 and non-IE
         sel = window.getSelection();
@@ -485,7 +514,7 @@ export default {
       this.showEmojis2 = true;
     },
     Update() {
-      this.$validator.validateAll().then((result) => {
+      this.$validator.validateAll().then(result => {
         if (result) {
           const url = Base_URL.Actual_URL + "editresponsename/";
           const id = this.$route.params.id;
@@ -494,9 +523,9 @@ export default {
             .post(url1, {
               responsename: this.rowdata[0].responsename,
               text: document.getElementById("editor1").innerHTML,
-              textnew: document.getElementById("editor2").innerHTML,
+              textnew: document.getElementById("editor2").innerHTML
             })
-            .then((response) => {
+            .then(response => {
               this.msg = response.data.msg;
 
               if (response.data.code == 200) {
@@ -505,16 +534,23 @@ export default {
                   title: "Edit Response ",
                   text: "The Response data is updated",
                   color: "success",
-                  position: "top-center",
+                  position: "top-center"
                 });
                 EventBus.$emit("selectedComponent", "responseEvent");
                 this.$router.go(-1);
               }
+               if (response.data.code == 100) {
+                    this.$vs.notify({
+                    color: "danger",
+                    title: response.data.result,
+                    position: "top-center",
+                  });
+                }
             });
         }
       });
-    },
-  },
+    }
+  }
 };
 </script>
 

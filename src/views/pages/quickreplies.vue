@@ -275,6 +275,7 @@ export default {
           })
           .then((response) => {
             this.entitycard = response.data.entity;
+            // this.assignentityvaluequickreplies = "";
           });
       } else {
         this.assignentityquickreplies = "";

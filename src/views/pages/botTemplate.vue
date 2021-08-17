@@ -75,6 +75,13 @@
         @click="selectButton('pdfEvent')"
         >Pdf</vs-button
       >
+      <vs-button
+        type="filled"
+        :color="videoEvent ? 'warning' : 'primary'"
+        class="ml-12 mt-2 mb-2"
+        @click="selectButton('videoEvent')"
+        >Video</vs-button
+      >
       <div class="mt-2">
         <responses v-if="responseEvent == true"></responses>
         <dropdown
@@ -122,6 +129,8 @@
           :key="pdfComponentKey"
           @updatePdfComponent="updatePdfComponent"
         ></pdf>
+        <videoComponent v-if="videoEvent == true" :key="videoComponentKey"
+          @updateVideoComponent="updateVideoComponent"></videoComponent>
       </div>
     </div>
   </div>
@@ -152,6 +161,7 @@ import Calender from "./calender.vue";
 import location from "./location.vue";
 import { EventBus } from "../../event-bus";
 import pdf from "./pdf.vue";
+import videoComponent from "./videoComponent.vue";
 export default {
   data() {
     return {
@@ -164,6 +174,8 @@ export default {
       pictureComponentKey: 0,
       locationComponentKey: 0,
       pdfComponentKey: 0,
+      videoComponentKey: 0,
+      videoEvent: false,
       pdfEvent: false,
       responseEvent: false,
       dropdownEvent: false,
@@ -204,6 +216,7 @@ export default {
         (this.cardEvent = false),
         (this.locationEvent = false);
       this.pdfEvent = false;
+      this.videoEvent = false;
     }
     if (this.$route.params.name == "dropdown") {
       this.dropdownEvent = true;
@@ -216,6 +229,7 @@ export default {
       this.cardEvent = false;
       this.locationEvent = false;
       this.pdfEvent = false;
+      this.videoEvent = false;
     }
     if (this.$route.params.name == "button") {
       this.dropdownEvent = false;
@@ -228,6 +242,7 @@ export default {
       this.cardEvent = false;
       this.locationEvent = false;
       this.pdfEvent = false;
+      this.videoEvent = false;
     }
     if (this.$route.params.name == "quickReply") {
       this.dropdownEvent = false;
@@ -240,6 +255,7 @@ export default {
       this.cardEvent = false;
       this.locationEvent = false;
       this.pdfEvent = false;
+      this.videoEvent = false;
     }
     if (this.$route.params.name == "collapsible") {
       this.dropdownEvent = false;
@@ -252,6 +268,7 @@ export default {
       this.cardEvent = false;
       this.locationEvent = false;
       this.pdfEvent = false;
+      this.videoEvent = false;
     }
     if (this.$route.params.name == "card") {
       this.dropdownEvent = false;
@@ -264,6 +281,7 @@ export default {
       this.cardEvent = true;
       this.locationEvent = false;
       this.pdfEvent = false;
+      this.videoEvent = false;
     }
     if (this.$route.params.name == "calendar") {
       this.dropdownEvent = false;
@@ -276,6 +294,8 @@ export default {
       this.cardEvent = false;
       this.locationEvent = false;
       this.pdfEvent = false;
+      this.videoEvent = false;
+      this.videoEvent = false;
     }
     if (this.$route.params.name == "picture") {
       this.dropdownEvent = false;
@@ -288,6 +308,7 @@ export default {
       this.cardEvent = false;
       this.locationEvent = false;
       this.pdfEvent = false;
+      this.videoEvent = false;
     }
     if (this.$route.params.name == "location") {
       this.dropdownEvent = false;
@@ -300,18 +321,7 @@ export default {
       this.cardEvent = false;
       this.locationEvent = true;
       this.pdfEvent = false;
-    }
-    if (this.$route.params.name == "location") {
-      this.dropdownEvent = false;
-      this.responseEvent = false;
-      this.buttonEvent = false;
-      this.calendarEvent = false;
-      this.pictureEvent = false;
-      this.quickReplyEvent = false;
-      this.collapsibleEvent = false;
-      this.cardEvent = false;
-      this.locationEvent = true;
-      this.pdfEvent = false;
+      this.videoEvent = false;
     }
     if (this.$route.params.name == "pdf") {
       this.dropdownEvent = false;
@@ -324,6 +334,20 @@ export default {
       this.cardEvent = false;
       this.locationEvent = false;
       this.pdfEvent = true;
+      this.videoEvent = false;
+    }
+    if (this.$route.params.name == "video") {
+      this.dropdownEvent = false;
+      this.responseEvent = false;
+      this.buttonEvent = false;
+      this.calendarEvent = false;
+      this.pictureEvent = false;
+      this.quickReplyEvent = false;
+      this.collapsibleEvent = false;
+      this.cardEvent = false;
+      this.locationEvent = false;
+      this.pdfEvent = false;
+      this.videoEvent = true;
     }
   },
 
@@ -357,6 +381,7 @@ export default {
     pictureComponent,
     location,
     pdf,
+    videoComponent
   },
   methods: {
     async reload(e) {
@@ -373,6 +398,10 @@ export default {
         (this.quickReplyEvent = false),
         (this.collapsibleEvent = false),
         (this.cardEvent = false);
+        this.videoEvent = false
+    },
+    updateVideoComponent() {
+      this.videoComponentKey = this.videoComponentKey + 1;
     },
     updatePdfComponent() {
       this.pdfComponentKey = this.pdfComponentKey + 1;
@@ -413,6 +442,7 @@ export default {
         (this.cardEvent = false),
         (this.locationEvent = false);
       this.pdfEvent = false;
+      this.videoEvent = false;
       if (selectedVal == "responseEvent") {
         this.responseEvent = true;
         this.$router.push({
@@ -472,6 +502,12 @@ export default {
           params: { name: "pdf" },
         });
         this.pdfEvent = true;
+      }
+        if (selectedVal == "videoEvent") {
+        this.$router.push({
+          params: { name: "video" },
+        });
+        this.videoEvent = true;
       }
     },
   },

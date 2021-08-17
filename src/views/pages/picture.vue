@@ -1,4 +1,3 @@
-
 <template>
   <div class="vx-row">
     <!-- MULTIPLE COLUMNS-->
@@ -18,16 +17,12 @@
               name="response_name"
             >
             </v-select>
-            <span class="text-danger text-sm">
-              {{ errors.first("response_name") }}</span
-            >
+            <span class="text-danger text-sm"> {{ errors.first("response_name") }}</span>
           </div>
 
           <template v-if="dataImg">
             <!-- Image Container -->
-            <div
-              class="img-container w-64 mx-auto flex items-center justify-center"
-            >
+            <div class="img-container w-64 mx-auto flex items-center justify-center">
               <img :src="dataImg" alt="img" class="responsive" />
               <!-- <img :src="previewImage" alt="img" class="responsive"/> -->
             </div>
@@ -35,10 +30,10 @@
             <!-- Image upload Buttons -->
             <div class="mt-5">
               <!-- <div
-      class="imagePreviewWrapper"
-      :style="{ 'background-image': `url(${previewImage})` }"
-      >
-    </div> -->
+                class="imagePreviewWrapper"
+                :style="{ 'background-image': `url(${previewImage})` }"
+                >
+              </div> -->
               <!-- <input :src="previewImage"
                 type="file"
                 ref="uploadImgInput"
@@ -84,7 +79,7 @@
             >
                     <img :src="previewImage" alt="img" class="responsive" />
 
-    </div> -->
+                </div> -->
               <!-- <img v-bind:src="previewImage" v-show="previewImage"/> -->
 
               <vs-button
@@ -92,20 +87,20 @@
                 @click="$refs.uploadImgInput.click()"
                 icon-pack="feather"
                 icon="icon icon-upload"
-                >Upload Image</vs-button
+                >Upload Picture</vs-button
               >
-              <span class="text-danger text-sm">
-                {{ errors.first("cardimage") }}</span
-              >
+              <span class="text-danger text-sm"> {{ errors.first("cardimage") }}</span>
             </div>
           </div>
         </div>
         <!-- <div class="contained-example-container">
-    <div id="div-with-loading" class="vs-con-loading__container"></div>
-  </div> -->
+          <div id="div-with-loading" class="vs-con-loading__container"></div>
+        </div> -->
 
-        <div class="vx-col sm:w-1/3 w-full">
-          <vs-button class="mr-3 mt-4" @click="addEvent1">Submit</vs-button>
+        <div class="vx-col sm:w-1/3 w-full contained-example-container pt-2 pb-2">
+          <div id="div-with-loading" class="vs-con-loading__container">
+            <vs-button class="mr-3 mt-4" @click="addEvent1">Submit</vs-button>
+          </div>
         </div>
       </vx-card>
     </div>
@@ -164,7 +159,7 @@ const dict = {
       required: "Please select response name",
     },
     cardimage: {
-      required: "Please select card image",
+      required: "Please upload picture",
     },
   },
 };
@@ -310,7 +305,9 @@ export default {
     submitAsItIs() {
       this.$emit("updatepictureComponent");
       this.responsename.responsename = "";
-
+      setTimeout(() => {
+        this.$vs.loading.close("#div-with-loading > .con-vs-loading");
+      }, 500);
       this.$vs.notify({
         color: "success",
         title: "Picture data updated.",
@@ -321,19 +318,15 @@ export default {
     addEvent1() {
       this.$validator.validateAll().then((result) => {
         if (result) {
-          var newemail = localStorage.email;
+          this.$vs.loading({
+            container: "#div-with-loading",
+            scale: 0.6,
+          });
           var chatbotname = localStorage.chatbotname;
           var chatbot_id = localStorage.chatbot_id;
-          if (
-            this.dataImg !== null &&
-            this.dataImg !== "" &&
-            this.selectedfile == ""
-          ) {
-
+          if (this.dataImg !== null && this.dataImg !== "" && this.selectedfile == "") {
             this.submitAsItIs();
           } else {
-            this.$vs.loading();
-
             axios
               .post(Base_URL.Actual_URL + "picturesapi", {
                 company_id: localStorage.company_id,
@@ -347,8 +340,8 @@ export default {
               .then((response) => {
                 if (parseInt(response.data.code) == 200) {
                   setTimeout(() => {
-                    this.$vs.loading.close();
-                  }, 3000);
+                    this.$vs.loading.close("#div-with-loading > .con-vs-loading");
+                  }, 500);
                   this.getResponseList();
                   this.$emit("updatepictureComponent");
                   this.responsename.responsename = "";
@@ -359,6 +352,17 @@ export default {
                     position: "top-center",
                   });
                 }
+              })
+              .catch((err) => {
+                setTimeout(() => {
+                  this.$vs.loading.close("#div-with-loading > .con-vs-loading");
+                }, 1000);
+                this.$vs.notify({
+                  text: "Please try again.",
+                  title: "Failed to process your request.",
+                  color: "danger",
+                  position: "top-center",
+                });
               });
           }
         }
@@ -420,5 +424,3 @@ export default {
   }
 }
 </style>
-
-

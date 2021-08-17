@@ -408,7 +408,7 @@ export default {
     addEvent3() {
       var newemail = localStorage.getItem("email");
       var chatbot_id = localStorage.getItem("chatbot_id");
-  if(localStorage.chatbot_id !== null && localStorage.chatbot_id !== undefined) {
+     if(localStorage.chatbot_id !== null && localStorage.chatbot_id !== undefined) {
       axios
         .post(Base_URL.Actual_URL + "intent", {
           createintent: this.createintent,
@@ -427,15 +427,22 @@ export default {
             });
             this.createintent = "";
           }
+           if (response.data.code == 100) {
+            this.msg = response.data.message;
+            this.$vs.notify({
+              title: this.msg,
+              color: "danger",
+              position: "top-center",
+            });
+          }
         });
-  } else {
-        this.$vs.notify({
-          color: "danger",
-          title: "Please Select Chatbot First.",
-          position: "top-center",
-        });
-  }
-     
+      } else {
+          this.$vs.notify({
+            color: "danger",
+            title: "Please Select Chatbot First.",
+            position: "top-center",
+          });
+      }
       const obj = {
         title: this.title,
         startDate: this.startDate,

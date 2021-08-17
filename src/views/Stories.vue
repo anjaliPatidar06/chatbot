@@ -87,6 +87,7 @@
             <v-select
               class="w-full"
               multiple
+              id="multiple_response"
               :closeOnSelect="false"
               label="responsename"
               :options="responsedata"
@@ -386,25 +387,6 @@ export default {
         }
       });
     },
-    // test(){
-    //  axios
-    //     .post('https://irbnkvfi2k.execute-api.us-east-1.amazonaws.com/default/SignUp-Concierge_API', {
-    //         "Name":"Deep-Test",
-    //         "email":"deepaaaa@gmail.com",
-    //         "city":"Indore",
-    //         "Phone":"9191919191",
-    //         "bio":"Nonee",
-    //         "profile_pic":"",
-    //         "password":"",
-    //         "DOB":"08-06-1993",
-    //         "states":"M.P.",
-    //         "country":"India",
-    //         "categories":"Noneee"
-    //     })
-    //     .then((response) => {
-    //       console.log(response,'testtttttttttttt')
-    //     })
-    // },
     button: function (e) {
       this.assignentityvalue = "";
       if (e !== null) {
@@ -494,6 +476,7 @@ export default {
               text: "The selected Story was successfully deleted",
               position: "top-center",
             });
+            this.getStoryNames()
           }
         });
     },
@@ -502,10 +485,11 @@ export default {
         .post(Base_URL.Actual_URL + "editstory", {
           Edit: 2,
           storyname: this.storyselect.name,
+                 company_id: localStorage.company_id,
+                chatbot_id: localStorage.chatbot_id,
         })
         .then((response) => {
           var storyData = response.data.userlist;
-          var id = storyData[0].id;
           this.$router.push({
             name: "editstoryname",
             params: { id: storyData[0].id },
@@ -574,16 +558,31 @@ export default {
               color: "success",
               position: "top-center",
             });
-          } else if (response.data.code == 100) {
-            this.message = response.data.message;
-
-            // this.errorMessage = response.data.message;
-          }
+          } 
+          if (response.data.code == 100) {
+                  this.$vs.notify({
+                    color: "danger",
+                    text: response.data.message,
+                    position: "top-center",
+                  });
+                }
         });
     },
   },
 };
 </script>
+<style>
 
-
+@media only screen and (max-width: 600px) {
+  span.vs__selected {
+    width: 15rem !important;
+    display: inline-block !important;
+    max-width: 100%;
+    box-sizing: border-box;
+    white-space: normal !important;
+    word-wrap: break-word !important; ;
+    word-break: break-all !important;;
+  }
+}
+</style>
          
