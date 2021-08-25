@@ -147,72 +147,72 @@ export default {
     },
 
     payment(cost, id) {
-      let merchantKey =
-        "test_$2y$10$kQLHx5X2j2.LkNPuBcKlUeT4C4mJsOLZZTh092r5RjFEa8NaLaupy";
-      const body = {
-        redirect_url: "http://188.227.58.42:83/payment-status",
-        transaction_amount: cost,
-        currency: "AED",
-        customer_name: localStorage.logged_in_user_name,
-        customer_email: localStorage.email,
-        // site_return_url: "http://188.227.58.42:83/AddUser",
-        site_return_url: "https://techsolvo.com/",
-      };
-      axios
-        .post("https://foloosi.com/api/v1/api/initialize-setup", body, {
-          headers: {
-            merchant_key: merchantKey,
-          },
-        })
-        .then((res) => {
-          console.log(res.data.data, "res");
-          var options = {
-            reference_token: res.data.data.reference_token, //which is get from step2
-            merchant_key: merchantKey,
-            redirect: true,
-          };
-          var fp1 = new Foloosipay(options);
-          fp1.open();
-          foloosiHandler(response, function (e) {
-            console.log(e, "e foloosi handler");
-            if (e.data.status == "success") {
-              //responde success code
-              console.log(e.data.status, "hey if");
-              //console.log(e.data.data.transaction_no);
-            }
-            if (e.data.status == "error") {
-              //responde success code
-              console.log(e.data.status, "hey error");
-              //console.log(e.data.data.payment_status);
-            }
-            if (e.data.status == "closed") {
-              //Payment Popup Closed
-              console.log(e.data);
-            }
-          });
-          fp1.close();
-        });
-      /*note : minimize form fields in card detail page*/
+      // let merchantKey =
+      //   "test_$2y$10$kQLHx5X2j2.LkNPuBcKlUeT4C4mJsOLZZTh092r5RjFEa8NaLaupy";
+      // const body = {
+      //   redirect_url: "http://188.227.58.42:83/payment-status",
+      //   transaction_amount: cost,
+      //   currency: "AED",
+      //   customer_name: localStorage.logged_in_user_name,
+      //   customer_email: localStorage.email,
+      //   // site_return_url: "http://188.227.58.42:83/AddUser",
+      //   site_return_url: "https://techsolvo.com/",
+      // };
       // axios
-      //   .post(Base_URL.Actual_URL + "payment_order", {
-      //     methods: "create",
-      //     store: 25923,
-      //     authkey: "f7Gng@bTpxw-bbhq",
-      //     trantype: "sale",
-      //     cart: id,
-      //     amount: cost,
-      //     currency: "AED",
-      //     desc: "order transaction test",
-      //     return_auth: "http://188.227.58.42:83/payment-status",
-      //     return_decl: "http://188.227.58.42:83/payment-status",
-      //     return_can: "http://188.227.58.42:83/payment-status",
-      //     test: 1,
+      //   .post("https://foloosi.com/api/v1/api/initialize-setup", body, {
+      //     headers: {
+      //       merchant_key: merchantKey,
+      //     },
       //   })
       //   .then((res) => {
-      //     console.log(res, "res");
-      //     localStorage.setItem("order_ref", res.data.order.ref);
-      //     window.location.href = res.data.order.url;
+      //     console.log(res.data.data, "res");
+      //     var options = {
+      //       reference_token: res.data.data.reference_token, //which is get from step2
+      //       merchant_key: merchantKey,
+      //       redirect: true,
+      //     };
+      //     var fp1 = new Foloosipay(options);
+      //     fp1.open();
+      //     foloosiHandler(response, function (e) {
+      //       console.log(e, "e foloosi handler");
+      //       if (e.data.status == "success") {
+      //         //responde success code
+      //         console.log(e.data.status, "hey if");
+      //         //console.log(e.data.data.transaction_no);
+      //       }
+      //       if (e.data.status == "error") {
+      //         //responde success code
+      //         console.log(e.data.status, "hey error");
+      //         //console.log(e.data.data.payment_status);
+      //       }
+      //       if (e.data.status == "closed") {
+      //         //Payment Popup Closed
+      //         console.log(e.data);
+      //       }
+      //     });
+      //     fp1.close();
       //   });
+      /*note : minimize form fields in card detail page*/
+      axios
+        .post(Base_URL.Actual_URL + "payment_order", {
+          methods: "create",
+          store: 25923,
+          authkey: "f7Gng@bTpxw-bbhq",
+          trantype: "sale",
+          cart: id,
+          amount: cost,
+          currency: "AED",
+          desc: "order transaction test",
+          return_auth: "http://188.227.58.42:83/payment-status",
+          return_decl: "http://188.227.58.42:83/payment-status",
+          return_can: "http://188.227.58.42:83/payment-status",
+          test: 1,
+        })
+        .then((res) => {
+          console.log(res, "res");
+          localStorage.setItem("order_ref", res.data.order.ref);
+          window.location.href = res.data.order.url;
+        });
     },
     formnew() {
       this.$validator.validateAll().then((result) => {

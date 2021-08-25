@@ -191,12 +191,13 @@
                   tr.trainstatus !== null &&
                   tr.trainstatus !== ''
                 "
-                ><a
+                >Error:
+                <a
                   type="filled"
                   color="primary"
                   @click="msgPopupActiveFunc(tr.trainstatus)"
                 >
-                  Error: View More</a
+                  View More</a
                 ></vs-td
               >
               <vs-td v-if="tr.trainstatus == null || tr.trainstatus == ''"></vs-td>

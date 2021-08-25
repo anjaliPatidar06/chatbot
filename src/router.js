@@ -27,8 +27,8 @@ function guardMyroute(to, from, next) {
     next(); // allow to enter route
   }
   else {
-    // next('/subscription');
-    next('/login');
+    next('/subscription');
+    // next('/login');
 
   }
 }
@@ -583,7 +583,7 @@ var router = new Router({
           component: () => import('@/views/pages/Error404.vue')
         },
         {
-          path: '/register',
+          path: '/register/:plan?',
           name: 'page-register',
           component: () => import('@/views/pages/register/Register.vue'),
 

@@ -13,9 +13,7 @@
               name="response_name"
               v-model="rowdata[0].responsename"
             />
-            <span class="text-danger text-sm">{{
-              errors.first("response_name")
-            }}</span>
+            <span class="text-danger text-sm">{{ errors.first("response_name") }}</span>
           </div>
           <div class="vx-col sm:w-1/2 w-full mb-2" :data="rowdata">
             <!-- <vx-input-group>
@@ -79,17 +77,12 @@
                 ></vs-button>
                 <vs-button
                   @click="makeItalic('editor1')"
-                  style="
-                    border-top-left-radius: 0;
-                    border-bottom-left-radius: 0;
-                  "
+                  style="border-top-left-radius: 0; border-bottom-left-radius: 0"
                   ><i class="fa fa-italic fa-lg" aria-hidden="true"></i
                 ></vs-button>
               </div>
             </div>
-            <span class="text-danger text-sm">{{
-              errors.first("response_text")
-            }}</span>
+            <span class="text-danger text-sm">{{ errors.first("response_text") }}</span>
             <VEmojiPicker
               @select="selectEmoji1"
               v-if="showEmojis"
@@ -131,17 +124,12 @@
                   <i class="fa fa-chevron-down" aria-hidden="true"></i>
                 </vs-button>
 
-                <vs-button
-                  @click="makeBold2('editor2')"
-                  style="border-radius: 0"
+                <vs-button @click="makeBold2('editor2')" style="border-radius: 0"
                   ><i class="fa fa-bold fa-lg" aria-hidden="true"></i
                 ></vs-button>
                 <vs-button
                   @click="makeItalic2('editor2')"
-                  style="
-                    border-top-left-radius: 0;
-                    border-bottom-left-radius: 0;
-                  "
+                  style="border-top-left-radius: 0; border-bottom-left-radius: 0"
                   ><i class="fa fa-italic fa-lg" aria-hidden="true"></i
                 ></vs-button>
               </div>
@@ -161,10 +149,7 @@
 
         <div class="vx-row">
           <div class="vx-col w-full">
-            <vs-button
-              v-on:keyup.enter="Update"
-              @click="Update"
-              class="mr-3 mb-2"
+            <vs-button v-on:keyup.enter="Update" @click="Update" class="mr-3 mb-2"
               >Update</vs-button
             >
           </div>
@@ -178,13 +163,13 @@ import { Validator } from "vee-validate";
 const dict = {
   custom: {
     response_name: {
-      required: "Please enter response name"
+      required: "Please enter response name",
       // alpha: "Your first name may only contain alphabetic characters",
     },
     response_text: {
-      required: "Please enter response Text"
-    }
-  }
+      required: "Please enter response Text",
+    },
+  },
 };
 Validator.localize("en", dict);
 import axios from "axios";
@@ -199,7 +184,7 @@ export default {
       rowdata: {
         responsename: "",
         text: "",
-        textnew: ""
+        textnew: "",
       },
       name: "",
       company: "",
@@ -212,13 +197,13 @@ export default {
       selectedCountry1: "",
       showEmojis: false,
       // checkError: false,
-      showEmojis2: false
+      showEmojis2: false,
     };
   },
 
   components: {
     "v-select": vSelect,
-    VEmojiPicker
+    VEmojiPicker,
   },
   computed: {
     validateForm() {
@@ -227,7 +212,7 @@ export default {
         this.rowdata[0].responsename.length > 0 &&
         this.rowdata[0].text.length > 0
       );
-    }
+    },
   },
   mounted() {
     this.entityData();
@@ -239,7 +224,7 @@ export default {
       const url = Base_URL.Actual_URL + "editresponsename/";
       const id = this.$route.params.id;
       const url1 = url + id;
-      axios.get(url1, {}).then(response => {
+      axios.get(url1, {}).then((response) => {
         this.rowdata = response.data.userlist;
       });
     },
@@ -412,14 +397,12 @@ export default {
           '<span style="font-style: normal;">&nbsp; </span>';
       } else {
         if (this.selectionIsItalic()) {
-          var span =
-            '<span style="font-style: normal;">' + highlight + "</span>";
+          var span = '<span style="font-style: normal;">' + highlight + "</span>";
           document.getElementById(Id).innerHTML = document
             .getElementById(Id)
             .innerHTML.replace(highlight.trim(), span);
         } else {
-          var span =
-            '<span style="font-style: italic;">' + highlight + "</span>";
+          var span = '<span style="font-style: italic;">' + highlight + "</span>";
           document.getElementById(Id).innerHTML = document
             .getElementById(Id)
             .innerHTML.replace(highlight.trim(), span);
@@ -514,7 +497,7 @@ export default {
       this.showEmojis2 = true;
     },
     Update() {
-      this.$validator.validateAll().then(result => {
+      this.$validator.validateAll().then((result) => {
         if (result) {
           const url = Base_URL.Actual_URL + "editresponsename/";
           const id = this.$route.params.id;
@@ -523,9 +506,9 @@ export default {
             .post(url1, {
               responsename: this.rowdata[0].responsename,
               text: document.getElementById("editor1").innerHTML,
-              textnew: document.getElementById("editor2").innerHTML
+              textnew: document.getElementById("editor2").innerHTML,
             })
-            .then(response => {
+            .then((response) => {
               this.msg = response.data.msg;
 
               if (response.data.code == 200) {
@@ -534,23 +517,23 @@ export default {
                   title: "Edit Response ",
                   text: "The Response data is updated",
                   color: "success",
-                  position: "top-center"
+                  position: "top-center",
                 });
                 EventBus.$emit("selectedComponent", "responseEvent");
                 this.$router.go(-1);
               }
-               if (response.data.code == 100) {
-                    this.$vs.notify({
-                    color: "danger",
-                    title: response.data.result,
-                    position: "top-center",
-                  });
-                }
+              if (response.data.code == 100) {
+                this.$vs.notify({
+                  color: "danger",
+                  title: response.data.status,
+                  position: "top-center",
+                });
+              }
             });
         }
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -125,7 +125,9 @@ import VueClipboard from 'vue-clipboard2'
 Vue.use(VueClipboard)
 import vueCountryRegionSelect from 'vue-country-region-select'
 Vue.use(vueCountryRegionSelect)
+import vueCodeditor from "vue-codeditor";
 
+Vue.component(vueCodeditor)
 Vue.use(new VueSocketIO({
   debug: true,
   connection: 'http://188.227.58.42:7000', //options object is Optional

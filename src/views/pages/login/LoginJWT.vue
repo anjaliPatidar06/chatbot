@@ -105,6 +105,7 @@ export default {
             .then((response) => {
               this.$vs.loading();
               this.email = response.data.msg;
+              var userData = response.data.user_list[0];
               if (response.data.code == 100) {
                 this.$vs.notify({
                   color: "danger",
@@ -118,23 +119,28 @@ export default {
                   this.$router.push({ name: "page-login" });
                 }, 2000);
               } else {
+                console.log(
+                  response.data.User_Role,
+                  userData.payment_status,
+                  "response.data.User_Role"
+                );
                 if (
                   response.data.User_Role == "Live Agent" ||
                   response.data.User_Role == "Chatbot Manager"
                 ) {
-                  localStorage.setItem(
-                    "chatbot_id",
-                    response.data.user_list[0].chatbot_id
-                  );
+                  localStorage.setItem("chatbot_id", userData.chatbot_id);
                 }
-                localStorage.setItem("company_id", response.data.user_list[0].company_id);
+                // if (
+                //   response.data.User_Role == "Admin" &&
+                //   userData.payment_status == "Due"
+                // ) {
+                //   this.getSubscriptionDetails(userData.subscription_id);
+                // }
+                localStorage.setItem("company_id", userData.company_id);
                 localStorage.setItem("user_role", response.data.User_Role);
-                localStorage.setItem("email", response.data.user_list[0].email);
-                localStorage.setItem("id", response.data.user_list[0].id);
-                localStorage.setItem(
-                  "logged_in_user_name",
-                  response.data.user_list[0].firstname
-                );
+                localStorage.setItem("email", userData.email);
+                localStorage.setItem("id", userData.id);
+                localStorage.setItem("logged_in_user_name", userData.firstname);
                 localStorage.setItem("trainingID", "");
                 this.$vs.notify({
                   color: "success",
@@ -164,6 +170,65 @@ export default {
         }
       });
       //  window.location.href = '/'
+    },
+    payment(cost, currencyValue) {
+      console.log(cost, currencyValue, "currencyValue");
+      let merchantKey =
+        "test_$2y$10$kQLHx5X2j2.LkNPuBcKlUeT4C4mJsOLZZTh092r5RjFEa8NaLaupy";
+      const body = {
+        redirect_url: "http://188.227.58.42:83/payment-status",
+        transaction_amount: cost,
+        currency: "AED",
+        customer_name: localStorage.logged_in_user_name,
+        customer_email: localStorage.email,
+        // site_return_url: "http://188.227.58.42:83/AddUser",
+        site_return_url: "https://techsolvo.com/",
+      };
+      axios
+        .post("https://foloosi.com/api/v1/api/initialize-setup", body, {
+          headers: {
+            merchant_key: merchantKey,
+          },
+        })
+        .then((res) => {
+          console.log(res.data.data, "res");
+
+          var options = {
+            reference_token: res.data.data.reference_token, //which is get from step2
+            merchant_key: merchantKey,
+            redirect: true,
+          };
+          var fp1 = new Foloosipay(options);
+          fp1.open();
+          foloosiHandler(res, function (e) {
+            console.log(e, "e foloosi handler");
+            if (e.data.status == "success") {
+              //responde success code
+              console.log(e.data.status, "hey if");
+              //console.log(e.data.data.transaction_no);
+            }
+            if (e.data.status == "error") {
+              //responde success code
+              console.log(e.data.status, "hey error");
+              //console.log(e.data.data.payment_status);
+            }
+            if (e.data.status == "closed") {
+              //Payment Popup Closed
+              console.log(e.data);
+            }
+          });
+          fp1.close();
+          console.log(res, "after fp1");
+        });
+    },
+    getSubscriptionDetails(subscription_id) {
+      axios
+        .get(Base_URL.Actual_URL + "subscriptions_get/" + subscription_id)
+        .then((response) => {
+          console.log(response, "sub data");
+          var sub_data = response.data.data[0];
+          this.payment(sub_data.price, sub_data.currency);
+        });
     },
   },
 };

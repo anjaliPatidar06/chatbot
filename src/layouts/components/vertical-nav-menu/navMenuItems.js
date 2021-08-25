@@ -216,12 +216,12 @@ export default [
     slug: "chatbot UI Design",
     icon: "MessageSquareIcon",
   },
-{
-  url: "/featured",
-  name: "Featured Templates",
-  slug: "featured",
-  icon: "MessageSquareIcon",
-}
+// {
+//   url: "/featured",
+//   name: "Featured Templates",
+//   slug: "featured",
+//   icon: "MessageSquareIcon",
+// }
 ]
 
 

@@ -505,29 +505,42 @@ export default {
   },
   methods: {
     selectChatbot(e) {
-      this.leadGraphData(e.id);
-      this.userGraphData(e.id);
-      this.unansweredQustionGraphData(e.id);
-      this.visitorReport(e.id);
-      this.$vs.loading({
-        container: "#div-with-loading",
-        scale: 0.6,
-      });
+      console.log(e, "e");
+      if (e !== null) {
+        this.leadGraphData(e.id);
+        this.userGraphData(e.id);
+        this.unansweredQustionGraphData(e.id);
+        this.visitorReport(e.id);
+        this.$vs.loading({
+          container: "#div-with-loading",
+          scale: 0.6,
+        });
+      } else {
+        this.$refs.chart1.updateSeries([{ data: [] }]);
+        this.$refs.chart2.updateSeries([{ data: [] }]);
+        this.$refs.chart3.updateSeries([{ data: [] }]);
+        this.$refs.chart5.updateSeries([{ data: [] }]);
+      }
     },
     selectChatbot2(e) {
-      this.userGraphData(e.id);
+      if (e !== null) {
+        this.userGraphData(e.id);
+      }
     },
     selectChatbot3(e) {
       this.unansweredQustionGraphData(e.id);
     },
     selectChatbot4(e) {
       //             this.activeLoading = true
-
-      this.$vs.loading({
-        container: "#div-with-loading",
-        scale: 0.6,
-      });
-      this.liveAgentReport(e.Id);
+      if (e !== null) {
+        this.$vs.loading({
+          container: "#div-with-loading",
+          scale: 0.6,
+        });
+        this.liveAgentReport(e.Id);
+      } else {
+        this.$refs.chart4.updateSeries([{ data: [] }]);
+      }
     },
     selectChatbot5(e) {
       this.visitorReport(e.id);

@@ -47,6 +47,7 @@
     "vue-chartjs": "^3.4.2",
     "vue-chat-emoji": "^1.1.27",
     "vue-clipboard2": "^0.3.1",
+    "vue-codeditor": "^1.0.5",
     "vue-context": "4.0.0",
     "vue-country-region-select": "^2.0.16",
     "vue-echarts": "^4.0.3",

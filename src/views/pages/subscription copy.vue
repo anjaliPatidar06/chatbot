@@ -46,11 +46,11 @@
           <li @click="ItemClicked('Yearly')" :class="{ active: activeTab === 'Yearly' }">
             Yearly
           </li>
-          <li class="ml-2">
+          <li>
             <!-- <vs-button> -->
             <vs-dropdown>
               <a class="flex items-center" href.prevent>
-                {{ selected_currency }}
+                USD
                 <i class="material-icons"> expand_more </i>
               </a>
 
@@ -69,43 +69,124 @@
       id="demo-basic-card"
       class="container pt-4 d-flex align-items-center justify-content-center"
     >
-      <div class="vx-row" style="justify-content: center">
-        <div
-          class="vx-col w-full sm:w-1/2 lg:w-1/3 lg:w-1/4 xl:w-1/3 mb-base d-flex align-items-center justify-content-center"
-          v-for="(data, index) in subscriptionData"
-          :key="data"
-          style="justify-content: center; display: flex"
-        >
+      <div class="vx-row">
+        <div class="vx-col w-full sm:w-1/2 lg:w-1/3 lg:w-1/4 xl:w-1/4 mb-base">
           <vx-card class="pb-12">
             <div class="ribbon ribbon-top-left">
               <span>Try it</span>
             </div>
 
             <div slot="no-body"></div>
-            <h3 class="mb-2">{{ data.sub_name }}</h3>
-            <p id="subheading" class="pb-4 curved-2">
-              {{ data.Total_user }} User <br />{{ data.no_message }} messages per month
-            </p>
+            <h3 class="mb-2">Free</h3>
+            <p id="subheading" class="pb-4 curved-2">1 bot <br />50 chats per month</p>
             <!-- <hr class="mt-2" /> -->
             <div class="text-center mt-4">
-              <p>
-                <span v-if="data.currency == 'USD'">${{ data.price }}</span>
-                <span v-if="data.currency == 'INR'">Rs.{{ data.price }}</span
-                ><br />/month billed annually
-              </p>
+              <p><span>$19.00</span><br />/month billed annually</p>
               <vs-button
-                :id="'subcription_btn' + (index + 1)"
+                id="subcription_btn1"
                 type="gradient"
                 class="mt-4 mr-2 shadow-lg"
                 gradient-color-secondary="#CE9FFC"
-                :to="'/register?plan=' + data.sub_name"
                 >Try it for free</vs-button
               >
             </div>
             <ul id="card_list" class="mt-4 mr-2 pt-4">
-              <li class="ml-2" v-for="content in data.Features" :key="content">
-                <span>{{ content }}</span>
-              </li>
+              <li class="ml-2"><span>Lead Generation Bot</span></li>
+              <li class="ml-2"><span>Logical Branching</span></li>
+              <li class="ml-2"><span>URL Based Flow</span></li>
+              <li class="ml-2"><span>Text to Speech</span></li>
+              <li class="ml-2"><span>Access Bot through Link</span></li>
+              <li class="ml-2"><span>Email Notifications</span></li>
+            </ul>
+          </vx-card>
+        </div>
+        <div class="vx-col w-full sm:w-1/2 lg:w-1/3 lg:w-1/4 xl:w-1/4 mb-base">
+          <vx-card class="pb-12">
+            <div class="ribbon ribbon-top-left">
+              <span>23<sup>%</sup><sub>Off</sub></span>
+            </div>
+            <div slot="no-body"></div>
+
+            <h3 class="mb-2">Basic</h3>
+            <p id="subheading" class="pb-4 curved-2">1 bot <br />50 chats per month</p>
+            <!-- <hr class="mt-2" /> -->
+            <div class="text-center mt-4 pt-2">
+              <p><span>$19.00</span><br />/month billed annually</p>
+              <vs-button
+                class="mt-4 mr-2 shadow-lg"
+                type="gradient"
+                gradient-color-secondary="#CE9FFC"
+                id="subcription_btn2"
+                >Try it for Free</vs-button
+              >
+            </div>
+            <ul class="mt-4 mr-2 pt-4" id="card_list">
+              <li class="ml-2"><span>Lead Generation Bot</span></li>
+              <li class="ml-2"><span>Logical Branching</span></li>
+              <li class="ml-2"><span>URL Based Flow</span></li>
+              <li class="ml-2"><span>Text to Speech</span></li>
+              <li class="ml-2"><span>Access Bot through Link</span></li>
+              <li class="ml-2"><span>Email Notifications</span></li>
+            </ul>
+          </vx-card>
+        </div>
+        <div class="vx-col w-full sm:w-1/2 lg:w-1/3 lg:w-1/4 xl:w-1/4 mb-base">
+          <vx-card class="pb-12">
+            <div class="ribbon ribbon-top-left">
+              <span>20<sup>%</sup><sub>Off</sub></span>
+            </div>
+            <h3 class="mb-2">Pro</h3>
+            <p id="subheading" class="pb-4 curved-2">1 bot <br />50 chats per month</p>
+
+            <!-- <hr class="mt-2" /> -->
+            <div class="text-center mt-4">
+              <p><span>$100.00</span><br />/month billed annually</p>
+
+              <vs-button
+                class="mt-4 mr-2 shadow-lg"
+                type="gradient"
+                gradient-color-secondary="#CE9FFC"
+                id="subcription_btn3"
+                >Try it for Free</vs-button
+              >
+            </div>
+            <ul class="mt-4 mr-2 pt-4" id="card_list">
+              <li class="ml-2"><span>Lead Generation Bot</span></li>
+              <li class="ml-2"><span>Logical Branching</span></li>
+              <li class="ml-2"><span>URL Based Flow</span></li>
+              <li class="ml-2"><span>Text to Speech</span></li>
+              <li class="ml-2"><span>Access Bot through Link</span></li>
+              <li class="ml-2"><span>Email Notifications</span></li>
+            </ul>
+          </vx-card>
+        </div>
+        <div class="vx-col w-full sm:w-1/2 lg:w-1/3 lg:w-1/4 xl:w-1/4 mb-base">
+          <vx-card class="pb-12">
+            <div class="ribbon ribbon-top-left">
+              <span>50<sup>%</sup><sub>Off</sub></span>
+            </div>
+            <h3 class="mb-2">Premium</h3>
+            <p id="subheading" class="pb-4 curved-2">1 bot <br />50 chats per month</p>
+
+            <!-- <hr class="mt-2" /> -->
+
+            <div class="text-center mt-4">
+              <p><span>$50.00</span><br />/month billed annually</p>
+              <vs-button
+                class="mt-4 mr-2 shadow-lg"
+                type="gradient"
+                gradient-color-secondary="#CE9FFC"
+                id="subcription_btn4"
+                >Try it for Free</vs-button
+              >
+            </div>
+            <ul class="mt-4 mr-2 pt-4" id="card_list">
+              <li class="ml-2"><span>Lead Generation Bot</span></li>
+              <li class="ml-2"><span>Logical Branching</span></li>
+              <li class="ml-2"><span>URL Based Flow</span></li>
+              <li class="ml-2"><span>Text to Speech</span></li>
+              <li class="ml-2"><span>Access Bot through Link</span></li>
+              <li class="ml-2"><span>Email Notifications</span></li>
             </ul>
           </vx-card>
         </div>
@@ -241,7 +322,7 @@ p#subheading {
 li span {
   position: relative;
   left: 10px;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: normal;
   line-height: 25px;
 }
@@ -387,9 +468,6 @@ a.flex.items-center {
 div#demo-basic-card {
   margin-top: 3.2rem;
 }
-div#demo-basic-card.vx-row {
-  justify-content: center;
-}
 .main-text {
   font-weight: 500;
   font-family: "Montserrat", Helvetica, Arial, sans-serif;
@@ -421,9 +499,5 @@ span#main_logo {
   font-size: 1.25rem;
   line-height: inherit;
   white-space: nowrap;
-}
-.vx-card {
-  min-height: 35rem;
-  width: 23rem;
 }
 </style>

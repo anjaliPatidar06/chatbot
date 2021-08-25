@@ -2,7 +2,9 @@
   <div id="demo-basic-card">
     <div class="vx-row">
       <div class="vx-col w-full sm:w-1/2 lg:w-1/3 mb-base">
-        <vx-card>
+        <vue-codeditor v-model="content" mode="javascript" theme="chrome" class="w-100" />
+
+        <!-- <vx-card>
           <div slot="no-body">
             <img src="" alt="content-img" class="responsive card-img-top" />
           </div>
@@ -17,7 +19,7 @@
               >Import Bot</vs-button
             >
           </div>
-        </vx-card>
+        </vx-card> -->
       </div>
     </div>
   </div>
@@ -28,6 +30,7 @@ export default {
     return {
       // card 1
       card_1: {},
+      content: "console.log('Hello world!')",
     };
   },
 };

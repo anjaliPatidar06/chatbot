@@ -89,7 +89,8 @@ export default {
       axios.post(Base_URL.Actual_URL + "logout", {
         email: localStorage.clear(),
       });
-      this.$router.push("/login").catch(() => {});
+      this.$router.push("/subscription").catch(() => {});
+      // this.$router.push("/login").catch(() => {});
     },
   },
 };

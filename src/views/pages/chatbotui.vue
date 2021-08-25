@@ -1,7 +1,5 @@
-import Vue from "vue";
-import vSelect from "vue-select";
-
-Vue.component("v-select", vSelect);
+import Vue from "vue"; import vSelect from "vue-select"; Vue.component("v-select",
+vSelect);
 
 <template>
   <div class="vx-row">
@@ -20,9 +18,7 @@ Vue.component("v-select", vSelect);
               name="bot_name"
               data-vv-validate-on="blur"
             />
-            <span class="text-danger text-sm">{{
-              errors.first("bot_name")
-            }}</span>
+            <span class="text-danger text-sm">{{ errors.first("bot_name") }}</span>
           </div>
           <div class="vx-col sm:w-1/3 w-full mb-2">
             <h6>Chatbot Heading</h6>
@@ -33,9 +29,7 @@ Vue.component("v-select", vSelect);
               name="chatbotheading"
               data-vv-validate-on="blur"
             />
-            <span class="text-danger text-sm">{{
-              errors.first("chatbotheading")
-            }}</span>
+            <span class="text-danger text-sm">{{ errors.first("chatbotheading") }}</span>
           </div>
 
           <div class="vx-col sm:w-1/3 w-full mb-2">
@@ -51,9 +45,7 @@ Vue.component("v-select", vSelect);
               name="select_font"
             >
             </v-select>
-            <span class="text-danger text-sm">{{
-              errors.first("select_font")
-            }}</span>
+            <span class="text-danger text-sm">{{ errors.first("select_font") }}</span>
 
             <p
               :style="{
@@ -91,7 +83,9 @@ Vue.component("v-select", vSelect);
 
         <div class="vx-row">
           <div class="vx-col sm:w-1/3 w-full mb-2">
-            <vs-button class="mr-3 mt-4" @click="chatbotui" v-if="rowdata.length > 0">Update</vs-button>
+            <vs-button class="mr-3 mt-4" @click="chatbotui" v-if="rowdata.length > 0"
+              >Update</vs-button
+            >
             <vs-button class="mr-3 mt-4" @click="chatbotui" v-else>Submit</vs-button>
           </div>
         </div>
@@ -100,16 +94,7 @@ Vue.component("v-select", vSelect);
         <div class="vx-row">
           <template v-if="dataImg">
             <!-- Image Container -->
-            <div
-              class="
-                img-container
-                w-64
-                mx-auto
-                flex
-                items-center
-                justify-center
-              "
-            >
+            <div class="img-container w-64 mx-auto flex items-center justify-center">
               <img :src="dataImg" alt="img" class="image-fit" />
             </div>
 
@@ -165,16 +150,7 @@ Vue.component("v-select", vSelect);
         <div class="vx-row">
           <template v-if="dataImgnew">
             <!-- Image Container -->
-            <div
-              class="
-                img-container
-                w-64
-                mx-auto
-                flex
-                items-center
-                justify-center
-              "
-            >
+            <div class="img-container w-64 mx-auto flex items-center justify-center">
               <img :src="dataImgnew" alt="img" class="image-fit" />
             </div>
 
@@ -227,16 +203,7 @@ Vue.component("v-select", vSelect);
         <div class="vx-row">
           <template v-if="dataImgavatar">
             <!-- Image Container -->
-            <div
-              class="
-                img-container
-                w-64
-                mx-auto
-                flex
-                items-center
-                justify-center
-              "
-            >
+            <div class="img-container w-64 mx-auto flex items-center justify-center">
               <img :src="dataImgavatar" alt="img" class="image-fit" />
             </div>
 
@@ -284,16 +251,7 @@ Vue.component("v-select", vSelect);
         <div class="vx-row">
           <template v-if="dataImgnewbackground">
             <!-- Image Container -->
-            <div
-              class="
-                img-container
-                w-64
-                mx-auto
-                flex
-                items-center
-                justify-center
-              "
-            >
+            <div class="img-container w-64 mx-auto flex items-center justify-center">
               <img :src="dataImgnewbackground" alt="img" class="image-fit" />
             </div>
 
@@ -342,19 +300,62 @@ Vue.component("v-select", vSelect);
           </div>
         </div>
       </vx-card>
+      <vx-card class="mt-5" title="Upload Popup Icon">
+        <div class="vx-row">
+          <template v-if="dataPopupIcon">
+            <!-- Image Container -->
+            <div class="img-container w-64 mx-auto flex items-center justify-center">
+              <img :src="dataPopupIcon" alt="img" class="image-fit" />
+            </div>
+
+            <!-- Image upload Buttons -->
+            <div class="mb-5">
+              <input
+                type="file"
+                class="hidden"
+                ref="updatePopupImage"
+                @change="updatePopupImage"
+                accept="image/*"
+              />
+              <vs-button
+                class="mb-base mr-3"
+                color="danger"
+                @click="$refs.updatePopupImage.click()"
+                size="large"
+              >
+                Update Image</vs-button
+              >
+              <vs-button
+                color="primary"
+                class="mb-base mr-3"
+                @click="removePopupImage"
+                size="large"
+                >Remove Image</vs-button
+              >
+            </div>
+          </template>
+          <div class="vx-col w-full mb-2">
+            <div class="upload-img mt-5" v-if="!dataPopupIcon">
+              <input
+                type="file"
+                class="hidden"
+                ref="updatePopupImage"
+                @change="updatePopupImage"
+                accept="image/*"
+              />
+              <vs-button
+                @click="$refs.updatePopupImage.click()"
+                icon-pack="feather"
+                icon="icon icon-upload"
+                >Background Image</vs-button
+              >
+            </div>
+          </div>
+        </div>
+      </vx-card>
     </div>
   </div>
 </template>
-
-
-      
-
-
-
-
-
-
-
 
 <script>
 /* eslint-disable */
@@ -369,7 +370,7 @@ const dict = {
   custom: {
     chatbotheading: {
       required: "Please enter chatbot heading.",
-      max:"Chatbot heading may not be greater than 14 characters."
+      max: "Chatbot heading may not be greater than 14 characters.",
     },
     bot_name: {
       required: "Please enter chatbot name.",
@@ -406,6 +407,7 @@ export default {
       focused_font: "",
       selectedDuration: "",
       activecolor: "red",
+      dataPopupIcon: "",
       images: [
         {
           url: "../../assets/images/logo/logo.png",
@@ -512,10 +514,7 @@ export default {
     Prism,
   },
   mounted() {
-    if (
-      localStorage.chatbot_id !== null &&
-      localStorage.chatbot_id !== undefined
-    ) {
+    if (localStorage.chatbot_id !== null && localStorage.chatbot_id !== undefined) {
       this.getReloadData();
     }
   },
@@ -549,8 +548,57 @@ export default {
             var se = this.rowdata[0].backgroundiconpath;
 
             this.dataImgnewbackground = `${se}`;
+
+            var popupIcon = this.rowdata[0].popup_icon_path;
+            this.dataPopupIcon = `${popupIcon}`;
           }
         });
+    },
+    updatePopupImage(input) {
+      if (input.target.files && input.target.files[0]) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          this.dataPopupIcon = e.target.result;
+          axios.post(Base_URL.Actual_URL + "uploadpopup_icon", {
+            image: this.dataPopupIcon,
+            company_id: localStorage.company_id,
+            imagename: input.target.files[0].name,
+            bot: "popupIcon",
+            chatbot_id: localStorage.chatbot_id,
+          });
+        };
+        reader.readAsDataURL(input.target.files[0]);
+      }
+    },
+    removePopupImage() {
+      console.log(this.dataPopupIcon);
+      var filename = this.dataPopupIcon.substring(
+        this.dataPopupIcon.lastIndexOf("/") + 1
+      );
+      console.log(filename, "namee");
+
+      if (filename == "botAvatar.png") {
+        this.$vs.notify({
+          color: "warning",
+          // title: "Delete Record",
+          title: "Default images can not be deleted.",
+          position: "top-center",
+        });
+      } else {
+        axios
+          .post(Base_URL.Actual_URL + "deletepopupicon", {
+            idx: this.rowdata[0].id,
+          })
+          .then((response) => {
+            this.dataPopupIcon = null;
+            this.$vs.notify({
+              color: "danger",
+              title: "Delete Record",
+              text: "The selected Record was successfully deleted",
+              position: "top-center",
+            });
+          });
+      }
     },
     removeBotIcon() {
       var filename = this.dataImg.substring(this.dataImg.lastIndexOf("/") + 1);
@@ -579,9 +627,7 @@ export default {
       }
     },
     removeChatIcon() {
-      var filename = this.dataImgnew.substring(
-        this.dataImgnew.lastIndexOf("/") + 1
-      );
+      var filename = this.dataImgnew.substring(this.dataImgnew.lastIndexOf("/") + 1);
 
       if (filename == "logoimag.png") {
         this.$vs.notify({
@@ -764,8 +810,7 @@ export default {
               color: localStorage.getItem("color") || this.uiColor,
               company_id: localStorage.company_id,
               chatbotheading: this.chatbotheading,
-              fontname:
-                this.selectedDuration.durationCode || this.selectedDuration,
+              fontname: this.selectedDuration.durationCode || this.selectedDuration,
               chatbot_id: localStorage.chatbot_id,
               bot_name: this.bot_name,
             })
@@ -826,4 +871,3 @@ export default {
   background: rgb(var(--vs-dark)) !important;
 }
 </style>
-
